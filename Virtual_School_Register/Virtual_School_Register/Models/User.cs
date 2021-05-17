@@ -36,18 +36,18 @@ namespace Virtual_School_Register.Models
         //[Required]
         //public string Type { get; set; }
 
-        //public virtual ICollection<Annoucement> Annoucements { get; set; }
+        public virtual ICollection<Annoucement> Annoucements { get; set; }
 
-        //public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
 
-        //[Display(Name = "Klasa ID")]
-        //public int? ClassId { get; set; }
+        [Display(Name = "Klasa ID")]
+        public int? ClassId { get; set; }
 
-        //[Display(Name = "Klasa")]
-        //public virtual Class Class { get; set; }
+        [Display(Name = "Klasa")]
+        public virtual Class Class { get; set; }
 
-        //public virtual ICollection<StudentGradeSubject> StudentsGradesSubjects { get; set; }
+        public virtual ICollection<Evaluation> Evaluations { get; set; }
 
-        //public virtual ICollection<ClassSubjectTeacher> ClassesSubjectsTeachers { get; set; }
+        public virtual ICollection<ConductingLesson> ConductingLessons { get; set; }
     }
 }
