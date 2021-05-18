@@ -21,6 +21,5 @@ namespace Virtual_School_Register.Data
         public DbSet<Question> Question { get; set; }
         public DbSet<Subject> Subject { get; set; }
         public DbSet<Test> Test { get; set; }
-        public DbSet<User> User { get; set; }
     }
 }
