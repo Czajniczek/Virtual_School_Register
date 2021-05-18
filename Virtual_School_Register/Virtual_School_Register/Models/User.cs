@@ -30,7 +30,7 @@ namespace Virtual_School_Register.Models
         public string Adress { get; set; }
 
         [Display(Name = "Rodzic")]
-        public int? ParentId { get; set; }
+        public string ParentId { get; set; }
 
         //[Display(Name = "Typ użytkownika")]
         //[Required]

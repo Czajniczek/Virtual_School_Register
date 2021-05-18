@@ -21,7 +21,7 @@ namespace Virtual_School_Register.Models
         public string Content { get; set; }
 
         [Display(Name = "Wychowawca")]
-        public int ClassTutorId { get; set; }
+        public string ClassTutorId { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
 
