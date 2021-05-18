@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Virtual_School_Register.ViewModels
 {
-    public class EditUserViewModel
+    public class UserEditViewModel
     {
         public string Id { get; set; }
 
@@ -45,7 +45,7 @@ namespace Virtual_School_Register.ViewModels
         [Display(Name = "Rodzic")]
         public string ParentId { get; set; }
 
-        [Display(Name = "Klasa ID")]
+        [Display(Name = "Klasa")]
         public int? ClassId { get; set; }
     }
 }

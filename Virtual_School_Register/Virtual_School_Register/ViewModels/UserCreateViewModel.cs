@@ -7,7 +7,7 @@ using Virtual_School_Register.Helpers;
 
 namespace Virtual_School_Register.ViewModels
 {
-    public class CreateUserViewModel
+    public class UserCreateViewModel
     {
         [Display(Name = "Login")]
         [StringLength(20, MinimumLength = 1, ErrorMessage = "Imię musi mieć od 1 do 20 znaków!")]
@@ -43,7 +43,7 @@ namespace Virtual_School_Register.ViewModels
         [Display(Name = "Rodzic")]
         public string ParentId { get; set; }
 
-        [Display(Name = "Klasa ID")]
+        [Display(Name = "Klasa")]
         [RequiredIf("Type", "Uczen", "Uczeń musi mieć przypisaną klasę")]
         public int? ClassId { get; set; }
 
