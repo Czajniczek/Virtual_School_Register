@@ -13,11 +13,12 @@
 <table class="table">
     <thead>
         <tr>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                Login
+                @*@Html.DisplayNameFor(model => model.UserName)*@
             </th>
             @*<th>
                     @Html.DisplayNameFor(model => model.Password)
@@ -35,7 +36,8 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
+                Numer telefonu
+                @*@Html.DisplayNameFor(model => model.PhoneNumber)*@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.BirthDate)
@@ -59,9 +61,9 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.UserName)
                 </td>
@@ -106,7 +108,9 @@
                     @Html.DisplayFor(modelItem => item.Class.Name)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>*@ |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>

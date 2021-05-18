@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,10 +15,12 @@ namespace Virtual_School_Register.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Users
@@ -99,22 +102,36 @@ namespace Virtual_School_Register.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                var userFromDb = await _userManager.FindByIdAsync(id);
+
+                userFromDb.Name = user.Name;
+                userFromDb.Surname = user.Surname;
+                userFromDb.Sex = user.Sex;
+                userFromDb.Email = user.Email;
+                userFromDb.PhoneNumber = user.PhoneNumber;
+                userFromDb.BirthDate = user.BirthDate;
+                userFromDb.Adress = user.Adress;
+                userFromDb.ParentId = user.ParentId;
+                userFromDb.ClassId = user.ClassId;
+
+                await _userManager.UpdateAsync(userFromDb);
+
+                //try
+                //{
+                //    _context.Update(user);
+                //    await _context.SaveChangesAsync();
+                //}
+                //catch (DbUpdateConcurrencyException)
+                //{
+                //    if (!UserExists(user.Id))
+                //    {
+                //        return NotFound();
+                //    }
+                //    else
+                //    {
+                //        throw;
+                //    }
+                //}
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
