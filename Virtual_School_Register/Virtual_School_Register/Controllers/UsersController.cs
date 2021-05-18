@@ -54,7 +54,8 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            return View(user);
+            var detailsModel = _mapper.Map<UserDetailsViewModel>(user);
+            return View(detailsModel);
         }
 
         // GET: Users/Create
@@ -68,7 +69,7 @@ namespace Virtual_School_Register.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         // public async Task<IActionResult> Create([Bind("Id,UserName,Password,Name,Surname,Sex,Email,PhoneNumber,BirthDate,Adress,ParentId,Type,ClassId")] User user)
-        public async Task<IActionResult> Create(CreateUserViewModel user)
+        public async Task<IActionResult> Create(UserCreateViewModel user)
         {
             if (ModelState.IsValid)
             {
@@ -123,14 +124,14 @@ namespace Virtual_School_Register.Controllers
             }
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
 
-            var editModel = _mapper.Map<EditUserViewModel>(user);
+            var editModel = _mapper.Map<UserEditViewModel>(user);
             return View(editModel);
         }
 
         // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, EditUserViewModel user)
+        public async Task<IActionResult> Edit(string id, UserEditViewModel user)
         {
             if (id != user.Id)
             {
@@ -182,7 +183,8 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            return View(user);
+            var deleteModel = _mapper.Map<UserDetailsViewModel>(user);
+            return View(deleteModel);
         }
 
         // POST: Users/Delete/5

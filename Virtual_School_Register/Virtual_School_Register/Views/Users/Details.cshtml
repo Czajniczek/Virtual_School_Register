@@ -1,4 +1,4 @@
-﻿@model Virtual_School_Register.Models.User
+﻿@model Virtual_School_Register.ViewModels.UserDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -23,11 +23,11 @@
             @Html.DisplayFor(model => model.UserName)
         </dd>
         @*        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>*@
+                @Html.DisplayNameFor(model => model.Password)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Password)
+            </dd>*@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -76,18 +76,18 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ParentId)
         </dd>
-        @*        <dt class="col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Type)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Type)
-        </dd>*@
-        <dt class="col-sm-2">
+        </dd>
+        @*<dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Class)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Class.Content)
-        </dd>
+            @Html.DisplayFor(model => model.Class.Name)
+        </dd>*@
     </dl>
 </div>
 <div>

@@ -12,11 +12,13 @@ namespace Virtual_School_Register.MapperConfig
     {
         public ConfigMapper()
         {
-            CreateMap<User, EditUserViewModel>().ReverseMap();
+            CreateMap<User, UserEditViewModel>().ReverseMap();
             //CreateMap<User, EditUserViewModel>()
             //    .ForMember(dest => dest.Name, opt => opt.MapFrom(x => $"{x.Name} 123")).ReverseMap();
 
-            CreateMap<User, CreateUserViewModel>().ReverseMap();
+            CreateMap<User, UserCreateViewModel>().ReverseMap();
+
+            CreateMap<User, UserDetailsViewModel>().ReverseMap();
         }
     }
 }

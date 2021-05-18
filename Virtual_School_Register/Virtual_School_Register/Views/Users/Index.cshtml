@@ -17,8 +17,8 @@
                     @Html.DisplayNameFor(model => model.Id)
                 </th>*@
             <th>
-                Login
-                @*@Html.DisplayNameFor(model => model.UserName)*@
+                @*Login*@
+                @Html.DisplayNameFor(model => model.UserName)
             </th>
             @*<th>
                     @Html.DisplayNameFor(model => model.Password)
@@ -36,8 +36,8 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                Numer telefonu
-                @*@Html.DisplayNameFor(model => model.PhoneNumber)*@
+                @*Numer telefonu*@
+                @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.BirthDate)
@@ -102,10 +102,12 @@
                 </td>
                 <td>
                     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
 
-                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>*@ |
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                 </td>
             </tr>
         }
