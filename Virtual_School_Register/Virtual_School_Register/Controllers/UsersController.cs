@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Virtual_School_Register.Data;
 using Virtual_School_Register.Models;
+using Virtual_School_Register.ViewModels;
 
 namespace Virtual_School_Register.Controllers
 {
@@ -15,12 +18,17 @@ namespace Virtual_School_Register.Controllers
     {
 
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<User> _userManager; //Do zarządzania userami
+        private readonly RoleManager<IdentityRole> _roleManager; //Do zarządzania rolami :D 
+        private readonly IMapper _mapper;
 
-        public UsersController(ApplicationDbContext context, UserManager<User> userManager)
+        public UsersController(ApplicationDbContext context, UserManager<User> userManager,
+            IMapper mapper, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
+            _mapper = mapper;
         }
 
         // GET: Users
@@ -39,9 +47,8 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .Include(u => u.Class)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _userManager.FindByIdAsync(id);
+
             if (user == null)
             {
                 return NotFound();
@@ -61,14 +68,42 @@ namespace Virtual_School_Register.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         // public async Task<IActionResult> Create([Bind("Id,UserName,Password,Name,Surname,Sex,Email,PhoneNumber,BirthDate,Adress,ParentId,Type,ClassId")] User user)
-        public async Task<IActionResult> Create([Bind("Id,UserName,Name,Surname,Sex,Email,PhoneNumber,BirthDate,Adress,ParentId,ClassId")] User user)
+        public async Task<IActionResult> Create(CreateUserViewModel user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (!await _roleManager.RoleExistsAsync(user.Type))
+                {
+                    var role = new IdentityRole();
+
+                    role.Name = user.Type;
+                    await _roleManager.CreateAsync(role);
+                }
+
+                var createdUser = _mapper.Map<User>(user);
+                createdUser.EmailConfirmed = true;
+                var result = await _userManager.CreateAsync(createdUser, user.Password);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(createdUser, user.Type);
+
+                    return RedirectToAction("Index");
+                }
+
+                //_context.Add(user);
+                //await _context.SaveChangesAsync();
+                //return RedirectToAction(nameof(Index));
             }
+
+            if (user.Type == "Uczen" && user.ClassId == null)
+            {
+                var invalidProp = ModelState.Values.FirstOrDefault(x => x.ValidationState == ModelValidationState.Invalid);
+                var error = invalidProp.Errors[0].ErrorMessage;
+
+                ModelState.AddModelError("ClassId", error);
+            }
+
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
             return View(user);
         }
@@ -87,13 +122,15 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
-            return View(user);
+
+            var editModel = _mapper.Map<EditUserViewModel>(user);
+            return View(editModel);
         }
 
         // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,UserName,Name,Surname,Sex,Email,PhoneNumber,BirthDate,Adress,ParentId,ClassId")] User user)
+        public async Task<IActionResult> Edit(string id, EditUserViewModel user)
         {
             if (id != user.Id)
             {
@@ -104,15 +141,7 @@ namespace Virtual_School_Register.Controllers
             {
                 var userFromDb = await _userManager.FindByIdAsync(id);
 
-                userFromDb.Name = user.Name;
-                userFromDb.Surname = user.Surname;
-                userFromDb.Sex = user.Sex;
-                userFromDb.Email = user.Email;
-                userFromDb.PhoneNumber = user.PhoneNumber;
-                userFromDb.BirthDate = user.BirthDate;
-                userFromDb.Adress = user.Adress;
-                userFromDb.ParentId = user.ParentId;
-                userFromDb.ClassId = user.ClassId;
+                _mapper.Map(user, userFromDb);
 
                 await _userManager.UpdateAsync(userFromDb);
 
@@ -146,9 +175,8 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .Include(u => u.Class)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _userManager.FindByIdAsync(id);
+
             if (user == null)
             {
                 return NotFound();
@@ -162,9 +190,10 @@ namespace Virtual_School_Register.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var user = await _context.Users.FindAsync(id);
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            var user = await _userManager.FindByIdAsync(id);
+
+            await _userManager.DeleteAsync(user);
+
             return RedirectToAction(nameof(Index));
         }
 
