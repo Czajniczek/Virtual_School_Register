@@ -48,9 +48,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ParentId)
             </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.Type)
-                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Class)
             </th>
@@ -94,16 +94,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ParentId)
                 </td>
-                @*<td>
-                                    @switch (item.Type)
-                                    {
-                                        case "1":@Html.DisplayName("Administrator") break;
-                                    case "2": @Html.DisplayName("Nauczyciel") break;
-                                case "3": @Html.DisplayName("Rodzic") break;
-                            case "4": @Html.DisplayName("Uczeń")break;
-                    }
-                                    @Html.DisplayFor(modelItem => item.Type)
-                                </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Class.Name)
                 </td>

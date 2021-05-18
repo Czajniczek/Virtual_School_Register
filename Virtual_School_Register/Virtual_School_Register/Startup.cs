@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Virtual_School_Register.Data;
+using Virtual_School_Register.MapperConfig;
 using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register
@@ -31,11 +33,31 @@ namespace Virtual_School_Register
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("Virtual_School_Register_CS")));
+            services.AddDefaultIdentity<User>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+                options.Password.RequireDigit = true; //Liczba
+                options.Password.RequireLowercase = true; //Ma³y znak
+                options.Password.RequireNonAlphanumeric = true; //Znak specjalny
+                options.Password.RequireUppercase = true; //Du¿y znak
+                options.Password.RequiredLength = 8; //D³ugoœæ
+            })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            var config = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new ConfigMapper());
+            });
+
+            IMapper mapper = config.CreateMapper();
+
+            services.AddSingleton(mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
