@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -14,6 +15,7 @@ using Virtual_School_Register.ViewModels;
 
 namespace Virtual_School_Register.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
 
@@ -82,7 +84,7 @@ namespace Virtual_School_Register.Controllers
                 }
 
                 var createdUser = _mapper.Map<User>(user);
-                createdUser.EmailConfirmed = true;
+                //createdUser.EmailConfirmed = true;
                 var result = await _userManager.CreateAsync(createdUser, user.Password);
 
                 if (result.Succeeded)

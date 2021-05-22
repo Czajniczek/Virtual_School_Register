@@ -10,20 +10,18 @@ namespace Virtual_School_Register.Models
     {
         public int MessageId { get; set; }
 
-        [Display(Name = "Tytuł")]
         [Required]
-        [MinLength(1, ErrorMessage = "Tytuł nie może być pusty!")]
+        [MinLength(1, ErrorMessage = "Title cannot be empty!")]
         public string Title { get; set; }
 
-        [Display(Name = "Data")]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
-        [Display(Name = "Treść")]
         [Required]
-        [MinLength(1, ErrorMessage = "Treść nie może być pusta!")]
+        [MinLength(1, ErrorMessage = "Content cannot be empty!")]
         public string Content { get; set; }
 
+        [Display(Name = "Recipient")]
         public int RecipientId { get; set; }
 
         public string UserId { get; set; }

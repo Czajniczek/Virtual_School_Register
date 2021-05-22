@@ -35,7 +35,7 @@ namespace Virtual_School_Register
                     Configuration.GetConnectionString("Virtual_School_Register_CS")));
             services.AddDefaultIdentity<User>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = true;
+                options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireDigit = true; //Liczba
                 options.Password.RequireLowercase = true; //Ma³y znak
                 options.Password.RequireNonAlphanumeric = true; //Znak specjalny

@@ -10,30 +10,29 @@ namespace Virtual_School_Register.Models
     {
         public int QuestionId { get; set; }
 
-        [Display(Name = "Treść")]
         [Required]
-        [MinLength(1, ErrorMessage = "Treść nie może być pusta!")]
+        [MinLength(1, ErrorMessage = "Content cannot be empty!")]
         public string Content { get; set; }
 
-        [Display(Name = "Odpowiedź A")]
+        [Display(Name = "Answer A")]
         [Required]
-        [MinLength(1, ErrorMessage = "Odpowiedź nie może być pusta!")]
+        [MinLength(1, ErrorMessage = "Answer cannot be empty!")]
         public string AnswerA { get; set; }
 
-        [Display(Name = "Odpowiedź B")]
+        [Display(Name = "Answer B")]
         [Required]
-        [MinLength(1, ErrorMessage = "Odpowiedź nie może być pusta!")]
+        [MinLength(1, ErrorMessage = "Answer cannot be empty!")]
         public string AnswerB { get; set; }
 
-        [Display(Name = "Odpowiedź C")]
+        [Display(Name = "Answer C")]
         public string AnswerC { get; set; }
 
-        [Display(Name = "Odpowiedź D")]
+        [Display(Name = "Answer D")]
         public string AnswerD { get; set; }
 
-        [Display(Name = "Prawidłowa odpowiedź")]
+        [Display(Name = "Correct answer")]
         [Required]
-        [MinLength(1, ErrorMessage = "Prawidłowa odpowiedź nie może być pusta!")]
+        [MinLength(1, ErrorMessage = "Correct answer cannot be empty!")]
         public string CorrectAnswer { get; set; }
 
         public int TestId { get; set; }

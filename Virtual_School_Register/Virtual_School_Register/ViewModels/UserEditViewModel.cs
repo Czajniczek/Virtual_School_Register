@@ -11,41 +11,36 @@ namespace Virtual_School_Register.ViewModels
         public string Id { get; set; }
 
         [Display(Name = "Login")]
-        [StringLength(20, MinimumLength = 1, ErrorMessage = "Imię musi mieć od 1 do 20 znaków!")]
+        [StringLength(20, MinimumLength = 1, ErrorMessage = "Login must be between 1 and 20 characters!")]
         public string UserName { get; set; }
 
-        [Display(Name = "Imię")]
-        [StringLength(20, MinimumLength = 1, ErrorMessage = "Imię musi mieć od 1 do 20 znaków!")]
+        [StringLength(20, MinimumLength = 1, ErrorMessage = "Name must be between 1 and 20 characters!")]
         public string Name { get; set; }
 
-        [Display(Name = "Nazwisko")]
-        [StringLength(20, MinimumLength = 1, ErrorMessage = "Nazwisko musi mieć od 1 do 20 znaków!")]
+        [StringLength(20, MinimumLength = 1, ErrorMessage = "Surname must be between 1 and 20 characters!")]
         public string Surname { get; set; }
 
-        [Display(Name = "Płeć")]
-        [StringLength(1, MinimumLength = 1, ErrorMessage = "Płeć musi składać się z jednego znaku")]
         public string Sex { get; set; }
 
-        [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Display(Name = "Numer telefonu")]
+        [Display(Name = "Phone number")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
-        [Display(Name = "Data urodzenia")]
+        [Display(Name = "Birth date")]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
-        [Display(Name = "Adres")]
-        [MinLength(1, ErrorMessage = "Opis nie może być pusty!")]
+        [MinLength(1, ErrorMessage = "Adress cannot be empty!")]
         public string Adress { get; set; }
 
-        [Display(Name = "Rodzic")]
+        [Display(Name = "Parent")]
         public string ParentId { get; set; }
 
-        [Display(Name = "Klasa")]
+        [Display(Name = "Class")]
+        //[RequiredIf("Type", "Uczen", "Student must be assigned to the class")]
         public int? ClassId { get; set; }
     }
 }

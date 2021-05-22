@@ -14,34 +14,29 @@ namespace Virtual_School_Register.ViewModels
         [Display(Name = "Login")]
         public string UserName { get; set; }
 
-        [Display(Name = "Imię")]
         public string Name { get; set; }
 
-        [Display(Name = "Nazwisko")]
         public string Surname { get; set; }
 
-        [Display(Name = "Płeć")]
         public string Sex { get; set; }
 
-        [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Display(Name = "Numer telefonu")]
+        [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
 
-        [Display(Name = "Data urodzenia")]
+        [Display(Name = "Birth date")]
         public DateTime BirthDate { get; set; }
 
-        [Display(Name = "Adres")]
         public string Adress { get; set; }
 
-        [Display(Name = "Rodzic")]
+        [Display(Name = "Parent")]
         public string ParentId { get; set; }
 
-        [Display(Name = "Klasa")]
+        [Display(Name = "Class")]
         public int? ClassId { get; set; }
 
-        [Display(Name = "Typ użytkownika")]
+        [Display(Name = "User type")]
         public string Type { get; set; }
     }
 }

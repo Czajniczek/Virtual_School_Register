@@ -1,3 +1,21 @@
 ﻿@{
     Layout = "_Layout";
 }
+
+@*@{ 
+    string myLayout = "";
+
+    if (User.IsInRole("Admin"))
+        myLayout = "_AdminLayout";
+    else if (User.IsInRole("Nauczyciel"))
+        myLayout = "_TeacherLayout";
+    else if (User.IsInRole("Rodzic"))
+        myLayout = "_Layout";
+    else if (User.IsInRole("Uczen"))
+        myLayout = "_Layout";
+    else
+        myLayout = "_Layout";
+
+    Layout = myLayout;
+}
+*@

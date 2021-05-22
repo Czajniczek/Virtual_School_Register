@@ -10,17 +10,16 @@ namespace Virtual_School_Register.Models
     {
         public int ClassId { get; set; }
 
-        [Display(Name = "Nazwa")]
         [Required]
-        [StringLength(5, MinimumLength = 1, ErrorMessage = "Nazwa musi mieć od 1 do 5 znaków!")]
+        [StringLength(5, MinimumLength = 1, ErrorMessage = "Name must be between 1 and 5 characters!")]
         public string Name { get; set; }
 
-        [Display(Name = "Profil")]
+        [Display(Name = "Profile")]
         [Required]
-        [MinLength(1, ErrorMessage = "Profil nie może być pusty!")]
+        [MinLength(1, ErrorMessage = "Profile cannot be empty!")]
         public string Content { get; set; }
 
-        [Display(Name = "Wychowawca")]
+        [Display(Name = "Class tutor")]
         public string ClassTutorId { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
