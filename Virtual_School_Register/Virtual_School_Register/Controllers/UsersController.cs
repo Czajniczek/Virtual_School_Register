@@ -36,7 +36,7 @@ namespace Virtual_School_Register.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var myDbContext = _context.Users.Include(u => u.Class);
+            var myDbContext = _context.Users.Include(u => u.Class).OrderBy(x => x.UserName.ToLower()).ThenBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower());
 
             return View(await myDbContext.ToListAsync());
         }
@@ -50,6 +50,7 @@ namespace Virtual_School_Register.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(id);
+            var myClass = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == user.ClassId);
 
             if (user == null)
             {
@@ -57,6 +58,7 @@ namespace Virtual_School_Register.Controllers
             }
 
             var detailsModel = _mapper.Map<UserDetailsViewModel>(user);
+            detailsModel.Class = myClass;
             return View(detailsModel);
         }
 
@@ -85,18 +87,17 @@ namespace Virtual_School_Register.Controllers
 
                 var createdUser = _mapper.Map<User>(user);
                 //createdUser.EmailConfirmed = true;
-                var result = await _userManager.CreateAsync(createdUser, user.Password);
-
-                if (result.Succeeded)
+                if (user.Password != null)
                 {
-                    await _userManager.AddToRoleAsync(createdUser, user.Type);
+                     var result = await _userManager.CreateAsync(createdUser, user.Password);
 
-                    return RedirectToAction("Index");
+                    if (result.Succeeded)
+                    {
+                        await _userManager.AddToRoleAsync(createdUser, user.Type);
+
+                        return RedirectToAction("Index");
+                    }
                 }
-
-                //_context.Add(user);
-                //await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
             }
 
             if (user.Type == "Uczen" && user.ClassId == null)
@@ -142,28 +143,36 @@ namespace Virtual_School_Register.Controllers
 
             if (ModelState.IsValid)
             {
+                if (!await _roleManager.RoleExistsAsync(user.Type))
+                {
+                    var role = new IdentityRole();
+
+                    role.Name = user.Type;
+                    await _roleManager.CreateAsync(role);
+                }
+
                 var userFromDb = await _userManager.FindByIdAsync(id);
 
                 _mapper.Map(user, userFromDb);
 
                 await _userManager.UpdateAsync(userFromDb);
 
-                //try
-                //{
-                //    _context.Update(user);
-                //    await _context.SaveChangesAsync();
-                //}
-                //catch (DbUpdateConcurrencyException)
-                //{
-                //    if (!UserExists(user.Id))
-                //    {
-                //        return NotFound();
-                //    }
-                //    else
-                //    {
-                //        throw;
-                //    }
-                //}
+                var token = await _userManager.GeneratePasswordResetTokenAsync(userFromDb);
+
+                if (user.Password != null)
+                {
+                    var result = await _userManager.ResetPasswordAsync(userFromDb, token, user.Password);
+
+                    if (result.Succeeded)
+                    {
+                        await _userManager.AddToRoleAsync(userFromDb, user.Type);
+
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
+                await _userManager.AddToRoleAsync(userFromDb, user.Type);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
@@ -179,6 +188,7 @@ namespace Virtual_School_Register.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(id);
+            var myClass = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == user.ClassId);
 
             if (user == null)
             {
@@ -186,6 +196,7 @@ namespace Virtual_School_Register.Controllers
             }
 
             var deleteModel = _mapper.Map<UserDetailsViewModel>(user);
+            deleteModel.Class = myClass;
             return View(deleteModel);
         }
 

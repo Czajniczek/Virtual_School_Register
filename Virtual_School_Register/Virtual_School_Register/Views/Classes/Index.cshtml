@@ -37,8 +37,8 @@
                 @Html.DisplayFor(modelItem => item.ClassTutorId)
             </td>
             <td>
+                <a asp-action="Details" asp-route-id="@item.ClassId">Manage</a> |
                 <a asp-action="Edit" asp-route-id="@item.ClassId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ClassId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ClassId">Delete</a>
             </td>
         </tr>

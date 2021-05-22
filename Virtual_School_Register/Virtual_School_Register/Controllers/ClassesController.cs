@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,16 +16,20 @@ namespace Virtual_School_Register.Controllers
     public class ClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public ClassesController(ApplicationDbContext context)
+        public ClassesController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Classes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Class.ToListAsync());
+            var classes = await _context.Class.OrderBy(x => x.Name.ToLower()).ToListAsync();
+            
+            return View(classes);
         }
 
         // GET: Classes/Details/5
@@ -41,6 +46,16 @@ namespace Virtual_School_Register.Controllers
             {
                 return NotFound();
             }
+
+            var students = _userManager.Users.Where(u => u.ClassId == id && u.Type == "Uczen").OrderBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower());
+            ViewBag.StudentsList = students.ToList();
+
+            var studentsWithNoClass = _userManager.Users.Where(u => u.ClassId == null && u.Type == "Uczen").OrderBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower());
+            ViewBag.StudentsWithNoClassList = studentsWithNoClass.ToList();
+
+            ViewBag.ClassId = id;
+
+            //Session["classId"] = id;
 
             return View(@class);
         }
@@ -145,6 +160,35 @@ namespace Virtual_School_Register.Controllers
             _context.Class.Remove(@class);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _userManager.FindByIdAsync(id);
+            var classId = student.ClassId;
+            student.ClassId = null;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = classId });
+        }
+
+        public async Task<IActionResult> AddUser(string id, int classId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _userManager.FindByIdAsync(id);
+            student.ClassId = classId;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = classId });
         }
 
         private bool ClassExists(int id)
