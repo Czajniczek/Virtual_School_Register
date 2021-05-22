@@ -10,14 +10,12 @@ namespace Virtual_School_Register.Models
     {
         public int SubjectId { get; set; }
 
-        [Display(Name = "Nazwa")]
         [Required]
-        [MinLength(1, ErrorMessage = "Nazwa nie może być pusta!")]
+        [MinLength(1, ErrorMessage = "Name cannot be empty!")]
         public string Name { get; set; }
 
-        [Display(Name = "Treść")]
         [Required]
-        [MinLength(1, ErrorMessage = "Treść nie może być pusta!")]
+        [MinLength(1, ErrorMessage = "Content cannot be empty!")]
         public string Content { get; set; }
 
         public virtual ICollection<Evaluation> Evaluations { get; set; }

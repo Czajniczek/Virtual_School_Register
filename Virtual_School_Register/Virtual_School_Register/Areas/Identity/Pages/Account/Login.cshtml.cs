@@ -44,7 +44,8 @@ namespace Virtual_School_Register.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [EmailAddress]
+            [Display(Name = "Login")]
+            //[EmailAddress]
             public string Email { get; set; }
 
             [Required]

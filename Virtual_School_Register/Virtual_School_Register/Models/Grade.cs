@@ -10,20 +10,18 @@ namespace Virtual_School_Register.Models
     {
         public int GradeId { get; set; }
 
-        [Display(Name = "Ocena")]
+        [Display(Name = "Grade")]
         [Required]
-        [RegularExpression(@"^\d+.\d{0,1}$", ErrorMessage = "Nieprawidłowa ocena")]
+        [RegularExpression(@"^\d+.\d{0,1}$", ErrorMessage = "Incorrect grade")]
         public float Value { get; set; }
 
-        [Display(Name = "Data")]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
-        [Display(Name = "Kategoria")]
-        [MinLength(1, ErrorMessage = "Kategoria nie może być pusta!")]
+        [Display(Name = "Category")]
+        [MinLength(1, ErrorMessage = "Category cannot be empty!")]
         public string Type { get; set; }
 
-        [Display(Name = "Komentarz")]
         public string Comment { get; set; }
 
         public virtual ICollection<Evaluation> Evaluations { get; set; }

@@ -10,7 +10,6 @@ namespace Virtual_School_Register.Models
     {
         public int FileId { get; set; }
 
-        [Display(Name = "Nazwa")]
         public string Name { get; set; }
 
         //public string Path { get; set; }
@@ -19,10 +18,10 @@ namespace Virtual_School_Register.Models
 
         //public string Content { get; set; }
 
-        [Display(Name = "Lekcja")]
+        [Display(Name = "Lesson")]
         public int LessonId { get; set; } //Do dodawania (create)
 
-        [Display(Name = "Lekcja")]
+        [Display(Name = "Lesson")]
         public virtual Lesson Lesson { get; set; } //Do wyświetlania (index)
     }
 }

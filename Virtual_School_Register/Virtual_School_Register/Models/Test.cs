@@ -10,16 +10,14 @@ namespace Virtual_School_Register.Models
     {
         public int TestId { get; set; }
 
-        [Display(Name = "Tytuł")]
         [Required]
-        [MinLength(1, ErrorMessage = "Tytuł nie może być pusty!")]
+        [MinLength(1, ErrorMessage = "Title cannot be empty!")]
         public string Title { get; set; }
 
-        [Display(Name = "Czas")]
         [DataType(DataType.Time)]
         public DateTime Time { get; set; }
 
-        public int ClassSubjectTeacherId { get; set; }
+        public int ConductingLessonId { get; set; }
 
         public virtual ConductingLesson ConductingLesson { get; set; }
 
