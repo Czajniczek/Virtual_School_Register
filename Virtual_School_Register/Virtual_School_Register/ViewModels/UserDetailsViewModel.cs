@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.ViewModels
 {
@@ -34,7 +35,7 @@ namespace Virtual_School_Register.ViewModels
         public string ParentId { get; set; }
 
         [Display(Name = "Class")]
-        public int? ClassId { get; set; }
+        public Class Class { get; set; }
 
         [Display(Name = "User type")]
         public string Type { get; set; }
