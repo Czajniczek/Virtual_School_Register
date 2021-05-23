@@ -1,7 +1,7 @@
 ﻿@model Virtual_School_Register.Models.Class
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Subjects";
 }
 
 @*<h1>Details</h1>*@
@@ -39,24 +39,25 @@
 
 <div class="row">
     <div class="col-md-6">
-        <h2>Students list:</h2>
+        <h2>Subjects list:</h2>
         <br />
         <table class="table table-striped text-center">
             <thead class="thead-dark">
                 <tr>
                     <th>@Html.DisplayName("Name")</th>
-                    <th>@Html.DisplayName("Surname")</th>
+                    <th>@Html.DisplayName("Content")</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (Virtual_School_Register.Models.User student in ViewBag.StudentsList)
+                @foreach (Virtual_School_Register.Models.Subject subject in ViewBag.SubjectsList)
                 {
                     <tr>
-                        <td>@Html.DisplayFor(i => student.Name)</td>
-                        <td>@Html.DisplayFor(i => student.Surname)</td>
+                        <td>@Html.DisplayFor(i => subject.Name)</td>
+                        <td>@Html.DisplayFor(i => subject.Content)</td>
                         <td>
-                            <a class="btn btn-outline-danger" asp-action="DeleteUser" asp-route-id="@student.Id">Remove</a>
+                            @*<a class="btn btn-outline-danger" asp-action="RemoveSubject" asp-route-id="@subject.SubjectId">Remove</a>*@
+                            @Html.ActionLink("Remove", "RemoveSubject", "Classes", new { id = subject.SubjectId, classId = ViewBag.ClassId }, new { @class = "btn btn-outline-danger" })
                         </td>
                     </tr>
                 }
@@ -65,25 +66,25 @@
     </div>
 
     <div class="col-md-6">
-        <h2>Students without class:</h2>
+        <h2>All subjects:</h2>
         <br />
         <table class="table table-striped text-center">
             <thead class="thead-dark">
                 <tr>
                     <th>@Html.DisplayName("Name")</th>
-                    <th>@Html.DisplayName("Surname")</th>
+                    <th>@Html.DisplayName("Content")</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (Virtual_School_Register.Models.User studentWithNoClass in ViewBag.StudentsWithNoClassList)
+                @foreach (Virtual_School_Register.Models.Subject allSubject in ViewBag.AllSubjectsList)
                 {
                     <tr>
-                        <td>@Html.DisplayFor(i => studentWithNoClass.Name)</td>
-                        <td>@Html.DisplayFor(i => studentWithNoClass.Surname)</td>
+                        <td>@Html.DisplayFor(i => allSubject.Name)</td>
+                        <td>@Html.DisplayFor(i => allSubject.Content)</td>
                         <td>
                             @*<a class="btn btn-outline-success" asp-action="AddUser" asp-route-id="@studentWithNoClass.Id">Add</a>*@
-                            @Html.ActionLink("Add", "AddUser", "Classes", new { id = studentWithNoClass.Id, classId = ViewBag.ClassId }, new { @class = "btn btn-outline-success" })
+                            @Html.ActionLink("Add", "AddSubject", "Classes", new { id = allSubject.SubjectId, classId = ViewBag.ClassId }, new { @class = "btn btn-outline-success" })
                         </td>
                     </tr>
                 }
