@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +14,18 @@ namespace Virtual_School_Register.Controllers
     public class ConductingLessonsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public ConductingLessonsController(ApplicationDbContext context)
+        public ConductingLessonsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: ConductingLessons
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User);
+            var applicationDbContext = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User).OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -57,8 +60,6 @@ namespace Virtual_School_Register.Controllers
         }
 
         // POST: ConductingLessons/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ConductingLessonId,UserId,ClassId,SubjectId")] ConductingLesson conductingLesson)
@@ -88,18 +89,21 @@ namespace Virtual_School_Register.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Content", conductingLesson.ClassId);
-            ViewData["SubjectId"] = new SelectList(_context.Set<Subject>(), "SubjectId", "Content", conductingLesson.SubjectId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", conductingLesson.UserId);
+            ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", conductingLesson.ClassId);
+            ViewData["SubjectId"] = new SelectList(_context.Set<Subject>(), "SubjectId", "Name", conductingLesson.SubjectId);
+
+            var users = await _userManager.Users.Where(x => x.Type == "Nauczyciel").ToListAsync();
+
+            ViewBag.TeachersList = users;
+
+            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", conductingLesson.UserId);
             return View(conductingLesson);
         }
 
         // POST: ConductingLessons/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ConductingLessonId,UserId,ClassId,SubjectId")] ConductingLesson conductingLesson)
+        public async Task<IActionResult> Edit(int id, ConductingLesson conductingLesson)
         {
             if (id != conductingLesson.ConductingLessonId)
             {
@@ -150,7 +154,13 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            return View(conductingLesson);
+            if(conductingLesson.UserId != null)
+            {
+                conductingLesson.UserId = null;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: ConductingLessons/Delete/5
