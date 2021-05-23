@@ -47,6 +47,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Index">Files</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Annoucements" asp-action="Index">Annoucements</a>
+                            </li>
                         }
                         else if (User.IsInRole("Nauczyciel"))
                         {
@@ -73,6 +76,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Index">Files</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Annoucements" asp-action="Index">Announcements</a>
                             </li>
                         }
                         else if (User.IsInRole("Uczen"))
