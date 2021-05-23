@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var tutorsList = ViewBag.TutorsList as IEnumerable<User>;
 }
 
 <h1>Edit</h1>
@@ -25,8 +26,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="ClassTutorId" class="control-label"></label>
-                <input asp-for="ClassTutorId" class="form-control" />
-                <span asp-validation-for="ClassTutorId" class="text-danger"></span>
+                <select asp-for="ClassTutorId" class="form-control">
+                    <option value=@(null)>Brak</option>
+                    @foreach (var tutor in tutorsList)
+                    {
+                        <option value="@tutor.Id">@tutor.Name @tutor.Surname</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

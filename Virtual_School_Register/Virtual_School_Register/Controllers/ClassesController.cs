@@ -28,7 +28,18 @@ namespace Virtual_School_Register.Controllers
         public async Task<IActionResult> Index()
         {
             var classes = await _context.Class.OrderBy(x => x.Name.ToLower()).ToListAsync();
-            
+            var users = await _userManager.Users.Where(x => x.Type == "Nauczyciel").ToListAsync();
+
+            foreach (var c in classes)
+            {
+                if (c.ClassTutorId != null)
+                {
+                    var teacher = users.Find(x => x.Id == c.ClassTutorId);
+                    c.ClassTutorId = teacher.Name + " " + teacher.Surname;
+                    //c.ClassTutorId = _userManager.Users.Where(x => x.Id == c.ClassTutorId);
+                }
+            }
+
             return View(classes);
         }
 
@@ -47,6 +58,15 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
+            var users = await _userManager.Users.Where(x => x.Type == "Nauczyciel").ToListAsync();
+
+
+            //var teacher = await _userManager.Users.Where(x => x.Id == @class.ClassTutorId);
+            //var teacher = await _userManager.Users.FindAsync(@class.ClassTutorId);
+            //c.ClassTutorId = teacher.Name + " " + teacher.Surname;
+
+
+
             var students = _userManager.Users.Where(u => u.ClassId == id && u.Type == "Uczen").OrderBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower());
             ViewBag.StudentsList = students.ToList();
 
@@ -60,9 +80,49 @@ namespace Virtual_School_Register.Controllers
             return View(@class);
         }
 
+        public async Task<IActionResult> Subjects(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var @class = await _context.Class
+                .FirstOrDefaultAsync(m => m.ClassId == id);
+
+            if (@class == null)
+            {
+                return NotFound();
+            }
+
+            var existingSubjects = _context.ConductingLesson.Where(c => c.ClassId == id).Select(x => x.SubjectId).Distinct().ToList();
+            var classesSubjects = _context.Subject.Where(x => existingSubjects.Contains(x.SubjectId)).ToList();
+            ViewBag.SubjectsList = classesSubjects;
+
+            var allSubjects = _context.Subject.Where(x => !existingSubjects.Contains(x.SubjectId));
+            ViewBag.AllSubjectsList = allSubjects.ToList();
+
+            //var subjects = subjectsId
+            //ViewBag.SubjectsList = subjects.ToList();
+
+            //var studentsWithNoClass = _userManager.Users.Where(u => u.ClassId == null && u.Type == "Uczen").OrderBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower());
+            //ViewBag.StudentsWithNoClassList = studentsWithNoClass.ToList();
+
+            ViewBag.ClassId = id;
+
+            //Session["classId"] = id;
+
+            return View(@class);
+        }
+
         // GET: Classes/Create
         public IActionResult Create()
         {
+            var tutors = _context.Class.Where(c => c.ClassTutorId != null).Select(x => x.ClassTutorId);
+            var notTutors = _userManager.Users.Where(x => x.Type == "Nauczyciel" && !tutors.Contains(x.Id)).ToList();
+
+            ViewBag.TutorsList = notTutors;
+
             return View();
         }
 
@@ -95,6 +155,12 @@ namespace Virtual_School_Register.Controllers
             {
                 return NotFound();
             }
+
+            var tutors = _context.Class.Where(c => c.ClassTutorId != null).Select(x => x.ClassTutorId);
+            var notTutors = _userManager.Users.Where(x => x.Type == "Nauczyciel" && !tutors.Contains(x.Id)).ToList();
+
+            ViewBag.TutorsList = notTutors;
+
             return View(@class);
         }
 
@@ -189,6 +255,35 @@ namespace Virtual_School_Register.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = classId });
+        }
+
+        public async Task<IActionResult> RemoveSubject(int? id, int classId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var subject = _context.ConductingLesson.Where(x => x.SubjectId == id);
+
+            foreach (var sub in subject)
+            {
+                _context.ConductingLesson.Remove(sub);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Subjects", new { id = classId });
+        }
+
+        public async Task<IActionResult> AddSubject(int id, int classId)
+        {
+            var conductingLesson = new ConductingLesson { SubjectId = id, ClassId = classId };
+
+            await _context.ConductingLesson.AddAsync(conductingLesson);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Subjects", new { id = classId });
         }
 
         private bool ClassExists(int id)
