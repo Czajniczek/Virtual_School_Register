@@ -11,7 +11,7 @@ using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Nauczyciel")]
     public class FilesController : Controller
     {
         private readonly ApplicationDbContext _context;

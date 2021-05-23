@@ -31,7 +31,7 @@ namespace Virtual_School_Register.Controllers
 
             if(User.IsInRole("Admin"))
             {
-                announcements = await _context.Annoucement.Include(u => u.User).OrderBy(x => x.Title.ToLower()).ThenBy(x => x.Content).ToListAsync();
+                announcements = await _context.Annoucement.Include(u => u.User).OrderBy(x => x.Date).Reverse().ToListAsync();
             }
             else
             {
@@ -116,7 +116,16 @@ namespace Virtual_School_Register.Controllers
 
             if (ModelState.IsValid)
             {
-                annoucement.UserId = _userManager.GetUserId(HttpContext.User);
+                if (User.IsInRole("Admin"))
+                {
+                    var thisAnnouncement = await _context.Annoucement.AsNoTracking().FirstOrDefaultAsync(x => x.AnnoucementId == id);
+                    annoucement.UserId = thisAnnouncement.UserId;
+                }
+                else
+                {
+                    annoucement.UserId = _userManager.GetUserId(HttpContext.User);
+                }
+
                 annoucement.Date = DateTime.Now;
 
                 try

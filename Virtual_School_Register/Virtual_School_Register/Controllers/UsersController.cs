@@ -86,7 +86,7 @@ namespace Virtual_School_Register.Controllers
                 }
 
                 var createdUser = _mapper.Map<User>(user);
-                //createdUser.EmailConfirmed = true;
+                createdUser.EmailConfirmed = true;
                 if (user.Password != null)
                 {
                      var result = await _userManager.CreateAsync(createdUser, user.Password);

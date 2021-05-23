@@ -6,42 +6,48 @@
 
 <h1>Index</h1>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+</p>*@
+<table class="table table-striped text-center">
+    <thead class="thead-dark">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Class)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Subject)
             </th>
-            <th></th>
+            <th>
+                Teacher
+                @*@Html.DisplayNameFor(model => model.User)*@
+            </th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
+                @Html.DisplayFor(modelItem => item.Class.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Class.Content)
+                @Html.DisplayFor(modelItem => item.Subject.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Subject.Content)
+                @Html.DisplayFor(modelItem => item.User.Name)
+                @Html.DisplayFor(modelItem => item.User.Surname)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ConductingLessonId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ConductingLessonId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ConductingLessonId">Delete</a>
+                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.ConductingLessonId">Edit</a>
+                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.ConductingLessonId">Remove teacher</a>
+
+                @*<a asp-action="Edit" asp-route-id="@item.ConductingLessonId">Edit</a> |*@
+                @*<a asp-action="Details" asp-route-id="@item.ConductingLessonId">Details</a> |*@
+                @*<a asp-action="Delete" asp-route-id="@item.ConductingLessonId">Remove teacher</a>*@
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
