@@ -23,7 +23,13 @@ namespace Virtual_School_Register.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
-        public string Username { get; set; }
+        public string Name { get; set; }
+
+        public string Surname { get; set; }
+
+        [Display(Name = "Birth Date")]
+        [DataType(DataType.Date)]
+        public DateTime Birthdate { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -36,6 +42,11 @@ namespace Virtual_School_Register.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Login")]
+            public string Username { get; set; }
+
+            public string Adress { get; set; }
         }
 
         private async Task LoadAsync(User user)
@@ -43,11 +54,15 @@ namespace Virtual_School_Register.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
-            Username = userName;
+            Name = user.Name;
+            Surname = user.Surname;
+            Birthdate = user.BirthDate;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Username = userName,
+                Adress = user.Adress
             };
         }
 
@@ -75,6 +90,16 @@ namespace Virtual_School_Register.Areas.Identity.Pages.Account.Manage
             {
                 await LoadAsync(user);
                 return Page();
+            }
+
+            if(Input.Username != user.UserName)
+            {
+               await _userManager.SetUserNameAsync(user, Input.Username);
+            }
+
+            if(Input.Adress != user.Adress)
+            {
+                user.Adress = Input.Adress;
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);

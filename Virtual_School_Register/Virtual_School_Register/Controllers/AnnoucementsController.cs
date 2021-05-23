@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,21 +12,35 @@ using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Nauczyciel")]
     public class AnnoucementsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public AnnoucementsController(ApplicationDbContext context)
+        public AnnoucementsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Annoucements
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Annoucement.Include(a => a.User);
-            return View(await applicationDbContext.ToListAsync());
+            List<Annoucement> announcements;
+
+            if(User.IsInRole("Admin"))
+            {
+                announcements = await _context.Annoucement.Include(u => u.User).OrderBy(x => x.Title.ToLower()).ThenBy(x => x.Content).ToListAsync();
+            }
+            else
+            {
+                var thisUser = _userManager.GetUserId(HttpContext.User);
+
+                announcements = await _context.Annoucement.Include(u => u.User).Where(x => x.UserId == thisUser).OrderBy(x => x.Title.ToLower()).ThenBy(x => x.Content).ToListAsync();
+            }
+
+            return View(announcements);
         }
 
         // GET: Annoucements/Details/5
@@ -55,14 +70,15 @@ namespace Virtual_School_Register.Controllers
         }
 
         // POST: Annoucements/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AnnoucementId,Title,Content,Date,UserId")] Annoucement annoucement)
+        public async Task<IActionResult> Create(Annoucement annoucement)
         {
             if (ModelState.IsValid)
             {
+                annoucement.UserId = _userManager.GetUserId(HttpContext.User);
+                annoucement.Date = DateTime.Now;
+
                 _context.Add(annoucement);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -89,11 +105,9 @@ namespace Virtual_School_Register.Controllers
         }
 
         // POST: Annoucements/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AnnoucementId,Title,Content,Date,UserId")] Annoucement annoucement)
+        public async Task<IActionResult> Edit(int id, Annoucement annoucement)
         {
             if (id != annoucement.AnnoucementId)
             {
@@ -102,6 +116,9 @@ namespace Virtual_School_Register.Controllers
 
             if (ModelState.IsValid)
             {
+                annoucement.UserId = _userManager.GetUserId(HttpContext.User);
+                annoucement.Date = DateTime.Now;
+
                 try
                 {
                     _context.Update(annoucement);

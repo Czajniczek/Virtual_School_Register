@@ -36,7 +36,6 @@ namespace Virtual_School_Register.Controllers
                 {
                     var teacher = users.Find(x => x.Id == c.ClassTutorId);
                     c.ClassTutorId = teacher.Name + " " + teacher.Surname;
-                    //c.ClassTutorId = _userManager.Users.Where(x => x.Id == c.ClassTutorId);
                 }
             }
 
@@ -58,14 +57,11 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            var users = await _userManager.Users.Where(x => x.Type == "Nauczyciel").ToListAsync();
-
-
-            //var teacher = await _userManager.Users.Where(x => x.Id == @class.ClassTutorId);
-            //var teacher = await _userManager.Users.FindAsync(@class.ClassTutorId);
-            //c.ClassTutorId = teacher.Name + " " + teacher.Surname;
-
-
+            if (@class.ClassTutorId != null)
+            {
+                var teacher = await _context.Users.FindAsync(@class.ClassTutorId);
+                @class.ClassTutorId = teacher.Name + " " + teacher.Surname;
+            }
 
             var students = _userManager.Users.Where(u => u.ClassId == id && u.Type == "Uczen").OrderBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower());
             ViewBag.StudentsList = students.ToList();
@@ -95,6 +91,12 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
+            if (@class.ClassTutorId != null)
+            {
+                var teacher = await _context.Users.FindAsync(@class.ClassTutorId);
+                @class.ClassTutorId = teacher.Name + " " + teacher.Surname;
+            }
+
             var existingSubjects = _context.ConductingLesson.Where(c => c.ClassId == id).Select(x => x.SubjectId).Distinct().ToList();
             var classesSubjects = _context.Subject.Where(x => existingSubjects.Contains(x.SubjectId)).ToList();
             ViewBag.SubjectsList = classesSubjects;
@@ -109,8 +111,6 @@ namespace Virtual_School_Register.Controllers
             //ViewBag.StudentsWithNoClassList = studentsWithNoClass.ToList();
 
             ViewBag.ClassId = id;
-
-            //Session["classId"] = id;
 
             return View(@class);
         }
@@ -159,14 +159,19 @@ namespace Virtual_School_Register.Controllers
             var tutors = _context.Class.Where(c => c.ClassTutorId != null).Select(x => x.ClassTutorId);
             var notTutors = _userManager.Users.Where(x => x.Type == "Nauczyciel" && !tutors.Contains(x.Id)).ToList();
 
+            if(@class.ClassTutorId != null)
+            {
+                var tutor = _userManager.Users.First(x => x.Id == @class.ClassTutorId);
+
+                notTutors.Add(tutor);
+            }
+
             ViewBag.TutorsList = notTutors;
 
             return View(@class);
         }
 
         // POST: Classes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ClassId,Name,Content,ClassTutorId")] Class @class)
@@ -207,11 +212,17 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            var @class = await _context.Class
-                .FirstOrDefaultAsync(m => m.ClassId == id);
+            var @class = await _context.Class.FirstOrDefaultAsync(m => m.ClassId == id);
+
             if (@class == null)
             {
                 return NotFound();
+            }
+
+            if (@class.ClassTutorId != null)
+            {
+                var teacher = await _context.Users.FindAsync(@class.ClassTutorId);
+                @class.ClassTutorId = teacher.Name + " " + teacher.Surname;
             }
 
             return View(@class);

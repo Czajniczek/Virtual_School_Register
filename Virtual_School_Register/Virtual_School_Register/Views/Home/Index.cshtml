@@ -1,7 +1,36 @@
-﻿@{
+﻿@model IEnumerable<Virtual_School_Register.Models.Annoucement>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to the virtual school register!</h1>
+    <h1>Our school news</h1>
 </div>
+
+@foreach (var card in Model)
+{
+    <br />
+    <div class="card border-secondary text-justify">
+        <div class="card-header text-info text-center">
+            <h5><b>@card.Title</b></h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">@card.Content</p>
+        </div>
+        <div class="card-footer text-muted">
+            <div class="row">
+                <div class="col-md-2">
+                    @card.User.Name
+                    @card.User.Surname
+                </div>
+                <div class="col-md-8">
+                </div>
+                <div class="col-md-2">
+                    @card.Date
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+}
