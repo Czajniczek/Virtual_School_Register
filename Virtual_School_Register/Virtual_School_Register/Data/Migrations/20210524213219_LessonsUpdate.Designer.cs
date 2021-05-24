@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Virtual_School_Register.Data;
 
 namespace Virtual_School_Register.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210524213219_LessonsUpdate")]
+    partial class LessonsUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -267,15 +269,15 @@ namespace Virtual_School_Register.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("LessonId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
-
                     b.HasKey("FileId");
 
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("LessonId");
 
                     b.ToTable("File");
                 });
@@ -654,13 +656,13 @@ namespace Virtual_School_Register.Data.Migrations
 
             modelBuilder.Entity("Virtual_School_Register.Models.File", b =>
                 {
-                    b.HasOne("Virtual_School_Register.Models.Subject", "Subject")
+                    b.HasOne("Virtual_School_Register.Models.Lesson", "Lesson")
                         .WithMany("Files")
-                        .HasForeignKey("SubjectId")
+                        .HasForeignKey("LessonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Subject");
+                    b.Navigation("Lesson");
                 });
 
             modelBuilder.Entity("Virtual_School_Register.Models.Lesson", b =>
@@ -733,13 +735,16 @@ namespace Virtual_School_Register.Data.Migrations
                     b.Navigation("Evaluations");
                 });
 
+            modelBuilder.Entity("Virtual_School_Register.Models.Lesson", b =>
+                {
+                    b.Navigation("Files");
+                });
+
             modelBuilder.Entity("Virtual_School_Register.Models.Subject", b =>
                 {
                     b.Navigation("ConductingLessons");
 
                     b.Navigation("Evaluations");
-
-                    b.Navigation("Files");
                 });
 
             modelBuilder.Entity("Virtual_School_Register.Models.Test", b =>

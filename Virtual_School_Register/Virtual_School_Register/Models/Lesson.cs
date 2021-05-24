@@ -18,10 +18,10 @@ namespace Virtual_School_Register.Models
         //[MinLength(1, ErrorMessage = "Content cannot be empty!")]
         public string Content { get; set; }
 
-        public int SubjectId { get; set; }
+        public int ConductingLessonId { get; set; }
 
-        public virtual Subject Subject { get; set; }
+        public virtual ConductingLesson ConductingLesson { get; set; }
 
-        public virtual ICollection<File> Files { get; set; }
+        //public virtual ICollection<File> Files { get; set; }
     }
 }

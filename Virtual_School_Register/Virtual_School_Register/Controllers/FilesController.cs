@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,6 @@ using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
 {
-    [Authorize(Roles = "Admin, Nauczyciel")]
     public class FilesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,7 +22,7 @@ namespace Virtual_School_Register.Controllers
         // GET: Files
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.File.Include(f => f.Lesson);
+            var applicationDbContext = _context.File.Include(f => f.Subject);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -37,7 +35,7 @@ namespace Virtual_School_Register.Controllers
             }
 
             var file = await _context.File
-                .Include(f => f.Lesson)
+                .Include(f => f.Subject)
                 .FirstOrDefaultAsync(m => m.FileId == id);
             if (file == null)
             {
@@ -50,7 +48,7 @@ namespace Virtual_School_Register.Controllers
         // GET: Files/Create
         public IActionResult Create()
         {
-            ViewData["LessonId"] = new SelectList(_context.Set<Lesson>(), "LessonId", "Title");
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Name");
             return View();
         }
 
@@ -59,7 +57,7 @@ namespace Virtual_School_Register.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FileId,Name,LessonId")] File file)
+        public async Task<IActionResult> Create([Bind("FileId,Name,SubjectId")] File file)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +65,7 @@ namespace Virtual_School_Register.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LessonId"] = new SelectList(_context.Set<Lesson>(), "LessonId", "Title", file.LessonId);
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", file.SubjectId);
             return View(file);
         }
 
@@ -84,16 +82,14 @@ namespace Virtual_School_Register.Controllers
             {
                 return NotFound();
             }
-            ViewData["LessonId"] = new SelectList(_context.Set<Lesson>(), "LessonId", "Title", file.LessonId);
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Name", file.SubjectId);
             return View(file);
         }
 
         // POST: Files/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FileId,Name,LessonId")] File file)
+        public async Task<IActionResult> Edit(int id, [Bind("FileId,Name,SubjectId")] File file)
         {
             if (id != file.FileId)
             {
@@ -120,7 +116,7 @@ namespace Virtual_School_Register.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LessonId"] = new SelectList(_context.Set<Lesson>(), "LessonId", "Title", file.LessonId);
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", file.SubjectId);
             return View(file);
         }
 
@@ -133,7 +129,7 @@ namespace Virtual_School_Register.Controllers
             }
 
             var file = await _context.File
-                .Include(f => f.Lesson)
+                .Include(f => f.Subject)
                 .FirstOrDefaultAsync(m => m.FileId == id);
             if (file == null)
             {

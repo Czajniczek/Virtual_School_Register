@@ -20,8 +20,10 @@ namespace Virtual_School_Register.Models
 
         public virtual ICollection<Evaluation> Evaluations { get; set; }
 
-        public virtual ICollection<Lesson> Lessons { get; set; }
+        //public virtual ICollection<Lesson> Lessons { get; set; }
 
         public virtual ICollection<ConductingLesson> ConductingLessons { get; set; }
+
+        public virtual ICollection<File> Files { get; set; }
     }
 }

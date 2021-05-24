@@ -23,8 +23,9 @@
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SubjectId" class="control-label"></label>
-                <select asp-for="SubjectId" class ="form-control" asp-items="ViewBag.SubjectId"></select>
+                @*<label asp-for="ConductingLessonId" class="control-label"></label>
+                <select asp-for="ConductingLessonId" class="form-control" asp-items="ViewBag.ConductingLessonId"></select>*@
+                <input asp-for="ConductingLessonId" value="@ViewBag.ConductingLessonId" hidden />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
