@@ -14,7 +14,7 @@ namespace Virtual_School_Register.Models
         [MinLength(1, ErrorMessage = "Title cannot be empty!")]
         public string Title { get; set; }
 
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         [Required]
@@ -22,7 +22,7 @@ namespace Virtual_School_Register.Models
         public string Content { get; set; }
 
         [Display(Name = "Recipient")]
-        public int RecipientId { get; set; }
+        public string RecipientId { get; set; }
 
         public string UserId { get; set; }
 

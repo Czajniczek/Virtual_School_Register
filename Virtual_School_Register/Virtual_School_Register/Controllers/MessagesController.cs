@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,21 +12,35 @@ using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
 {
-    [Authorize(Roles = "Admin, Nauczyciel, Rodzic")]
+    [Authorize(Roles = "Admin, Nauczyciel, Rodzic, Uczen")]
     public class MessagesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public MessagesController(ApplicationDbContext context)
+        public MessagesController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Messages
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Message.Include(m => m.User);
-            return View(await applicationDbContext.ToListAsync());
+            var messages = await _context.Message.Include(u => u.User).Where(x => x.RecipientId == _userManager.GetUserId(HttpContext.User))
+                .OrderBy(x => x.Date).Reverse().ToListAsync();
+
+            //var applicationDbContext = _context.Message.Include(m => m.User);
+
+            return View(messages);
+        }
+
+        public async Task<IActionResult> IndexSent()
+        {
+            var messages = await _context.Message.Include(u => u.User).Where(x => x.UserId == _userManager.GetUserId(HttpContext.User))
+                .OrderBy(x => x.Date).Reverse().ToListAsync();
+
+            return View("Index", messages);
         }
 
         // GET: Messages/Details/5
@@ -36,9 +51,8 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            var message = await _context.Message
-                .Include(m => m.User)
-                .FirstOrDefaultAsync(m => m.MessageId == id);
+            var message = await _context.Message.Include(m => m.User).FirstOrDefaultAsync(m => m.MessageId == id);
+
             if (message == null)
             {
                 return NotFound();
@@ -50,19 +64,40 @@ namespace Virtual_School_Register.Controllers
         // GET: Messages/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            List<User> persons;
+
+            if (User.IsInRole("Rodzic") || User.IsInRole("Uczen"))
+            {
+                persons = _userManager.Users.Where(x => x.Type == "Nauczyciel" && x.Id != _userManager.GetUserId(HttpContext.User))
+                    .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+            }
+            else if (User.IsInRole("Nauczyciel"))
+            {
+                persons = _userManager.Users.Where(x => (x.Type == "Rodzic" || x.Type == "Uczen") && x.Id != _userManager.GetUserId(HttpContext.User))
+                    .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+            }
+            else
+            {
+                persons = _userManager.Users.Where(x => x.Id != _userManager.GetUserId(HttpContext.User))
+                    .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+            }
+
+            ViewBag.PersonsList = persons;
+
+            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
         // POST: Messages/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MessageId,Title,Date,Content,RecipientId,UserId")] Message message)
+        public async Task<IActionResult> Create(Message message)
         {
             if (ModelState.IsValid)
             {
+                message.UserId = _userManager.GetUserId(HttpContext.User);
+                message.Date = DateTime.Now;
+
                 _context.Add(message);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

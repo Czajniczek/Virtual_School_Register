@@ -127,8 +127,6 @@ namespace Virtual_School_Register.Controllers
         }
 
         // POST: Classes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ClassId,Name,Content,ClassTutorId")] Class @class)
