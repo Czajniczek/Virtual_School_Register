@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
 {
+    [Authorize(Roles = "Admin, Nauczyciel")]
     public class ConductingLessonsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,10 +25,22 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: ConductingLessons
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User).OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name);
-            return View(await applicationDbContext.ToListAsync());
+            List<ConductingLesson> teachings;
+
+            if (User.IsInRole("Nauczyciel"))
+            {
+                teachings = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
+                    .Where(x => x.UserId == _userManager.GetUserId(HttpContext.User))
+                    .OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name).ToList();
+            } 
+            else
+            {
+                teachings = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User).OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name).ToList();
+            }
+
+            return View(teachings);
         }
 
         // GET: ConductingLessons/Details/5

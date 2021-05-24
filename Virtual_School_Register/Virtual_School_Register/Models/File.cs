@@ -18,10 +18,10 @@ namespace Virtual_School_Register.Models
 
         //public string Content { get; set; }
 
-        [Display(Name = "Lesson")]
-        public int LessonId { get; set; } //Do dodawania (create)
+        [Display(Name = "Subject")]
+        public int SubjectId { get; set; } //Do dodawania (create)
 
-        [Display(Name = "Lesson")]
-        public virtual Lesson Lesson { get; set; } //Do wyświetlania (index)
+        [Display(Name = "Subject")]
+        public virtual Subject Subject { get; set; } //Do wyświetlania (index)
     }
 }

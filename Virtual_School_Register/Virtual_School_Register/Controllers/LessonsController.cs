@@ -11,7 +11,7 @@ using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Nauczyciel")]
     public class LessonsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,8 +24,22 @@ namespace Virtual_School_Register.Controllers
         // GET: Lessons
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Lesson.Include(l => l.Subject);
-            return View(await applicationDbContext.ToListAsync());
+            var lessons = await _context.Lesson.Include(l => l.ConductingLesson).ToListAsync();
+
+            var classes = await _context.Class.ToListAsync();
+            var subjects = await _context.Subject.ToListAsync();
+
+            /*foreach (var c in lessons)
+            {
+                var @class = classes.Find(x => x.ClassId == c.ConductingLesson.ClassId);
+                var subject = subjects.Find(x => x.SubjectId == c.ConductingLesson.SubjectId);
+                c. = @class.Name + " " + subject.Name;
+            }*/
+
+            ViewBag.ClassesList = classes;
+            ViewBag.SubjectsList = subjects;
+
+            return View(lessons);
         }
 
         // GET: Lessons/Details/5
@@ -37,7 +51,7 @@ namespace Virtual_School_Register.Controllers
             }
 
             var lesson = await _context.Lesson
-                .Include(l => l.Subject)
+                .Include(l => l.ConductingLesson)
                 .FirstOrDefaultAsync(m => m.LessonId == id);
             if (lesson == null)
             {
@@ -48,18 +62,19 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Lessons/Create
-        public IActionResult Create()
+        public IActionResult Create(int conductingLesson)
         {
-            ViewData["SubjectId"] = new SelectList(_context.Set<Subject>(), "SubjectId", "Content");
+            ViewData["ConductingLessonId"] = new SelectList(_context.ConductingLesson, "ConductingLessonId", "ConductingLessonId");
+
+            ViewBag.ConductingLessonId = conductingLesson;
+
             return View();
         }
 
         // POST: Lessons/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LessonId,Title,Content,SubjectId")] Lesson lesson)
+        public async Task<IActionResult> Create([Bind("LessonId,Title,Content,ConductingLessonId")] Lesson lesson)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +82,7 @@ namespace Virtual_School_Register.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SubjectId"] = new SelectList(_context.Set<Subject>(), "SubjectId", "Content", lesson.SubjectId);
+            ViewData["ConductingLessonId"] = new SelectList(_context.ConductingLesson, "ConductingLessonId", "ConductingLessonId", lesson.ConductingLessonId);
             return View(lesson);
         }
 
@@ -84,7 +99,7 @@ namespace Virtual_School_Register.Controllers
             {
                 return NotFound();
             }
-            ViewData["SubjectId"] = new SelectList(_context.Set<Subject>(), "SubjectId", "Content", lesson.SubjectId);
+            ViewData["ConductingLessonId"] = new SelectList(_context.ConductingLesson, "ConductingLessonId", "ConductingLessonId", lesson.ConductingLessonId);
             return View(lesson);
         }
 
@@ -93,7 +108,7 @@ namespace Virtual_School_Register.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LessonId,Title,Content,SubjectId")] Lesson lesson)
+        public async Task<IActionResult> Edit(int id, [Bind("LessonId,Title,Content,ConductingLessonId")] Lesson lesson)
         {
             if (id != lesson.LessonId)
             {
@@ -120,7 +135,7 @@ namespace Virtual_School_Register.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SubjectId"] = new SelectList(_context.Set<Subject>(), "SubjectId", "Content", lesson.SubjectId);
+            ViewData["ConductingLessonId"] = new SelectList(_context.ConductingLesson, "ConductingLessonId", "ConductingLessonId", lesson.ConductingLessonId);
             return View(lesson);
         }
 
@@ -133,7 +148,7 @@ namespace Virtual_School_Register.Controllers
             }
 
             var lesson = await _context.Lesson
-                .Include(l => l.Subject)
+                .Include(l => l.ConductingLesson)
                 .FirstOrDefaultAsync(m => m.LessonId == id);
             if (lesson == null)
             {

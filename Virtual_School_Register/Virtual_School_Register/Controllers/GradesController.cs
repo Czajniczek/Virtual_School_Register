@@ -11,7 +11,7 @@ using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Nauczyciel")]
     public class GradesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -52,8 +52,6 @@ namespace Virtual_School_Register.Controllers
         }
 
         // POST: Grades/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("GradeId,Value,Date,Type,Comment")] Grade grade)

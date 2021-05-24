@@ -22,5 +22,7 @@ namespace Virtual_School_Register.Models
         public virtual Subject Subject { get; set; }
 
         public virtual ICollection<Test> Tests { get; set; }
+
+        public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }
