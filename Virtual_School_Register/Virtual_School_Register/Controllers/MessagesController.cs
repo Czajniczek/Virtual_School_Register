@@ -27,18 +27,35 @@ namespace Virtual_School_Register.Controllers
         // GET: Messages
         public async Task<IActionResult> Index()
         {
-            var messages = await _context.Message.Include(u => u.User).Where(x => x.RecipientId == _userManager.GetUserId(HttpContext.User))
+            var messages = await _context.Message.Include(u => u.User)
+                .Where(x => (x.RecipientId == _userManager.GetUserId(HttpContext.User)) && x.IsRecipientDeleted == false)
                 .OrderBy(x => x.Date).Reverse().ToListAsync();
 
-            //var applicationDbContext = _context.Message.Include(m => m.User);
+            ViewBag.InboxMessage = "Received";
+            ViewBag.UserType = "Sender";
 
             return View(messages);
         }
 
         public async Task<IActionResult> IndexSent()
         {
-            var messages = await _context.Message.Include(u => u.User).Where(x => x.UserId == _userManager.GetUserId(HttpContext.User))
+            var messages = await _context.Message.Include(u => u.User)
+                .Where(x => (x.UserId == _userManager.GetUserId(HttpContext.User)) && x.IsSenderDeleted == false)
                 .OrderBy(x => x.Date).Reverse().ToListAsync();
+
+            var users = await _userManager.Users.ToListAsync();
+
+            foreach (var m in messages)
+            {
+                if (m.RecipientId != null)
+                {
+                    var recipient = users.Find(x => x.Id == m.RecipientId);
+                    m.RecipientId = recipient.Name + " " + recipient.Surname;
+                }
+            }
+
+            ViewBag.InboxMessage = "Sent";
+            ViewBag.UserType = "Recipient";
 
             return View("Index", messages);
         }
@@ -124,8 +141,6 @@ namespace Virtual_School_Register.Controllers
         }
 
         // POST: Messages/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("MessageId,Title,Date,Content,RecipientId,UserId")] Message message)
@@ -167,9 +182,8 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            var message = await _context.Message
-                .Include(m => m.User)
-                .FirstOrDefaultAsync(m => m.MessageId == id);
+            var message = await _context.Message.Include(m => m.User).FirstOrDefaultAsync(m => m.MessageId == id);
+
             if (message == null)
             {
                 return NotFound();
@@ -183,9 +197,31 @@ namespace Virtual_School_Register.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            bool indexFlag = true;
             var message = await _context.Message.FindAsync(id);
-            _context.Message.Remove(message);
+
+            if(message.RecipientId == _userManager.GetUserId(HttpContext.User))
+            {
+                message.IsRecipientDeleted = true;
+                indexFlag = true;
+            } 
+            else if (message.UserId == _userManager.GetUserId(HttpContext.User))
+            {
+                message.IsSenderDeleted = true;
+                indexFlag = false;
+            }
+
+            if(message.IsSenderDeleted && message.IsRecipientDeleted)
+            {
+                _context.Message.Remove(message);
+            }
+
             await _context.SaveChangesAsync();
+
+            if(!indexFlag)
+            {
+                return RedirectToAction(nameof(IndexSent));
+            }
             return RedirectToAction(nameof(Index));
         }
 

@@ -24,6 +24,10 @@ namespace Virtual_School_Register.Models
         [Display(Name = "Recipient")]
         public string RecipientId { get; set; }
 
+        public bool IsSenderDeleted { get; set; }
+
+        public bool IsRecipientDeleted { get; set; }
+
         public string UserId { get; set; }
 
         public virtual User User { get; set; }
