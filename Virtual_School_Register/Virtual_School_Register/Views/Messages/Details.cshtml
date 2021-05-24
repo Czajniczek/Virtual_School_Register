@@ -4,45 +4,79 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Message</h1>
 
-<div>
+<!--<div>
     <h4>Message</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Date)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Date)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Content)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Content)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RecipientId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RecipientId)
-        </dd>
-        <dt class = "col-sm-2">
+        </dd>-->
+@*        <dt class = "col-sm-2">
+        @Html.DisplayNameFor(model => model.RecipientId)
+    </dt>
+    <dd class = "col-sm-10">
+        @Html.DisplayFor(model => model.RecipientId)
+    </dd>*@
+<!--<dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.User)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Name)
+            @Html.DisplayFor(model => model.User.Surname)
         </dd>
     </dl>
+</div>-->
+
+<br />
+<div class="card border-secondary text-justify">
+    <div class="card-header text-dark">
+        <h5>
+            @Html.DisplayNameFor(model => model.Title):
+            <b>
+                @Html.DisplayFor(model => model.Title)
+            </b>
+        </h5>
+    </div>
+    <div class="card-body">
+        <p class="card-text">@Html.DisplayFor(model => model.Content)</p>
+    </div>
+    <div class="card-footer text-muted">
+        <div class="row">
+            <div class="col-md-3">
+                From:
+                <b>
+                    @Html.DisplayFor(model => model.User.Name)
+                    @Html.DisplayFor(model => model.User.Surname)
+                </b>
+            </div>
+            <div class="col-md-7">
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayFor(model => model.Date)
+            </div>
+        </div>
+    </div>
 </div>
+<br />
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.MessageId">Edit</a> |
+    <a asp-action="Create">Reply</a> |
     <a asp-action="Index">Back to List</a>
 </div>
