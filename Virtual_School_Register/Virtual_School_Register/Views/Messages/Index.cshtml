@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Twoje wiadomości</h1>
+<h1>@ViewBag.InboxMessage</h1>
 
 <hr />
 <div class="thead-dark row">
@@ -25,7 +25,8 @@
     <thead class="thead-dark">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @ViewBag.UserType
+                @*@Html.DisplayNameFor(model => model.User)*@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
@@ -47,8 +48,16 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.User.Name)
-                    @Html.DisplayFor(modelItem => item.User.Surname)
+                    @if (@ViewBag.UserType == "Recipient")
+                    {
+                        @Html.DisplayFor(modelItem => item.RecipientId)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.User.Name)
+                        <text>&nbsp;</text>
+                        @Html.DisplayFor(modelItem => item.User.Surname)
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
@@ -62,14 +71,14 @@
                 @*            <td>
                         @Html.DisplayFor(modelItem => item.RecipientId)
                     </td>*@
-            <td>
-                @*<a asp-action="Edit" asp-route-id="@item.MessageId">Edit</a> |*@
-                @*<a asp-action="Details" asp-route-id="@item.MessageId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MessageId">Delete</a>*@
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.MessageId">Edit</a> |*@
+                    @*<a asp-action="Details" asp-route-id="@item.MessageId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.MessageId">Delete</a>*@
 
-                <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.MessageId">Details</a>
-                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.MessageId">Delete</a>
-            </td>
+                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.MessageId">Details</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.MessageId">Delete</a>
+                </td>
             </tr>
         }
     </tbody>
