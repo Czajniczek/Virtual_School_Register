@@ -8,26 +8,26 @@
     <h1>Our school news</h1>
 </div>
 
-@foreach (var card in Model)
+@foreach (var announcement in Model)
 {
     <br />
     <div class="card border-secondary text-justify">
         <div class="card-header text-info text-center">
-            <h5><b>@card.Title</b></h5>
+            <h5><b>@announcement.Title</b></h5>
         </div>
         <div class="card-body">
-            <p class="card-text">@card.Content</p>
+            <p class="card-text">@announcement.Content</p>
         </div>
         <div class="card-footer text-muted">
             <div class="row">
                 <div class="col-md-4">
-                    @card.User.Name
-                    @card.User.Surname
+                    @announcement.User.Name
+                    @announcement.User.Surname
                 </div>
                 <div class="col-md-6">
                 </div>
                 <div class="col-md-2">
-                    @card.Date
+                    @announcement.Date
                 </div>
             </div>
         </div>

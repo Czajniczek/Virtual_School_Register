@@ -13,22 +13,24 @@ namespace Virtual_School_Register.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
             _context = context;
         }
 
         public IActionResult Index()
         {
-            var announcements = _context.Annoucement.Include(u => u.User).OrderBy(x => x.Date).Reverse().ToList();
+            var announcements = _context.Annoucement.Include(u => u.User)
+                                                    .OrderBy(x => x.Date)
+                                                    .Reverse()
+                                                    .ToList();
 
             return View(announcements);
         }
 
+        //Home/Privacy - Use this page to detail your site's privacy policy.
         public IActionResult Privacy()
         {
             return View();
