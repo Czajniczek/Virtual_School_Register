@@ -28,14 +28,14 @@ namespace Virtual_School_Register.Controllers
         public async Task<IActionResult> Index()
         {
             var classes = await _context.Class.OrderBy(x => x.Name.ToLower()).ToListAsync();
-            var users = await _userManager.Users.Where(x => x.Type == "Nauczyciel").ToListAsync();
+            var tutors = await _userManager.Users.Where(x => x.Type == "Nauczyciel").ToListAsync();
 
             foreach (var c in classes)
             {
                 if (c.ClassTutorId != null)
                 {
-                    var teacher = users.Find(x => x.Id == c.ClassTutorId);
-                    c.ClassTutorId = teacher.Name + " " + teacher.Surname;
+                    var tutor = tutors.Find(x => x.Id == c.ClassTutorId);
+                    c.ClassTutorId = tutor.Name + " " + tutor.Surname;
                 }
             }
 
@@ -43,15 +43,14 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Classes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Students(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var @class = await _context.Class
-                .FirstOrDefaultAsync(m => m.ClassId == id);
+            var @class = await _context.Class.FirstOrDefaultAsync(m => m.ClassId == id);
             if (@class == null)
             {
                 return NotFound();
@@ -63,17 +62,50 @@ namespace Virtual_School_Register.Controllers
                 @class.ClassTutorId = teacher.Name + " " + teacher.Surname;
             }
 
-            var students = _userManager.Users.Where(u => u.ClassId == id && u.Type == "Uczen").OrderBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower());
-            ViewBag.StudentsList = students.ToList();
+            var studentsInClass = _userManager.Users.Where(u => u.ClassId == id && u.Type == "Uczen")
+                                             .OrderBy(x => x.Surname.ToLower())
+                                             .ThenBy(x => x.Name.ToLower());
+            ViewBag.StudentsInClassList = studentsInClass.ToList();
 
-            var studentsWithNoClass = _userManager.Users.Where(u => u.ClassId == null && u.Type == "Uczen").OrderBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower());
+            var studentsWithNoClass = _userManager.Users.Where(u => u.ClassId == null && u.Type == "Uczen")
+                                                        .OrderBy(x => x.Surname.ToLower())
+                                                        .ThenBy(x => x.Name.ToLower());
             ViewBag.StudentsWithNoClassList = studentsWithNoClass.ToList();
 
             ViewBag.ClassId = id;
 
-            //Session["classId"] = id;
-
             return View(@class);
+        }
+
+        public async Task<IActionResult> RemoveUserFromClass(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _userManager.FindByIdAsync(id);
+            var classId = student.ClassId;
+            student.ClassId = null;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Students", new { id = classId });
+        }
+
+        public async Task<IActionResult> AddUserToClass(string id, int classId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _userManager.FindByIdAsync(id);
+            student.ClassId = classId;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Students", new { id = classId });
         }
 
         public async Task<IActionResult> Subjects(int? id)
@@ -83,8 +115,7 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            var @class = await _context.Class
-                .FirstOrDefaultAsync(m => m.ClassId == id);
+            var @class = await _context.Class.FirstOrDefaultAsync(m => m.ClassId == id);
 
             if (@class == null)
             {
@@ -97,22 +128,49 @@ namespace Virtual_School_Register.Controllers
                 @class.ClassTutorId = teacher.Name + " " + teacher.Surname;
             }
 
-            var existingSubjects = _context.ConductingLesson.Where(c => c.ClassId == id).Select(x => x.SubjectId).Distinct().ToList();
+            var existingSubjects = _context.ConductingLesson.Where(c => c.ClassId == id)
+                                                            .Select(x => x.SubjectId)
+                                                            .Distinct()
+                                                            .ToList();
+
             var classesSubjects = _context.Subject.Where(x => existingSubjects.Contains(x.SubjectId)).ToList();
             ViewBag.SubjectsList = classesSubjects;
 
             var allSubjects = _context.Subject.Where(x => !existingSubjects.Contains(x.SubjectId));
             ViewBag.AllSubjectsList = allSubjects.ToList();
 
-            //var subjects = subjectsId
-            //ViewBag.SubjectsList = subjects.ToList();
-
-            //var studentsWithNoClass = _userManager.Users.Where(u => u.ClassId == null && u.Type == "Uczen").OrderBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower());
-            //ViewBag.StudentsWithNoClassList = studentsWithNoClass.ToList();
-
             ViewBag.ClassId = id;
 
             return View(@class);
+        }
+
+        public async Task<IActionResult> RemoveSubjectFromClass(int? id, int classId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var subject = _context.ConductingLesson.Where(x => x.SubjectId == id);
+
+            foreach (var sub in subject)
+            {
+                _context.ConductingLesson.Remove(sub);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Subjects", new { id = classId });
+        }
+
+        public async Task<IActionResult> AddSubjectToClass(int id, int classId)
+        {
+            var conductingLesson = new ConductingLesson { SubjectId = id, ClassId = classId };
+
+            await _context.ConductingLesson.AddAsync(conductingLesson);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Subjects", new { id = classId });
         }
 
         // GET: Classes/Create
@@ -157,7 +215,7 @@ namespace Virtual_School_Register.Controllers
             var tutors = _context.Class.Where(c => c.ClassTutorId != null).Select(x => x.ClassTutorId);
             var notTutors = _userManager.Users.Where(x => x.Type == "Nauczyciel" && !tutors.Contains(x.Id)).ToList();
 
-            if(@class.ClassTutorId != null)
+            if (@class.ClassTutorId != null)
             {
                 var tutor = _userManager.Users.First(x => x.Id == @class.ClassTutorId);
 
@@ -199,6 +257,7 @@ namespace Virtual_School_Register.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(@class);
         }
 
@@ -234,65 +293,8 @@ namespace Virtual_School_Register.Controllers
             var @class = await _context.Class.FindAsync(id);
             _context.Class.Remove(@class);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> DeleteUser(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var student = await _userManager.FindByIdAsync(id);
-            var classId = student.ClassId;
-            student.ClassId = null;
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Details", new { id = classId });
-        }
-
-        public async Task<IActionResult> AddUser(string id, int classId)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var student = await _userManager.FindByIdAsync(id);
-            student.ClassId = classId;
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Details", new { id = classId });
-        }
-
-        public async Task<IActionResult> RemoveSubject(int? id, int classId)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var subject = _context.ConductingLesson.Where(x => x.SubjectId == id);
-
-            foreach (var sub in subject)
-            {
-                _context.ConductingLesson.Remove(sub);
-            }
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Subjects", new { id = classId });
-        }
-
-        public async Task<IActionResult> AddSubject(int id, int classId)
-        {
-            var conductingLesson = new ConductingLesson { SubjectId = id, ClassId = classId };
-
-            await _context.ConductingLesson.AddAsync(conductingLesson);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Subjects", new { id = classId });
         }
 
         private bool ClassExists(int id)

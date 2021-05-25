@@ -9,9 +9,9 @@
 <br />
 <div>
     <div class="row">
-        <h4 class="col-md-4">Class name: @Html.DisplayFor(model => model.Name)</h4>
-        <h4 class="col-md-4">@Html.DisplayNameFor(model => model.Content): @Html.DisplayFor(model => model.Content)</h4>
-        <h4 class="col-md-4">@Html.DisplayNameFor(model => model.ClassTutorId): @Html.DisplayFor(model => model.ClassTutorId)</h4>
+        <h4 class="col-md-2">Class name: @Html.DisplayFor(model => model.Name)</h4>
+        <h4 class="col-md-5">@Html.DisplayNameFor(model => model.Content): @Html.DisplayFor(model => model.Content)</h4>
+        <h4 class="col-md-5">@Html.DisplayNameFor(model => model.ClassTutorId): @Html.DisplayFor(model => model.ClassTutorId)</h4>
     </div>
     <hr />
     @*<dl class="row">
@@ -57,7 +57,7 @@
                         <td>@Html.DisplayFor(i => subject.Content)</td>
                         <td>
                             @*<a class="btn btn-outline-danger" asp-action="RemoveSubject" asp-route-id="@subject.SubjectId">Remove</a>*@
-                            @Html.ActionLink("Remove", "RemoveSubject", "Classes", new { id = subject.SubjectId, classId = ViewBag.ClassId }, new { @class = "btn btn-outline-danger" })
+                            @Html.ActionLink("Remove from class", "RemoveSubjectFromClass", "Classes", new { id = subject.SubjectId, classId = ViewBag.ClassId }, new { @class = "btn btn-outline-danger" })
                         </td>
                     </tr>
                 }
@@ -84,7 +84,7 @@
                         <td>@Html.DisplayFor(i => allSubject.Content)</td>
                         <td>
                             @*<a class="btn btn-outline-success" asp-action="AddUser" asp-route-id="@studentWithNoClass.Id">Add</a>*@
-                            @Html.ActionLink("Add", "AddSubject", "Classes", new { id = allSubject.SubjectId, classId = ViewBag.ClassId }, new { @class = "btn btn-outline-success" })
+                            @Html.ActionLink("Add to class", "AddSubjectToClass", "Classes", new { id = allSubject.SubjectId, classId = ViewBag.ClassId }, new { @class = "btn btn-outline-success" })
                         </td>
                     </tr>
                 }
@@ -94,6 +94,6 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ClassId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@Model.ClassId">Edit</a>
+    <a class="btn btn-primary" asp-action="Index">Back to List</a>
 </div>
