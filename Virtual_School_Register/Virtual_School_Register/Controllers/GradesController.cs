@@ -11,7 +11,7 @@ using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
 {
-    [Authorize(Roles = "Admin, Nauczyciel")]
+    [Authorize(Roles = "Admin, Nauczyciel, Uczen")]
     public class GradesController : Controller
     {
         private readonly ApplicationDbContext _context;
