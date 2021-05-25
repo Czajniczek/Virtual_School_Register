@@ -18,10 +18,9 @@ namespace Virtual_School_Register.Controllers
     [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
-
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager; //Do zarządzania userami
-        private readonly RoleManager<IdentityRole> _roleManager; //Do zarządzania rolami :D 
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
 
         public UsersController(ApplicationDbContext context, UserManager<User> userManager,
@@ -37,10 +36,11 @@ namespace Virtual_School_Register.Controllers
         public IActionResult Index()
         {
             var users = _context.Users.Include(u => u.Class)
-                .OrderBy(x => x.Type)
-                .ThenBy(x => x.UserName.ToLower())
-                .ThenBy(x => x.Surname.ToLower())
-                .ThenBy(x => x.Name.ToLower()).ToList();
+                                      .OrderBy(x => x.Type)
+                                      .ThenBy(x => x.UserName.ToLower())
+                                      .ThenBy(x => x.Surname.ToLower())
+                                      .ThenBy(x => x.Name.ToLower())
+                                      .ToList();
 
             foreach (var p in users)
             {
@@ -63,17 +63,20 @@ namespace Virtual_School_Register.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(id);
-            var myClass = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == user.ClassId);
-
             if (user == null)
             {
                 return NotFound();
             }
 
             var detailsModel = _mapper.Map<UserDetailsViewModel>(user);
-            detailsModel.Class = myClass;
 
-            if(user.ParentId != null)
+            if (user.Type == "Uczen")
+            {
+                var myClass = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == user.ClassId);
+                detailsModel.Class = myClass;
+            }
+
+            if (user.ParentId != null)
             {
                 var parent = _userManager.Users.FirstOrDefault(x => x.Id == user.ParentId);
                 detailsModel.ParentId = parent.Name + " " + parent.Surname;
@@ -85,7 +88,9 @@ namespace Virtual_School_Register.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name");
+            ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name"); //Value = Class Id, Text = Name
+                                                                                     //Value = 2, Text = 1A
+
             var parents = _userManager.Users.Where(x => x.Type == "Rodzic").ToList();
             ViewBag.ParentsList = parents;
 
@@ -102,14 +107,16 @@ namespace Virtual_School_Register.Controllers
             {
                 if (!await _roleManager.RoleExistsAsync(user.Type))
                 {
-                    var role = new IdentityRole();
-
-                    role.Name = user.Type;
+                    var role = new IdentityRole
+                    {
+                        Name = user.Type
+                    };
                     await _roleManager.CreateAsync(role);
                 }
 
                 var createdUser = _mapper.Map<User>(user);
                 createdUser.EmailConfirmed = true;
+
                 if (user.Password != null)
                 {
                     var result = await _userManager.CreateAsync(createdUser, user.Password);
@@ -148,6 +155,7 @@ namespace Virtual_School_Register.Controllers
             {
                 return NotFound();
             }
+
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
 
             var parents = _userManager.Users.Where(x => x.Type == "Rodzic").ToList();
@@ -171,9 +179,10 @@ namespace Virtual_School_Register.Controllers
             {
                 if (!await _roleManager.RoleExistsAsync(user.Type))
                 {
-                    var role = new IdentityRole();
-
-                    role.Name = user.Type;
+                    var role = new IdentityRole
+                    {
+                        Name = user.Type
+                    };
                     await _roleManager.CreateAsync(role);
                 }
 
@@ -202,6 +211,7 @@ namespace Virtual_School_Register.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
+
             return View(user);
         }
 

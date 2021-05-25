@@ -59,29 +59,29 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var user in Model)
         {
             <tr>
                 @*<td>
                         @Html.DisplayFor(modelItem => item.Id)
                     </td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
+                    @Html.DisplayFor(modelItem => user.UserName)
                 </td>
                 @*<td>
                         @Html.DisplayFor(modelItem => item.Password)
                     </td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @Html.DisplayFor(modelItem => user.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Surname)
+                    @Html.DisplayFor(modelItem => user.Surname)
                 </td>
                 @*<td>
                         @Html.DisplayFor(modelItem => item.Sex)
                     </td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.Email)
+                    @Html.DisplayFor(modelItem => user.Email)
                 </td>
                 @*<td>
                         @Html.DisplayFor(modelItem => item.PhoneNumber)
@@ -93,34 +93,34 @@
                         @Html.DisplayFor(modelItem => item.Adress)
                     </td>*@
                 <td>
-                    @if (item.Type != "Uczen")
+                    @if (user.Type != "Uczen")
                     {
                         <img src="~/Images/close.png" alt="x" />
                         @*@Html.DisplayName("===")*@
                     }
                     else
                     {
-                        @Html.DisplayFor(modelItem => item.ParentId)
+                        @Html.DisplayFor(modelItem => user.ParentId)
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Type)
+                    @Html.DisplayFor(modelItem => user.Type)
                 </td>
                 <td>
-                    @if (item.Type != "Uczen")
+                    @if (user.Type != "Uczen")
                     {
                         <img src="~/Images/close.png" alt="x" />
                         @*@Html.DisplayName("===")*@
                     }
                     else
                     {
-                        @Html.DisplayFor(modelItem => item.Class.Name)
+                        @Html.DisplayFor(modelItem => user.Class.Name)
                     }
                 </td>
                 <td>
-                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@user.Id">Details</a>
+                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
                 </td>
             </tr>
         }
