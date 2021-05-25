@@ -11,7 +11,7 @@ using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
 {
-    [Authorize(Roles = "Admin, Nauczyciel")]
+    [Authorize(Roles = "Admin, Nauczyciel, Uczen")]
     public class SubjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -52,8 +52,6 @@ namespace Virtual_School_Register.Controllers
         }
 
         // POST: Subjects/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SubjectId,Name,Content")] Subject subject)

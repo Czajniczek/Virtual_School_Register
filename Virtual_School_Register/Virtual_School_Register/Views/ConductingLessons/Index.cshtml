@@ -1,7 +1,14 @@
 ﻿@model IEnumerable<Virtual_School_Register.Models.ConductingLesson>
 
 @{
-    ViewData["Title"] = "Index";
+    @if (User.IsInRole("Nauczyciel"))
+    {
+        ViewData["Title"] = "Teaching";
+    }
+    else
+    {
+        ViewData["Title"] = "Teachers";
+    }
 }
 
 @*<p>
@@ -44,22 +51,22 @@
                         @Html.DisplayFor(modelItem => item.User.Surname)
                     </td>
                 }
-            <td>
-                @if (User.IsInRole("Nauczyciel"))
-                {
-                    @Html.ActionLink("Begin lesson", "Create", "Lessons", new { conductingLesson = item.ConductingLessonId }, new { @class = "btn btn-outline-success" })
-                    @*<a class="btn btn-outline-success" asp-controller="Lessons" asp-action="Create" asp-route-id="@item.ConductingLessonId">Begin lesson</a>*@
-                }
-                else
-                {
-                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.ConductingLessonId">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.ConductingLessonId">Remove teacher</a>
-                }
+                <td>
+                    @if (User.IsInRole("Nauczyciel"))
+                    {
+                        @Html.ActionLink("Begin lesson", "Create", "Lessons", new { conductingLesson = item.ConductingLessonId }, new { @class = "btn btn-outline-success" })
+                        @*<a class="btn btn-outline-success" asp-controller="Lessons" asp-action="Create" asp-route-id="@item.ConductingLessonId">Begin lesson</a>*@
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.ConductingLessonId">Edit</a>
+                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.ConductingLessonId">Remove teacher</a>
+                    }
 
-                @*<a asp-action="Edit" asp-route-id="@item.ConductingLessonId">Edit</a> |*@
-                @*<a asp-action="Details" asp-route-id="@item.ConductingLessonId">Details</a> |*@
-                @*<a asp-action="Delete" asp-route-id="@item.ConductingLessonId">Remove teacher</a>*@
-            </td>
+                    @*<a asp-action="Edit" asp-route-id="@item.ConductingLessonId">Edit</a> |*@
+                    @*<a asp-action="Details" asp-route-id="@item.ConductingLessonId">Details</a> |*@
+                    @*<a asp-action="Delete" asp-route-id="@item.ConductingLessonId">Remove teacher</a>*@
+                </td>
             </tr>
         }
     </tbody>
