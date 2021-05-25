@@ -26,7 +26,7 @@
             <div class="form-group">
                 <label asp-for="ClassTutorId" class="control-label"></label>
                 <select asp-for="ClassTutorId" class="form-control">
-                    <option value=@(null)>Brak</option>
+                    <option value=@(null)>---</option>
                     @foreach (var tutor in tutorsList)
                     {
                         <option value="@tutor.Id">@tutor.Name @tutor.Surname</option>

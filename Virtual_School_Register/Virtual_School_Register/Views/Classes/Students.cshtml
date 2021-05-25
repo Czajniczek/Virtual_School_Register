@@ -9,9 +9,19 @@
 <br />
 <div>
     <div class="row">
-        <h4 class="col-md-4">Class name: @Html.DisplayFor(model => model.Name)</h4>
+        <h4 class="col-md-3">Class name: @Html.DisplayFor(model => model.Name)</h4>
         <h4 class="col-md-4">@Html.DisplayNameFor(model => model.Content): @Html.DisplayFor(model => model.Content)</h4>
-        <h4 class="col-md-4">@Html.DisplayNameFor(model => model.ClassTutorId): @Html.DisplayFor(model => model.ClassTutorId)</h4>
+        <h4 class="col-md-5">
+            @Html.DisplayNameFor(model => model.ClassTutorId):
+            @if (Model.ClassTutorId == null)
+            {
+                <text>---</text>
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.ClassTutorId)
+            }
+        </h4>
     </div>
     <hr />
     @*<dl class="row">
@@ -50,13 +60,13 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (Virtual_School_Register.Models.User student in ViewBag.StudentsList)
+                @foreach (Virtual_School_Register.Models.User studentInClass in ViewBag.StudentsInClassList)
                 {
                     <tr>
-                        <td>@Html.DisplayFor(i => student.Name)</td>
-                        <td>@Html.DisplayFor(i => student.Surname)</td>
+                        <td>@Html.DisplayFor(i => studentInClass.Name)</td>
+                        <td>@Html.DisplayFor(i => studentInClass.Surname)</td>
                         <td>
-                            <a class="btn btn-outline-danger" asp-action="DeleteUser" asp-route-id="@student.Id">Remove</a>
+                            <a class="btn btn-outline-danger" asp-action="RemoveUserFromClass" asp-route-id="@studentInClass.Id">Remove from class</a>
                         </td>
                     </tr>
                 }
@@ -82,8 +92,7 @@
                         <td>@Html.DisplayFor(i => studentWithNoClass.Name)</td>
                         <td>@Html.DisplayFor(i => studentWithNoClass.Surname)</td>
                         <td>
-                            @*<a class="btn btn-outline-success" asp-action="AddUser" asp-route-id="@studentWithNoClass.Id">Add</a>*@
-                            @Html.ActionLink("Add", "AddUser", "Classes", new { id = studentWithNoClass.Id, classId = ViewBag.ClassId }, new { @class = "btn btn-outline-success" })
+                            @Html.ActionLink("Add to class", "AddUserToClass", "Classes", new { id = studentWithNoClass.Id, classId = ViewBag.ClassId }, new { @class = "btn btn-outline-success" })
                         </td>
                     </tr>
                 }
@@ -93,6 +102,6 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ClassId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@Model.ClassId">Edit</a>
+    <a class="btn btn-primary" asp-action="Index">Back to List</a>
 </div>

@@ -162,6 +162,7 @@ namespace Virtual_School_Register.Controllers
             ViewBag.ParentsList = parents;
 
             var editModel = _mapper.Map<UserEditViewModel>(user);
+
             return View(editModel);
         }
 
@@ -224,15 +225,18 @@ namespace Virtual_School_Register.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(id);
-            var myClass = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == user.ClassId);
-
             if (user == null)
             {
                 return NotFound();
             }
 
             var deleteModel = _mapper.Map<UserDetailsViewModel>(user);
-            deleteModel.Class = myClass;
+
+            if (user.Type == "Uczen")
+            {
+                var myClass = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == user.ClassId);
+                deleteModel.Class = myClass;
+            }
 
             if (user.ParentId != null)
             {

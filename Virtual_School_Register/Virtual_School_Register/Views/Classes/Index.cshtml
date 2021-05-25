@@ -5,7 +5,7 @@
 }
 
 <p>
-    <a class="btn btn-success" asp-action="Create">Create New</a>
+    <a class="btn btn-success" asp-action="Create">Create class</a>
 </p>
 <table class="table table-striped text-center">
     <thead class="thead-dark">
@@ -23,28 +23,30 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var _class in Model)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @Html.DisplayFor(modelItem => _class.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Content)
+                    @Html.DisplayFor(modelItem => _class.Content)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ClassTutorId)
+                    @if (_class.ClassTutorId == null)
+                    {
+                        <img src="~/Images/close.png" alt="x" />
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => _class.ClassTutorId)
+                    }
                 </td>
                 <td>
-                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.ClassId">Students</a>
-                    <a class="btn btn-outline-info" asp-action="Subjects" asp-route-id="@item.ClassId">Subjects</a>
-                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.ClassId">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.ClassId">Delete</a>
-
-                    @*<a asp-action="Details" asp-route-id="@item.ClassId">Students</a> |
-                    <a asp-action="Subjects" asp-route-id="@item.ClassId">Subjects</a> |
-                    <a asp-action="Edit" asp-route-id="@item.ClassId">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ClassId">Delete</a>*@
+                    <a class="btn btn-outline-info" asp-action="Students" asp-route-id="@_class.ClassId">Students</a>
+                    <a class="btn btn-outline-info" asp-action="Subjects" asp-route-id="@_class.ClassId">Subjects</a>
+                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@_class.ClassId">Edit</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@_class.ClassId">Delete</a>
                 </td>
             </tr>
         }
