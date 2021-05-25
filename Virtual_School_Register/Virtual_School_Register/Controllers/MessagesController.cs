@@ -88,16 +88,27 @@ namespace Virtual_School_Register.Controllers
                 persons = _userManager.Users.Where(x => x.Type == "Nauczyciel" && x.Id != _userManager.GetUserId(HttpContext.User))
                     .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
             }
-            else if (User.IsInRole("Nauczyciel"))
-            {
-                persons = _userManager.Users.Where(x => (x.Type == "Rodzic" || x.Type == "Uczen") && x.Id != _userManager.GetUserId(HttpContext.User))
-                    .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
-            }
             else
             {
                 persons = _userManager.Users.Where(x => x.Id != _userManager.GetUserId(HttpContext.User))
                     .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
             }
+
+            //if (User.IsInRole("Rodzic") || User.IsInRole("Uczen"))
+            //{
+            //    persons = _userManager.Users.Where(x => x.Type == "Nauczyciel" && x.Id != _userManager.GetUserId(HttpContext.User))
+            //        .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+            //}
+            //else if (User.IsInRole("Nauczyciel"))
+            //{
+            //    persons = _userManager.Users.Where(x => (x.Type == "Rodzic" || x.Type == "Uczen") && x.Id != _userManager.GetUserId(HttpContext.User))
+            //        .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+            //}
+            //else
+            //{
+            //    persons = _userManager.Users.Where(x => x.Id != _userManager.GetUserId(HttpContext.User))
+            //        .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+            //}
 
             ViewBag.PersonsList = persons;
 

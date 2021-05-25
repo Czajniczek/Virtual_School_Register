@@ -27,6 +27,7 @@ namespace Virtual_School_Register.ViewModels
         public string PhoneNumber { get; set; }
 
         [Display(Name = "Birth date")]
+        [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
         public string Adress { get; set; }

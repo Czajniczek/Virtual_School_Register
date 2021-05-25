@@ -34,11 +34,24 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var myDbContext = _context.Users.Include(u => u.Class).OrderBy(x => x.UserName.ToLower()).ThenBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower());
+            var users = _context.Users.Include(u => u.Class)
+                .OrderBy(x => x.Type)
+                .ThenBy(x => x.UserName.ToLower())
+                .ThenBy(x => x.Surname.ToLower())
+                .ThenBy(x => x.Name.ToLower()).ToList();
 
-            return View(await myDbContext.ToListAsync());
+            foreach (var p in users)
+            {
+                if (p.ParentId != null)
+                {
+                    var parent = users.Find(x => x.Id == p.ParentId);
+                    p.ParentId = parent.Name + " " + parent.Surname;
+                }
+            }
+
+            return View(users);
         }
 
         // GET: Users/Details/5
@@ -59,6 +72,13 @@ namespace Virtual_School_Register.Controllers
 
             var detailsModel = _mapper.Map<UserDetailsViewModel>(user);
             detailsModel.Class = myClass;
+
+            if(user.ParentId != null)
+            {
+                var parent = _userManager.Users.FirstOrDefault(x => x.Id == user.ParentId);
+                detailsModel.ParentId = parent.Name + " " + parent.Surname;
+            }
+
             return View(detailsModel);
         }
 
@@ -66,6 +86,9 @@ namespace Virtual_School_Register.Controllers
         public IActionResult Create()
         {
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name");
+            var parents = _userManager.Users.Where(x => x.Type == "Rodzic").ToList();
+            ViewBag.ParentsList = parents;
+
             return View();
         }
 
@@ -89,7 +112,7 @@ namespace Virtual_School_Register.Controllers
                 createdUser.EmailConfirmed = true;
                 if (user.Password != null)
                 {
-                     var result = await _userManager.CreateAsync(createdUser, user.Password);
+                    var result = await _userManager.CreateAsync(createdUser, user.Password);
 
                     if (result.Succeeded)
                     {
@@ -126,6 +149,9 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
+
+            var parents = _userManager.Users.Where(x => x.Type == "Rodzic").ToList();
+            ViewBag.ParentsList = parents;
 
             var editModel = _mapper.Map<UserEditViewModel>(user);
             return View(editModel);
@@ -197,6 +223,13 @@ namespace Virtual_School_Register.Controllers
 
             var deleteModel = _mapper.Map<UserDetailsViewModel>(user);
             deleteModel.Class = myClass;
+
+            if (user.ParentId != null)
+            {
+                var parent = _userManager.Users.FirstOrDefault(x => x.Id == user.ParentId);
+                deleteModel.ParentId = parent.Name + " " + parent.Surname;
+            }
+
             return View(deleteModel);
         }
 

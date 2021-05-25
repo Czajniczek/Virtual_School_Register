@@ -18,7 +18,7 @@ namespace Virtual_School_Register.Models
         [MinLength(1, ErrorMessage = "Content cannot be empty!")]
         public string Content { get; set; }
 
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         public string UserId { get; set; }
