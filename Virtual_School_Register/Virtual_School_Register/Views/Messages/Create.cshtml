@@ -5,7 +5,14 @@
     var personsList = ViewBag.PersonsList as IEnumerable<User>;
 }
 
-<h1>Create</h1>
+@if (ViewBag.IsReply == "Reply")
+{
+    <h1>@ViewBag.IsReply</h1>
+}
+else
+{
+    <h1>Create</h1>
+}
 
 <h4>Message</h4>
 <hr />
@@ -15,17 +22,40 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="RecipientId" class="control-label"></label>
-                <select asp-for="RecipientId" class="form-control">
+                @if (ViewBag.IsReply == "Reply")
+                {
+                    <select asp-for="RecipientId" class="form-control" disabled>
+                        @foreach (var person in personsList)
+                        {
+                            <option value="@person.Id">@person.Type[0] - @person.Surname @person.Name</option>
+                        }
+                    </select>
                     @foreach (var person in personsList)
                     {
-                    <option value="@person.Id">@person.Type[0] - @person.Surname @person.Name</option>
+                        <input asp-for="RecipientId" value="@person.Id" hidden />
                     }
-                </select>
+                }
+                else
+                {
+                    <select asp-for="RecipientId" class="form-control">
+                        @foreach (var person in personsList)
+                        {
+                            <option value="@person.Id">@person.Type[0] - @person.Surname @person.Name</option>
+                        }
+                    </select>
+                }
                 @*<span asp-validation-for="RecipientId" class="text-danger"></span>*@
             </div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
+                @if (ViewBag.IsReply == "Reply")
+                {
+                    <input asp-for="Title" value="@ViewBag.ReplyTitle" class="form-control" />
+                }
+                else
+                {
+                    <input asp-for="Title" class="form-control" />
+                }
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -34,14 +64,14 @@
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             @*<div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-            </div>*@
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for="Date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserId" class="control-label"></label>
+                    <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                </div>*@
             <div class="form-group">
                 <input type="submit" value="Send" class="btn btn-primary" />
             </div>

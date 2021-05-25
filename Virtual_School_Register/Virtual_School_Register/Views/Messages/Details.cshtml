@@ -77,6 +77,8 @@
 <br />
 
 <div>
-    <a asp-action="Create">Reply</a> |
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Replay", "Create", "Messages", new { userId = Model.UserId, title = Model.Title }, new { @class = "btn btn-success" })
+    @*<a asp-action="Create">Reply</a> |*@
+    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+    @*<a asp-action="Index">Back to List</a>*@
 </div>

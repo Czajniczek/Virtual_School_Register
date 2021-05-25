@@ -74,17 +74,6 @@
                 <span asp-validation-for="Adress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ParentId" class="control-label"></label>
-                <select asp-for="ParentId" class="form-control">
-                    <option value=@(null)>Brak</option>
-                    @foreach (var parent in parentsList)
-                    {
-                        <option value="@parent.Id">@parent.Name @parent.Surname</option>
-                    }
-                </select>
-                <span asp-validation-for="ParentId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
                 <select asp-for="Type" class="form-control">
                     <option value="Admin">Administrator</option>
@@ -95,9 +84,20 @@
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ParentId" class="control-label"></label>
+                <select asp-for="ParentId" class="form-control">
+                    <option value=@(null)>---</option>
+                    @foreach (var parent in parentsList)
+                    {
+                        <option value="@parent.Id">@parent.Name @parent.Surname</option>
+                    }
+                </select>
+                <span asp-validation-for="ParentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="ClassId" class="control-label"></label>
                 <select asp-for="ClassId" class="form-control">
-                    <option value=@(null)>Brak</option>
+                    <option value=@(null)>---</option>
                     @foreach (var klasa in classesList)
                     {
                         <option value="@klasa.Value">@klasa.Text</option>
