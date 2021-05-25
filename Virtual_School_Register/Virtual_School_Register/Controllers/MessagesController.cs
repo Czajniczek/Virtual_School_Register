@@ -79,20 +79,32 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Messages/Create
-        public IActionResult Create()
+        public IActionResult Create(string userId, string title)
         {
             List<User> persons;
 
-            if (User.IsInRole("Rodzic") || User.IsInRole("Uczen"))
+            if (userId == null)
             {
-                persons = _userManager.Users.Where(x => x.Type == "Nauczyciel" && x.Id != _userManager.GetUserId(HttpContext.User))
-                    .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+                if (User.IsInRole("Rodzic") || User.IsInRole("Uczen"))
+                {
+                    persons = _userManager.Users.Where(x => x.Type == "Nauczyciel" && x.Id != _userManager.GetUserId(HttpContext.User))
+                        .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+                }
+                else
+                {
+                    persons = _userManager.Users.Where(x => x.Id != _userManager.GetUserId(HttpContext.User))
+                        .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+                }
             }
             else
             {
-                persons = _userManager.Users.Where(x => x.Id != _userManager.GetUserId(HttpContext.User))
-                    .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+                persons = _userManager.Users.Where(x => x.Id == userId).ToList();
+
+                ViewBag.IsReply = "Reply";
+                ViewBag.ReplyTitle = "Re: " + title;
             }
+
+            ViewBag.PersonsList = persons;
 
             //if (User.IsInRole("Rodzic") || User.IsInRole("Uczen"))
             //{
@@ -109,8 +121,6 @@ namespace Virtual_School_Register.Controllers
             //    persons = _userManager.Users.Where(x => x.Id != _userManager.GetUserId(HttpContext.User))
             //        .OrderBy(x => x.Type).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
             //}
-
-            ViewBag.PersonsList = persons;
 
             //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
@@ -211,25 +221,25 @@ namespace Virtual_School_Register.Controllers
             bool indexFlag = true;
             var message = await _context.Message.FindAsync(id);
 
-            if(message.RecipientId == _userManager.GetUserId(HttpContext.User))
+            if (message.RecipientId == _userManager.GetUserId(HttpContext.User))
             {
                 message.IsRecipientDeleted = true;
                 indexFlag = true;
-            } 
+            }
             else if (message.UserId == _userManager.GetUserId(HttpContext.User))
             {
                 message.IsSenderDeleted = true;
                 indexFlag = false;
             }
 
-            if(message.IsSenderDeleted && message.IsRecipientDeleted)
+            if (message.IsSenderDeleted && message.IsRecipientDeleted)
             {
                 _context.Message.Remove(message);
             }
 
             await _context.SaveChangesAsync();
 
-            if(!indexFlag)
+            if (!indexFlag)
             {
                 return RedirectToAction(nameof(IndexSent));
             }

@@ -42,7 +42,6 @@
                 <td style="width: 300px">
                     @if (item.Content.Length > 60)
                     {
-                        //var content = item.Content.Substring(0, 40) + "...";
                         @Html.Raw(item.Content.Substring(0, 60) + "...")
                     }
                     else

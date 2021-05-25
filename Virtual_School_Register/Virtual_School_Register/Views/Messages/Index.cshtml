@@ -9,7 +9,7 @@
 <hr />
 <div class="thead-dark row">
     <div class="col-md-2">
-        <a class="btn btn-success" asp-action="Create">Create New</a>
+        <a class="btn btn-success" asp-action="Create">Compose</a>
     </div>
     <div class="col-md-8">
 
@@ -59,11 +59,25 @@
                         @Html.DisplayFor(modelItem => item.User.Surname)
                     }
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                <td style="width:250px">
+                    @if (item.Title.Length > 50)
+                    {
+                        <b>@Html.Raw(item.Title.Substring(0, 50) + "...")</b>
+                    }
+                    else
+                    {
+                        <b>@Html.DisplayFor(modelItem => item.Title)</b>
+                    }
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Content)
+                <td style="width: 300px">
+                    @if (item.Content.Length > 60)
+                    {
+                        @Html.Raw(item.Content.Substring(0, 60) + "...")
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Content)
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)
