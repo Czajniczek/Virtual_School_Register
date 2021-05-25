@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Create";
     var classesList = ViewBag.ClassId as SelectList;
+    var parentsList = ViewBag.ParentsList as IEnumerable<User>;
 }
 
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -44,8 +45,8 @@
             <div class="form-group">
                 <label asp-for="Sex" class="control-label"></label>
                 <select asp-for="Sex" class="form-control">
-                    <option value="K">Kobieta</option>
-                    <option value="M">Mężczyzna</option>
+                    <option value="M">Man</option>
+                    <option value="K">Woman</option>
                 </select>
                 @*<input asp-for="Sex" class="form-control" />*@
                 <span asp-validation-for="Sex" class="text-danger"></span>
@@ -76,11 +77,6 @@
                 <span asp-validation-for="Adress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ParentId" class="control-label"></label>
-                <input asp-for="ParentId" class="form-control" />
-                <span asp-validation-for="ParentId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
                 <select asp-for="Type" class="form-control">
                     <option value="Admin">Administrator</option>
@@ -91,12 +87,24 @@
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ParentId" class="control-label"></label>
+                <select asp-for="ParentId" class="form-control">
+                    <option value=@(null)>---</option>
+                    @foreach (var parent in parentsList)
+                    {
+                        <option value="@parent.Id">@parent.Name @parent.Surname</option>
+                    }
+                </select>
+                @*<input asp-for="ParentId" class="form-control" />*@
+                <span asp-validation-for="ParentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="ClassId" class="control-label"></label>
                 <select asp-for="ClassId" class="form-control">
-                    <option value=@(null)>Brak</option>
-                    @foreach (var klasa in classesList)
+                    <option value=@(null)>---</option>
+                    @foreach (var _class in classesList)
                     {
-                        <option value="@klasa.Value">@klasa.Text</option>
+                        <option value="@_class.Value">@_class.Text</option>
                     }
                 </select> @*asp-items="ViewBag.ClassId"*@
                 <span asp-validation-for="ClassId" class="text-danger"></span>

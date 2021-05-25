@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Virtual_School_Register.Models.Annoucement>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Annoucements";
 }
 
 <p>
@@ -22,35 +22,51 @@
             <th>
                 @Html.DisplayNameFor(model => model.User)
             </th>
-            <th></th>
+            <th>Action</th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Name)
-                @Html.DisplayFor(modelItem => item.User.Surname)
-            </td>
-            <td>
-                <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.AnnoucementId">Details</a>
-                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.AnnoucementId">Edit</a>
-                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.AnnoucementId">Delete</a>
+    <tbody class="text-left">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="width:250px">
+                    @if (item.Title.Length > 50)
+                    {
+                        <b>@Html.Raw(item.Title.Substring(0, 50) + "...")</b>
+                    }
+                    else
+                    {
+                        <b>@Html.DisplayFor(modelItem => item.Title)</b>
+                    }
+                </td>
+                <td style="width: 300px">
+                    @if (item.Content.Length > 60)
+                    {
+                        //var content = item.Content.Substring(0, 40) + "...";
+                        @Html.Raw(item.Content.Substring(0, 60) + "...")
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Content)
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Name)
+                    @Html.DisplayFor(modelItem => item.User.Surname)
+                </td>
+                <td>
+                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.AnnoucementId">Details</a>
+                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.AnnoucementId">Edit</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.AnnoucementId">Delete</a>
 
-                @*<a asp-action="Edit" asp-route-id="@item.AnnoucementId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AnnoucementId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AnnoucementId">Delete</a>*@
-            </td>
-        </tr>
-}
+                    @*<a asp-action="Edit" asp-route-id="@item.AnnoucementId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.AnnoucementId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.AnnoucementId">Delete</a>*@
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
