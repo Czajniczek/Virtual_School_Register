@@ -12,7 +12,6 @@ using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
 {
-    [Authorize(Roles = "Admin, Nauczyciel")]
     public class ConductingLessonsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -56,15 +55,22 @@ namespace Virtual_School_Register.Controllers
                 .Include(c => c.Subject)
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.ConductingLessonId == id);
+
             if (conductingLesson == null)
             {
                 return NotFound();
             }
 
-            return View(conductingLesson);
+            ViewBag.ConductingLesson = conductingLesson;
+
+            var users = await _userManager.Users.Include(u => u.Class).Where(x => x.ClassId == conductingLesson.ClassId)
+                          .OrderBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower()).ToListAsync();
+
+            return View(users);
         }
 
         // GET: ConductingLessons/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Content");
@@ -76,6 +82,7 @@ namespace Virtual_School_Register.Controllers
         // POST: ConductingLessons/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("ConductingLessonId,UserId,ClassId,SubjectId")] ConductingLesson conductingLesson)
         {
             if (ModelState.IsValid)
@@ -91,6 +98,7 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: ConductingLessons/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -117,6 +125,7 @@ namespace Virtual_School_Register.Controllers
         // POST: ConductingLessons/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, ConductingLesson conductingLesson)
         {
             if (id != conductingLesson.ConductingLessonId)
@@ -151,6 +160,7 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: ConductingLessons/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -180,6 +190,7 @@ namespace Virtual_School_Register.Controllers
         // POST: ConductingLessons/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var conductingLesson = await _context.ConductingLesson.FindAsync(id);
