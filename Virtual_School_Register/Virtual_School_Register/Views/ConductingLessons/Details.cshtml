@@ -41,11 +41,15 @@
 
 @{
     ViewData["Title"] = "Students";
+    var conductingLesson = ViewBag.ConductingLesson as ConductingLesson;
 }
 
 <h1>
-    Details
+    @conductingLesson.Class.Name
+    @conductingLesson.Subject.Name
 </h1>
+
+<hr/>
 
 <table class="table table-striped text-center">
     <thead class="thead-dark">
@@ -56,9 +60,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Surname)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Class)
-            </th>
+            </th>*@
             <th>
                 Action
             </th>
@@ -74,7 +78,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => user.Surname)
                 </td>
-                <td>
+                @*<td>
                     @if (user.Type != "Uczen")
                     {
                         <img src="~/Images/close.png" alt="x" />
@@ -83,9 +87,9 @@
                     {
                         @Html.DisplayFor(modelItem => user.Class.Name)
                     }
-                </td>
+                </td>*@
                 <td>
-                    @Html.ActionLink("Add grade", "Create", "Grades", new { }, new { @class = "btn btn-outline-success" })
+                    @Html.ActionLink("Add grade", "Create", "Evaluations", new { userId = user.Id, subjectId = conductingLesson.SubjectId }, new { @class = "btn btn-outline-success" })
 
                     @*<a class="btn btn-outline-info" asp-action="Details" asp-route-id="@user.Id">Details</a>
                         <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>

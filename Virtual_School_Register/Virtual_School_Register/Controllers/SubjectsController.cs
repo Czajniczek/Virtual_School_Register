@@ -46,6 +46,7 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Subjects/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +55,7 @@ namespace Virtual_School_Register.Controllers
         // POST: Subjects/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("SubjectId,Name,Content")] Subject subject)
         {
             if (ModelState.IsValid)
@@ -66,6 +68,7 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Subjects/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,10 +85,9 @@ namespace Virtual_School_Register.Controllers
         }
 
         // POST: Subjects/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("SubjectId,Name,Content")] Subject subject)
         {
             if (id != subject.SubjectId)
@@ -117,6 +119,7 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Subjects/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +140,7 @@ namespace Virtual_School_Register.Controllers
         // POST: Subjects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var subject = await _context.Subject.FindAsync(id);

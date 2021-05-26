@@ -24,6 +24,6 @@ namespace Virtual_School_Register.Models
 
         public string Comment { get; set; }
 
-        public virtual ICollection<Evaluation> Evaluations { get; set; }
+        //public virtual ICollection<Evaluation> Evaluations { get; set; }
     }
 }

@@ -2,28 +2,86 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Virtual_School_Register.Data;
 using Virtual_School_Register.Models;
+using Virtual_School_Register.ViewModels;
 
 namespace Virtual_School_Register.Controllers
 {
     public class EvaluationsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public EvaluationsController(ApplicationDbContext context)
+        public EvaluationsController(ApplicationDbContext context, UserManager<User> userManager, IMapper mapper)
         {
             _context = context;
+            _userManager = userManager;
+            _mapper = mapper;
+        }
+
+        public async Task<IActionResult> IndexTeacher()
+        {
+            var applicationDbContext = _context.Evaluation.Include(e => e.Subject).Include(e => e.User);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Evaluations
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "Uczen, Rodzic")]
+        public async Task<IActionResult> Index(string childId)
         {
-            var applicationDbContext = _context.Evaluation.Include(e => e.Grade).Include(e => e.Subject).Include(e => e.User);
-            return View(await applicationDbContext.ToListAsync());
+            List<Evaluation> evaluations = new List<Evaluation>();
+            List<SubjectGradeViewModel> subjectGradesList = new List<SubjectGradeViewModel>();
+
+            /*if (User.IsInRole("Nauczyciel"))
+            {
+               *//* var conductingLessons = await _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
+                    .Where(x => x.UserId == _userManager.GetUserId(HttpContext.User)).ToListAsync();*//*
+
+
+                evaluations = await _context.Evaluation.Include(e => e.Subject).Include(e => e.User).ToListAsync();
+            }
+            else */
+
+            var thisUser = new User();
+
+            if (User.IsInRole("Rodzic"))
+            {
+                //Zakładamy, że rodzic ma jedno dziecko
+                thisUser = _userManager.Users.FirstOrDefault(x => x.ParentId == _userManager.GetUserId(HttpContext.User));
+            }
+            else
+            {
+                thisUser = _userManager.Users.FirstOrDefault(x => x.Id == _userManager.GetUserId(HttpContext.User));
+            }
+
+            ViewBag.ThisUser = thisUser;
+
+            var lessonsSubjectsIds = await _context.ConductingLesson.Include(c => c.Subject)
+                .Where(x => x.ClassId == thisUser.ClassId).Distinct().OrderBy(x => x.SubjectId).ToListAsync();
+
+            foreach (var subject in lessonsSubjectsIds)
+            {
+                SubjectGradeViewModel subjectGrade = new SubjectGradeViewModel();
+
+                ICollection<Evaluation> grades = _context.Evaluation
+                    .Where(x => x.UserId == thisUser.Id && x.SubjectId == subject.SubjectId).ToList();
+
+                subjectGrade.SubjectId = subject.SubjectId;
+                subjectGrade.SubjectName = subject.Subject.Name;
+                subjectGrade.Evaluations = grades;
+
+                subjectGradesList.Add(subjectGrade);
+            }
+
+            return View(subjectGradesList);
         }
 
         // GET: Evaluations/Details/5
@@ -35,7 +93,6 @@ namespace Virtual_School_Register.Controllers
             }
 
             var evaluation = await _context.Evaluation
-                .Include(e => e.Grade)
                 .Include(e => e.Subject)
                 .Include(e => e.User)
                 .FirstOrDefaultAsync(m => m.EvaluationId == id);
@@ -48,29 +105,28 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Evaluations/Create
-        public IActionResult Create()
+        public IActionResult Create(string userId, int subjectId)
         {
-            ViewData["GradeId"] = new SelectList(_context.Set<Grade>(), "GradeId", "GradeId");
-            ViewData["SubjectId"] = new SelectList(_context.Set<Subject>(), "SubjectId", "Content");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", subjectId.ToString());
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", userId);
             return View();
         }
 
         // POST: Evaluations/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EvaluationId,UserId,GradeId,SubjectId")] Evaluation evaluation)
+        public async Task<IActionResult> Create(Evaluation evaluation)
         {
             if (ModelState.IsValid)
             {
+                evaluation.Date = DateTime.Now;
+
                 _context.Add(evaluation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "ConductingLessons");
             }
-            ViewData["GradeId"] = new SelectList(_context.Set<Grade>(), "GradeId", "GradeId", evaluation.GradeId);
-            ViewData["SubjectId"] = new SelectList(_context.Set<Subject>(), "SubjectId", "Content", evaluation.SubjectId);
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", evaluation.SubjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", evaluation.UserId);
             return View(evaluation);
         }
@@ -88,18 +144,15 @@ namespace Virtual_School_Register.Controllers
             {
                 return NotFound();
             }
-            ViewData["GradeId"] = new SelectList(_context.Set<Grade>(), "GradeId", "GradeId", evaluation.GradeId);
-            ViewData["SubjectId"] = new SelectList(_context.Set<Subject>(), "SubjectId", "Content", evaluation.SubjectId);
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", evaluation.SubjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", evaluation.UserId);
             return View(evaluation);
         }
 
         // POST: Evaluations/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EvaluationId,UserId,GradeId,SubjectId")] Evaluation evaluation)
+        public async Task<IActionResult> Edit(int id, [Bind("EvaluationId,UserId,Value,Date,Type,Comment,SubjectId")] Evaluation evaluation)
         {
             if (id != evaluation.EvaluationId)
             {
@@ -126,8 +179,7 @@ namespace Virtual_School_Register.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GradeId"] = new SelectList(_context.Set<Grade>(), "GradeId", "GradeId", evaluation.GradeId);
-            ViewData["SubjectId"] = new SelectList(_context.Set<Subject>(), "SubjectId", "Content", evaluation.SubjectId);
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", evaluation.SubjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", evaluation.UserId);
             return View(evaluation);
         }
@@ -141,7 +193,6 @@ namespace Virtual_School_Register.Controllers
             }
 
             var evaluation = await _context.Evaluation
-                .Include(e => e.Grade)
                 .Include(e => e.Subject)
                 .Include(e => e.User)
                 .FirstOrDefaultAsync(m => m.EvaluationId == id);

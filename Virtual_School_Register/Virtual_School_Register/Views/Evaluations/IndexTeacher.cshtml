@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Virtual_School_Register.Models.Evaluation>
+
+@{
+    ViewData["Title"] = "IndexTeacher";
+}
+
+@*<h1>IndexTeacher</h1>*@
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+<br />
+<table class="table table-striped text-center">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Student
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subject)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Name)
+                    @Html.DisplayFor(modelItem => item.User.Surname)
+                </td>
+                <td>
+                    @if (item.Value[0] == '1')
+                    {
+                        <b style="color:red">@Html.DisplayFor(modelItem => item.Value)</b>
+                    }
+                    else
+                    {
+                        <b>@Html.DisplayFor(modelItem => item.Value)</b>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject.Name)
+                </td>
+                <td>
+                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.EvaluationId">Details</a>
+                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.EvaluationId">Edit</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.EvaluationId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

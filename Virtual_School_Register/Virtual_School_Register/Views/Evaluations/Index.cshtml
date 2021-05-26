@@ -1,47 +1,64 @@
-﻿@model IEnumerable<Virtual_School_Register.Models.Evaluation>
+﻿@model IEnumerable<Virtual_School_Register.ViewModels.SubjectGradeViewModel>
 
 @{
-    ViewData["Title"] = "Evaluation";
+    ViewData["Title"] = "Grades";
+    var thisUser = ViewBag.ThisUser as User;
 }
 
-<h1>Index</h1>
+@if (User.IsInRole("Rodzic"))
+{
+    <h3>
+        <b>
+            @thisUser.Name
+            @thisUser.Surname
+        </b>
+        grades
+    </h3>
+    <hr />
+}
+else
+{
+    <br />
+}
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+@*<p>
+        <a asp-action="Create">Create New</a>
+</p>*@
+
+<table class="table table-striped text-center">
+    <thead class="thead-dark">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                Subject
+                @*@Html.DisplayNameFor(model => model.SubjectName)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Grade)
+                Grades
+                @*@Html.DisplayNameFor(model => model.Evaluations)*@
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Subject)
-            </th>
-            <th></th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Grade.GradeId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subject.Content)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EvaluationId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EvaluationId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EvaluationId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubjectName)
+                </td>
+                <td>
+                    @foreach (var grade in item.Evaluations)
+                    {
+                        <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>
+                        <text>&nbsp;&nbsp;</text>
+                    }
+                </td>
+                <td>
+                    @*<a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.EvaluationId">Details</a>
+                        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.EvaluationId">Edit</a>
+                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.EvaluationId">Delete</a>*@
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
