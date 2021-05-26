@@ -63,20 +63,12 @@ namespace Virtual_School_Register.Controllers
                 {
                     item.ClassName = classes.Find(x => x.ClassId == lesson.ClassId).Name;
                     item.SubjectName = subjects.Find(x => x.SubjectId == lesson.SubjectId).Name;
+                    /*item.ClassName = c.ConductingLesson.Class.Name;
+                    item.SubjectName = c.ConductingLesson.Subject.Name;*/
                 }
 
                 lessonsViewModelList.Add(item);
             }
-
-            /*foreach (var c in lessons)
-            {
-                var @class = classes.Find(x => x.ClassId == c.ConductingLesson.ClassId);
-                var subject = subjects.Find(x => x.SubjectId == c.ConductingLesson.SubjectId);
-                c. = @class.Name + " " + subject.Name;
-            }*/
-
-            /*ViewBag.ClassesList = classes;
-            ViewBag.SubjectsList = subjects;*/
 
             return View(lessonsViewModelList);
         }

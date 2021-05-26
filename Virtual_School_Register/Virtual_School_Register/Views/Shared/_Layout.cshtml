@@ -37,7 +37,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Lessons" asp-action="Index">Lessons</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Grades" asp-action="Index">Grades</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="IndexTeacher">Grades</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">Messages</a>
@@ -58,13 +58,16 @@
                         else if (User.IsInRole("Nauczyciel"))
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Subjects" asp-action="Index">Subjects</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="ConductingLessons" asp-action="Index">Teaching</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Lessons" asp-action="Index">Lessons</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Grades" asp-action="Index">Grades</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="IndexTeacher">Grades</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">Messages</a>
@@ -88,7 +91,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Subjects" asp-action="Index">Subjects</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Grades" asp-action="Index">Grades</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="Index">Grades</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">Messages</a>
@@ -97,7 +100,7 @@
                         else if (User.IsInRole("Rodzic"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Grades" asp-action="Index">Grades</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="Index">Grades</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">Messages</a>
