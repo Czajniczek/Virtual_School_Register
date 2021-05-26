@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Virtual_School_Register.Data;
 using Virtual_School_Register.Models;
+using Virtual_School_Register.ViewModels;
 
 namespace Virtual_School_Register.Controllers
 {
@@ -15,10 +17,12 @@ namespace Virtual_School_Register.Controllers
     public class LessonsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public LessonsController(ApplicationDbContext context)
+        public LessonsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: Lessons
@@ -28,6 +32,24 @@ namespace Virtual_School_Register.Controllers
 
             var classes = await _context.Class.ToListAsync();
             var subjects = await _context.Subject.ToListAsync();
+            var conductingLessons = await _context.ConductingLesson.ToListAsync();
+
+            List<LessonViewModel> lessonsViewModelList = new List<LessonViewModel>();
+
+            foreach (var c in lessons)
+            {
+                var item = _mapper.Map<LessonViewModel>(c);
+
+                var lesson = conductingLessons.Find(x => x.ConductingLessonId == item.ConductingLessonId);
+
+                if(lesson != null)
+                {
+                    item.ClassName = classes.Find(x => x.ClassId == lesson.ClassId).Name;
+                    item.SubjectName = subjects.Find(x => x.SubjectId == lesson.SubjectId).Name;
+                }
+
+                lessonsViewModelList.Add(item);
+            }
 
             /*foreach (var c in lessons)
             {
@@ -36,10 +58,10 @@ namespace Virtual_School_Register.Controllers
                 c. = @class.Name + " " + subject.Name;
             }*/
 
-            ViewBag.ClassesList = classes;
-            ViewBag.SubjectsList = subjects;
+            /*ViewBag.ClassesList = classes;
+            ViewBag.SubjectsList = subjects;*/
 
-            return View(lessons);
+            return View(lessonsViewModelList);
         }
 
         // GET: Lessons/Details/5
@@ -104,8 +126,6 @@ namespace Virtual_School_Register.Controllers
         }
 
         // POST: Lessons/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("LessonId,Title,Content,ConductingLessonId")] Lesson lesson)
@@ -155,7 +175,16 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            return View(lesson);
+            var deleteModel = _mapper.Map<LessonViewModel>(lesson);
+
+            var conductingLesson = await _context.ConductingLesson.FirstOrDefaultAsync(x => x.ConductingLessonId == deleteModel.ConductingLessonId);
+            var @class = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == conductingLesson.ClassId);
+            var subject = await _context.Subject.FirstOrDefaultAsync(x => x.SubjectId == conductingLesson.SubjectId);
+
+            deleteModel.ClassName = @class.Name;
+            deleteModel.SubjectName = subject.Name;
+
+            return View(deleteModel);
         }
 
         // POST: Lessons/Delete/5

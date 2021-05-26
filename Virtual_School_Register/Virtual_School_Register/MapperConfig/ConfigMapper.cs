@@ -19,6 +19,8 @@ namespace Virtual_School_Register.MapperConfig
             CreateMap<User, UserCreateViewModel>().ReverseMap();
 
             CreateMap<User, UserDetailsViewModel>().ReverseMap();
+
+            CreateMap<Lesson, LessonViewModel>().ReverseMap();
         }
     }
 }
