@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Virtual_School_Register.Models.Lesson>
+﻿@model IEnumerable<Virtual_School_Register.ViewModels.LessonViewModel>
 
 @{
     ViewData["Title"] = "Lessons";
@@ -18,7 +18,11 @@
                 @Html.DisplayNameFor(model => model.Content)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ConductingLesson)
+                Subject
+                @*@Html.DisplayNameFor(model => model.ConductingLesson)*@
+            </th>
+            <th>
+                Class
             </th>
             <th>Action</th>
         </tr>
@@ -26,25 +30,29 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Content)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ConductingLesson.ConductingLessonId)
-                </td>
-                <td>
-                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.LessonId">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.LessonId">Delete</a>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectName)
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.ConductingLesson.ConductingLessonId)*@
+                @Html.DisplayFor(modelItem => item.ClassName)
+            </td>
+            <td>
+                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.LessonId">Edit</a>
+                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.LessonId">Delete</a>
 
-                    @*<a asp-action="Edit" asp-route-id="@item.LessonId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.LessonId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.LessonId">Delete</a>*@
-                </td>
-            </tr>
+                @*<a asp-action="Edit" asp-route-id="@item.LessonId">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.LessonId">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.LessonId">Delete</a>*@
+            </td>
+        </tr>
         }
     </tbody>
 </table>
