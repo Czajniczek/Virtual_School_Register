@@ -1,36 +1,97 @@
-﻿@model Virtual_School_Register.Models.ConductingLesson
+﻿@*@model Virtual_School_Register.Models.ConductingLesson
+
+    @{
+        ViewData["Title"] = "Details";
+    }
+
+    <h1>Details</h1>
+
+    <div>
+        <h4>ConductingLesson</h4>
+        <hr />
+        <dl class="row">
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.User)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.User.Id)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Class)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Class.Content)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Subject)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Subject.Content)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.ConductingLessonId">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+*@
+
+
+@model IEnumerable<Virtual_School_Register.Models.User>
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Students";
 }
 
-<h1>Details</h1>
+<h1>
+    Details
+</h1>
 
-<div>
-    <h4>ConductingLesson</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Class)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Class.Content)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Subject)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Subject.Content)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ConductingLessonId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<table class="table table-striped text-center">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Surname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Class)
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Surname)
+                </td>
+                <td>
+                    @if (user.Type != "Uczen")
+                    {
+                        <img src="~/Images/close.png" alt="x" />
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => user.Class.Name)
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Add grade", "Create", "Grades", new { }, new { @class = "btn btn-outline-success" })
+
+                    @*<a class="btn btn-outline-info" asp-action="Details" asp-route-id="@user.Id">Details</a>
+                        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</a>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

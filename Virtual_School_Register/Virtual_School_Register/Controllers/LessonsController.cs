@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,21 +19,37 @@ namespace Virtual_School_Register.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
-        public LessonsController(ApplicationDbContext context, IMapper mapper)
+        public LessonsController(ApplicationDbContext context, IMapper mapper, UserManager<User> userManager)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         // GET: Lessons
         public async Task<IActionResult> Index()
         {
-            var lessons = await _context.Lesson.Include(l => l.ConductingLesson).ToListAsync();
-
             var classes = await _context.Class.ToListAsync();
             var subjects = await _context.Subject.ToListAsync();
-            var conductingLessons = await _context.ConductingLesson.ToListAsync();
+
+            List<Lesson> lessons = new List<Lesson>();
+            List<ConductingLesson> conductingLessons = new List<ConductingLesson>();
+
+            if (User.IsInRole("Nauczyciel"))
+            {
+                conductingLessons = await _context.ConductingLesson.Where(x => x.UserId == _userManager.GetUserId(HttpContext.User)).ToListAsync();
+                var conductingLessonsId = await _context.ConductingLesson.Where(x => x.UserId == _userManager.GetUserId(HttpContext.User)).Select(x => x.ConductingLessonId).ToListAsync();
+
+                lessons = await _context.Lesson.Where(x => conductingLessonsId.Contains(x.ConductingLessonId)).Include(l => l.ConductingLesson).ToListAsync();
+            }
+            else
+            {
+                conductingLessons = await _context.ConductingLesson.ToListAsync();
+
+                lessons = await _context.Lesson.Include(l => l.ConductingLesson).ToListAsync();
+            }
 
             List<LessonViewModel> lessonsViewModelList = new List<LessonViewModel>();
 
@@ -42,7 +59,7 @@ namespace Virtual_School_Register.Controllers
 
                 var lesson = conductingLessons.Find(x => x.ConductingLessonId == item.ConductingLessonId);
 
-                if(lesson != null)
+                if (lesson != null)
                 {
                     item.ClassName = classes.Find(x => x.ClassId == lesson.ClassId).Name;
                     item.SubjectName = subjects.Find(x => x.SubjectId == lesson.SubjectId).Name;
@@ -102,9 +119,11 @@ namespace Virtual_School_Register.Controllers
             {
                 _context.Add(lesson);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "ConductingLessons");
             }
             ViewData["ConductingLessonId"] = new SelectList(_context.ConductingLesson, "ConductingLessonId", "ConductingLessonId", lesson.ConductingLessonId);
+
             return View(lesson);
         }
 
