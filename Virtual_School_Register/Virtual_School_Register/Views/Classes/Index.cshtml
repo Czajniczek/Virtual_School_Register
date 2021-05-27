@@ -43,10 +43,14 @@
                     }
                 </td>
                 <td>
-                    <a class="btn btn-outline-info" asp-action="Students" asp-route-id="@_class.ClassId">Students</a>
-                    <a class="btn btn-outline-info" asp-action="Subjects" asp-route-id="@_class.ClassId">Subjects</a>
-                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@_class.ClassId">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@_class.ClassId">Delete</a>
+                    @Html.ActionLink("Students", "ClassStudents", "Classes", new { classId = _class.ClassId }, new { @class = "btn btn-outline-info" })
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-outline-warning" asp-action="Students" asp-route-id="@_class.ClassId">Edit students</a>
+                        <a class="btn btn-outline-warning" asp-action="Subjects" asp-route-id="@_class.ClassId">Edit subjects</a>
+                        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@_class.ClassId">Edit</a>
+                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@_class.ClassId">Delete</a>
+                    }
                 </td>
             </tr>
         }
