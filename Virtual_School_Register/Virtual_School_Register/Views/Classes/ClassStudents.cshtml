@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Virtual_School_Register.Models.User>
+
+@{
+    ViewData["Title"] = "Students";
+    var _class = @ViewBag.ClassName as Class;
+}
+
+<h1>
+    Students:
+    <b>
+        @_class.Name
+    </b>
+</h1>
+<hr />
+
+<table class="table table-striped text-center">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Surname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Adress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParentId)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Adress)
+                </td>
+                <td>
+                    @if (item.ParentId == null)
+                    {
+                        <img src="~/Images/close.png" alt="x" />
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.ParentId)
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Grades", "Index", "Evaluations", new { userId = item.Id }, new { @class = "btn btn-outline-info" })
+
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.ActionLink("Back to List", "Index", "Classes", null, new { @class = "btn btn-primary" })

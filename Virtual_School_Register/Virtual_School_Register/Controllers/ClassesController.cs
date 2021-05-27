@@ -12,7 +12,7 @@ using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Nauczyciel")]
     public class ClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -40,6 +40,27 @@ namespace Virtual_School_Register.Controllers
             }
 
             return View(classes);
+        }
+
+        public async Task<IActionResult> ClassStudents(int classId)
+        {
+            var allUsers = await _userManager.Users.ToListAsync();
+
+            var users = await _userManager.Users.Include(u => u.Class).Where(x => x.ClassId == classId)
+                          .OrderBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower()).ToListAsync();
+
+            foreach (var p in users)
+            {
+                if (p.ParentId != null)
+                {
+                    var parent = allUsers.Find(x => x.Id == p.ParentId);
+                    p.ParentId = parent.Name + " " + parent.Surname;
+                }
+            }
+
+            ViewBag.ClassName = _context.Class.FirstOrDefault(x => x.ClassId == classId);
+
+            return View(users);
         }
 
         // GET: Classes/Details/5

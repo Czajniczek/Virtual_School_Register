@@ -5,25 +5,19 @@
     var thisUser = ViewBag.ThisUser as User;
 }
 
-@if (User.IsInRole("Rodzic"))
-{
-    <h3>
-        <b>
-            @thisUser.Name
-            @thisUser.Surname
-        </b>
-        grades
-    </h3>
-    <hr />
-}
-else
-{
-    <br />
-}
+
+<h3>
+    Grades:
+    <b>
+        @thisUser.Name
+        @thisUser.Surname
+    </b>
+</h3>
+<hr />
 
 @*<p>
-        <a asp-action="Create">Create New</a>
-</p>*@
+            <a asp-action="Create">Create New</a>
+    </p>*@
 
 <table class="table table-striped text-center">
     <thead class="thead-dark">
@@ -36,7 +30,10 @@ else
                 Grades
                 @*@Html.DisplayNameFor(model => model.Evaluations)*@
             </th>
-            <th>Action</th>
+            @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
+            {
+                <th>Action</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -53,12 +50,17 @@ else
                         <text>&nbsp;&nbsp;</text>
                     }
                 </td>
-                <td>
-                    @*<a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.EvaluationId">Details</a>
-                        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.EvaluationId">Edit</a>
-                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.EvaluationId">Delete</a>*@
-                </td>
+                @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
+                {
+                    <td>
+                        @Html.ActionLink("Add grade", "Create", "Evaluations", new { userId = @thisUser.Id, subjectId = item.SubjectId, flag = 1 }, new { @class = "btn btn-outline-success" })
+                    </td>
+                }
             </tr>
         }
     </tbody>
 </table>
+@if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
+{
+    @Html.ActionLink("Back to List", "ClassStudents", "Classes", new { classId = thisUser.ClassId }, new { @class = "btn btn-primary" })
+}

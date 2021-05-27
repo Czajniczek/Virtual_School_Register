@@ -27,6 +27,7 @@ namespace Virtual_School_Register.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> IndexTeacher()
         {
             var applicationDbContext = _context.Evaluation.Include(e => e.Subject).Include(e => e.User);
@@ -34,32 +35,28 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Evaluations
-        [Authorize(Roles = "Uczen, Rodzic")]
-        public async Task<IActionResult> Index(string childId)
+        public async Task<IActionResult> Index(string userId)
         {
             List<Evaluation> evaluations = new List<Evaluation>();
             List<SubjectGradeViewModel> subjectGradesList = new List<SubjectGradeViewModel>();
 
-            /*if (User.IsInRole("Nauczyciel"))
-            {
-               *//* var conductingLessons = await _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
-                    .Where(x => x.UserId == _userManager.GetUserId(HttpContext.User)).ToListAsync();*//*
-
-
-                evaluations = await _context.Evaluation.Include(e => e.Subject).Include(e => e.User).ToListAsync();
-            }
-            else */
-
             var thisUser = new User();
 
-            if (User.IsInRole("Rodzic"))
+            if (userId != null)
             {
-                //Zakładamy, że rodzic ma jedno dziecko
-                thisUser = _userManager.Users.FirstOrDefault(x => x.ParentId == _userManager.GetUserId(HttpContext.User));
+                thisUser = _userManager.Users.FirstOrDefault(x => x.Id == userId);
             }
             else
             {
-                thisUser = _userManager.Users.FirstOrDefault(x => x.Id == _userManager.GetUserId(HttpContext.User));
+                if (User.IsInRole("Rodzic"))
+                {
+                    //Zakładamy, że rodzic ma jedno dziecko
+                    thisUser = _userManager.Users.FirstOrDefault(x => x.ParentId == _userManager.GetUserId(HttpContext.User));
+                }
+                else
+                {
+                    thisUser = _userManager.Users.FirstOrDefault(x => x.Id == _userManager.GetUserId(HttpContext.User));
+                }
             }
 
             ViewBag.ThisUser = thisUser;
@@ -105,8 +102,17 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Evaluations/Create
-        public IActionResult Create(string userId, int subjectId)
+        public IActionResult Create(string userId, int subjectId, int flag)
         {
+            if (flag == 0)
+            {
+                ViewBag.Flag = "A";
+            }
+            else if (flag == 1)
+            {
+                ViewBag.Flag = userId;
+            }
+
             ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", subjectId.ToString());
             ViewData["UserId"] = new SelectList(_context.Users, "Id", userId);
 
@@ -131,7 +137,15 @@ namespace Virtual_School_Register.Controllers
 
                 var subjectId = _context.ConductingLesson.FirstOrDefault(x => x.SubjectId == evaluation.SubjectId);
 
-                return RedirectToAction("Details", "ConductingLessons", new { id = subjectId.ConductingLessonId });
+                //TODO
+                /*if()
+                {*/
+                    return RedirectToAction("Index", "Evaluations", new { userId = evaluation.UserId });
+                /*}
+                else
+                {
+                    return RedirectToAction("Details", "ConductingLessons", new { id = subjectId.ConductingLessonId });
+                }*/
             }
             ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", evaluation.SubjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", evaluation.UserId);

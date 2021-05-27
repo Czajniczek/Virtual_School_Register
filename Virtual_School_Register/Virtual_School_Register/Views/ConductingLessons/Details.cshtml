@@ -90,7 +90,7 @@
                     }
                 </td>
                 <td>
-                    @Html.ActionLink("Add grade", "Create", "Evaluations", new { userId = user.User.Id, subjectId = conductingLesson.SubjectId }, new { @class = "btn btn-outline-success" })
+                    @Html.ActionLink("Add grade", "Create", "Evaluations", new { userId = user.User.Id, subjectId = conductingLesson.SubjectId, flag = 0 }, new { @class = "btn btn-outline-success" })
 
                     @*<a class="btn btn-outline-info" asp-action="Details" asp-route-id="@user.Id">Details</a>
                         <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>

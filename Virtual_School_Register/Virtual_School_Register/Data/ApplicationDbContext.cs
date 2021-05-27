@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Virtual_School_Register.Models;
+using Virtual_School_Register.ViewModels;
 
 namespace Virtual_School_Register.Data
 {
@@ -21,5 +22,6 @@ namespace Virtual_School_Register.Data
         public DbSet<Question> Question { get; set; }
         public DbSet<Subject> Subject { get; set; }
         public DbSet<Test> Test { get; set; }
+        public DbSet<Virtual_School_Register.ViewModels.UserDetailsViewModel> UserDetailsViewModel { get; set; }
     }
 }

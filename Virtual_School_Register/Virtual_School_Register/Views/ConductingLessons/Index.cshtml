@@ -12,19 +12,18 @@
 }
 
 @*<p>
-        <a asp-action="Create">Create New</a>
-</p>*@
+            <a asp-action="Create">Create New</a>
+    </p>*@
 <br />
 <table class="table table-striped text-center">
     <thead class="thead-dark">
         <tr>
             <th>
-                Student
-                @*@Html.DisplayNameFor(model => model.Class)*@
+                @Html.DisplayNameFor(model => model.Class)
             </th>
-            @*<th>
+            <th>
                 @Html.DisplayNameFor(model => model.Subject)
-            </th>*@
+            </th>
             @if (!User.IsInRole("Nauczyciel"))
             {
                 <th>
@@ -40,6 +39,8 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Class.Name)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Subject.Name)
                 </td>
                 @if (!User.IsInRole("Nauczyciel"))
@@ -49,23 +50,18 @@
                         @Html.DisplayFor(modelItem => item.User.Surname)
                     </td>
                 }
-            <td>
-                @if (User.IsInRole("Nauczyciel"))
-                {
+                <td>
                     @Html.ActionLink("Begin lesson", "Create", "Lessons", new { conductingLesson = item.ConductingLessonId }, new { @class = "btn btn-outline-success" })
                     <text>&nbsp;&nbsp;</text>
                     @Html.ActionLink("Lessons", "Index", "Lessons", new { lessonId = item.ConductingLessonId }, new { @class = "btn btn-outline-info" })
                     @*<a class="btn btn-outline-success" asp-controller="Lessons" asp-action="Create" asp-route-id="@item.ConductingLessonId">Begin lesson</a>*@
                     <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.ConductingLessonId">Students</a>
-                }
-                else
-                {
-                    @Html.ActionLink("Lessons", "Index", "Lessons", new { lessonId = item.ConductingLessonId }, new { @class = "btn btn-outline-info" })
-                    <text>&nbsp;</text>
-                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.ConductingLessonId">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.ConductingLessonId">Remove teacher</a>
-                }
-            </td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.ConductingLessonId">Edit</a>
+                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.ConductingLessonId">Remove teacher</a>
+                    }
+                </td>
             </tr>
         }
     </tbody>
