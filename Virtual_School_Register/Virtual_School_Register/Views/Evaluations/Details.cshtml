@@ -7,51 +7,58 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Evaluation</h4>
+    <h4>Grade</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
+        <dt class="col-sm-2">
+            Student
+            @*@Html.DisplayNameFor(model => model.User)*@
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Name)
+            @Html.DisplayFor(model => model.User.Surname)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Value)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Value)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Date)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Date)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Type)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Type)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Comment)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Comment)
-        </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Subject)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Subject.Content)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Subject.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Comment)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Comment)
         </dd>
     </dl>
 </div>
 <div>
-    @if (User.IsInRole("Nauczyciel"))
+    @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
     {
-        <a asp-action="Edit" asp-route-id="@Model.EvaluationId">Edit</a>
+        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.EvaluationId">Edit</a>
+        <a class="btn btn-danger" asp-action="Delete" asp-route-id="Model.EvaluationId">Delete</a>
+        <a class="btn btn-primary" asp-action="IndexTeacher">Back to List</a>
     }
-    <a asp-action="Index">Back to List</a>
+    else
+    {
+        <a class="btn btn-primary" asp-action="Index">Back to List</a>
+    }
 </div>

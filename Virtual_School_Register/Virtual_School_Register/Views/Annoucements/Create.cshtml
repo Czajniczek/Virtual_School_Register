@@ -6,7 +6,7 @@
 
 <h1>Create</h1>
 
-<h4>Annoucement</h4>
+<h4>Announcement</h4>
 <hr />
 <div class="row">
     <div class="col-md-6">
@@ -32,14 +32,14 @@
                 <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
             </div>*@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

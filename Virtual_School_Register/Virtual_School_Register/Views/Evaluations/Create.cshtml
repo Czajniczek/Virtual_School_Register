@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    var where = ViewBag.BackTo as ConductingLesson;
 }
 
 <h1>Create</h1>
@@ -69,14 +70,15 @@
                     <span asp-validation-for="Date" class="text-danger"></span>
                 </div>*@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Back to List", "Details", "ConductingLessons", new { id = @where.ConductingLessonId }, new { @class = "btn btn-primary" })
+    @*<a class="btn btn-primary" asp-action="Index">Back to List</a>*@
 </div>
 
 @section Scripts {

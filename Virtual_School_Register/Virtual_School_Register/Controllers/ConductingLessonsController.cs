@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Virtual_School_Register.Data;
 using Virtual_School_Register.Models;
+using Virtual_School_Register.ViewModels;
 
 namespace Virtual_School_Register.Controllers
 {
+    [Authorize(Roles = "Admin, Nauczyciel")]
     public class ConductingLessonsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -66,7 +68,22 @@ namespace Virtual_School_Register.Controllers
             var users = await _userManager.Users.Include(u => u.Class).Where(x => x.ClassId == conductingLesson.ClassId)
                           .OrderBy(x => x.Surname.ToLower()).ThenBy(x => x.Name.ToLower()).ToListAsync();
 
-            return View(users);
+            List<UsersGradesViewModel> usersGradesList = new List<UsersGradesViewModel>();
+
+            foreach (var user in users)
+            {
+                UsersGradesViewModel usersGrades = new UsersGradesViewModel();
+
+                ICollection<Evaluation> grades = _context.Evaluation
+                    .Where(x => x.UserId == user.Id && x.SubjectId == conductingLesson.SubjectId).ToList();
+
+                usersGrades.User = user;
+                usersGrades.Evaluations = grades;
+
+                usersGradesList.Add(usersGrades);
+            }
+
+            return View(usersGradesList);
         }
 
         // GET: ConductingLessons/Create

@@ -37,7 +37,7 @@
 *@
 
 
-@model IEnumerable<Virtual_School_Register.Models.User>
+@model IEnumerable<Virtual_School_Register.ViewModels.UsersGradesViewModel>
 
 @{
     ViewData["Title"] = "Students";
@@ -45,24 +45,27 @@
 }
 
 <h1>
-    @conductingLesson.Class.Name
-    @conductingLesson.Subject.Name
+    Students:
+    <b>
+        @conductingLesson.Class.Name
+        @conductingLesson.Subject.Name
+    </b>
 </h1>
 
-<hr/>
+<hr />
 
 <table class="table table-striped text-center">
     <thead class="thead-dark">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.User.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Surname)
+                @Html.DisplayNameFor(model => model.User.Surname)
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.Class)
-            </th>*@
+            <th>
+                Grades
+            </th>
             <th>
                 Action
             </th>
@@ -73,23 +76,21 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => user.Name)
+                    @Html.DisplayFor(modelItem => user.User.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => user.Surname)
+                    @Html.DisplayFor(modelItem => user.User.Surname)
                 </td>
-                @*<td>
-                    @if (user.Type != "Uczen")
-                    {
-                        <img src="~/Images/close.png" alt="x" />
-                    }
-                    else
-                    {
-                        @Html.DisplayFor(modelItem => user.Class.Name)
-                    }
-                </td>*@
                 <td>
-                    @Html.ActionLink("Add grade", "Create", "Evaluations", new { userId = user.Id, subjectId = conductingLesson.SubjectId }, new { @class = "btn btn-outline-success" })
+                    @foreach (var grade in user.Evaluations)
+                    {
+                        @Html.ActionLink(@grade.Value, "Details", "Evaluations", new { id = @grade.EvaluationId }, new { @class = "btn btn-outline-primary" })
+                        @*<a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>*@
+                        <text>&nbsp;&nbsp;</text>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Add grade", "Create", "Evaluations", new { userId = user.User.Id, subjectId = conductingLesson.SubjectId }, new { @class = "btn btn-outline-success" })
 
                     @*<a class="btn btn-outline-info" asp-action="Details" asp-route-id="@user.Id">Details</a>
                         <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
@@ -99,3 +100,4 @@
         }
     </tbody>
 </table>
+@Html.ActionLink("Back to List", "Index", "ConductingLessons", null, new { @class = "btn btn-primary" })

@@ -4,9 +4,17 @@
     ViewData["Title"] = "Subjects";
 }
 
-<p>
-    <a class="btn btn-success" asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a class="btn btn-success" asp-action="Create">Create New</a>
+    </p>
+}
+else
+{
+    <br />
+}
+
 <table class="table table-striped text-center">
     <thead class="thead-dark">
         <tr>
