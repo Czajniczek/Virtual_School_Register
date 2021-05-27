@@ -109,6 +109,10 @@ namespace Virtual_School_Register.Controllers
         {
             ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", subjectId.ToString());
             ViewData["UserId"] = new SelectList(_context.Users, "Id", userId);
+
+            ViewBag.BackTo = _context.ConductingLesson
+                .FirstOrDefault(x => x.SubjectId == subjectId && x.ClassId == _userManager.Users.FirstOrDefault(x => x.Id == userId).ClassId);
+
             return View();
         }
 
@@ -124,7 +128,10 @@ namespace Virtual_School_Register.Controllers
                 _context.Add(evaluation);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
-                return RedirectToAction("Index", "ConductingLessons");
+
+                var subjectId = _context.ConductingLesson.FirstOrDefault(x => x.SubjectId == evaluation.SubjectId);
+
+                return RedirectToAction("Details", "ConductingLessons", new { id = subjectId.ConductingLessonId });
             }
             ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", evaluation.SubjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", evaluation.UserId);

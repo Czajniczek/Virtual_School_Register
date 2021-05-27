@@ -6,9 +6,9 @@
 
 <h1>Delete</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete this lesson?</h3>
 <div>
-    <h4>Lesson</h4>
+    @*<h4>Lesson</h4>*@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -41,7 +41,8 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="LessonId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-danger" /> 
+        @Html.ActionLink("Back to List", "Index", "Lessons", new { lessonId = Model.ConductingLessonId }, new { @class = "btn btn-primary" })
+        @*<a asp-action="Index">Back to List</a>*@
     </form>
 </div>

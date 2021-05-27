@@ -29,9 +29,9 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Lessons
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int lessonId)
         {
-            var classes = await _context.Class.ToListAsync();
+            /*var classes = await _context.Class.ToListAsync();
             var subjects = await _context.Subject.ToListAsync();
 
             List<Lesson> lessons = new List<Lesson>();
@@ -63,14 +63,23 @@ namespace Virtual_School_Register.Controllers
                 {
                     item.ClassName = classes.Find(x => x.ClassId == lesson.ClassId).Name;
                     item.SubjectName = subjects.Find(x => x.SubjectId == lesson.SubjectId).Name;
-                    /*item.ClassName = c.ConductingLesson.Class.Name;
-                    item.SubjectName = c.ConductingLesson.Subject.Name;*/
+                    *//*item.ClassName = c.ConductingLesson.Class.Name;
+                    item.SubjectName = c.ConductingLesson.Subject.Name;*//*
                 }
 
                 lessonsViewModelList.Add(item);
             }
 
-            return View(lessonsViewModelList);
+            return View(lessonsViewModelList);*/
+
+            var conductingLesson = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
+                .FirstOrDefault(x => x.ConductingLessonId == lessonId);
+
+            ViewBag.ConductingLesson = conductingLesson;
+
+            var lessons = await _context.Lesson.Where(x => x.ConductingLessonId == lessonId).ToListAsync();
+
+            return View(lessons);
         }
 
         // GET: Lessons/Details/5
@@ -164,7 +173,8 @@ namespace Virtual_School_Register.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index", "Lessons", new { lessonId = lesson.ConductingLessonId } );
             }
             ViewData["ConductingLessonId"] = new SelectList(_context.ConductingLesson, "ConductingLessonId", "ConductingLessonId", lesson.ConductingLessonId);
             return View(lesson);
@@ -206,7 +216,9 @@ namespace Virtual_School_Register.Controllers
             var lesson = await _context.Lesson.FindAsync(id);
             _context.Lesson.Remove(lesson);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index", "Lessons", new { lessonId = lesson.ConductingLessonId });
         }
 
         private bool LessonExists(int id)
