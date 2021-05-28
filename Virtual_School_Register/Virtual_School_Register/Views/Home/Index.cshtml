@@ -13,21 +13,21 @@
     <br />
     <div class="card border-secondary text-justify">
         <div class="card-header text-info text-center">
-            <h5><b>@announcement.Title</b></h5>
+            <h5><b>@Html.DisplayFor(modelItem => announcement.Title)</b></h5>
         </div>
         <div class="card-body">
-            <p class="card-text">@announcement.Content</p>
+            <p class="card-text">@Html.DisplayFor(modelItem => announcement.Content)</p>
         </div>
         <div class="card-footer text-muted">
             <div class="row">
                 <div class="col-md-4">
-                    @announcement.User.Name
-                    @announcement.User.Surname
+                    @Html.DisplayFor(modelItem => announcement.User.Name)
+                    @Html.DisplayFor(modelItem => announcement.User.Surname)
                 </div>
                 <div class="col-md-6">
                 </div>
                 <div class="col-md-2">
-                    @announcement.Date
+                    @Html.DisplayFor(modelItem => announcement.Date)
                 </div>
             </div>
         </div>

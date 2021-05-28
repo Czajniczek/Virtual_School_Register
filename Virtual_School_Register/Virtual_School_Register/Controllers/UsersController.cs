@@ -24,7 +24,7 @@ namespace Virtual_School_Register.Controllers
         private readonly IMapper _mapper;
 
         public UsersController(ApplicationDbContext context, UserManager<User> userManager,
-            IMapper mapper, RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager, IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
@@ -35,22 +35,40 @@ namespace Virtual_School_Register.Controllers
         // GET: Users
         public IActionResult Index()
         {
+            //TODO: Nie pobierać całej klasy tylko nazwę klasy (Name)
             var users = _context.Users.Include(u => u.Class)
-                                      .OrderBy(x => x.Type)
-                                      .ThenBy(x => x.UserName.ToLower())
-                                      .ThenBy(x => x.Surname.ToLower())
-                                      .ThenBy(x => x.Name.ToLower())
-                                      .ToList();
+                          .OrderBy(x => x.Type)
+                          .ThenBy(x => x.UserName.ToLower())
+                          .ThenBy(x => x.Surname.ToLower())
+                          .ThenBy(x => x.Name.ToLower())
+                          .ToList();
 
-            foreach (var p in users)
+            users.ForEach(x =>
             {
-                if (p.ParentId != null)
+                if (x.ParentId != null)
                 {
-                    var parent = users.Find(x => x.Id == p.ParentId);
-                    p.ParentId = parent.Name + " " + parent.Surname;
+                    var parent = users.Find(y => y.Id == x.ParentId);
+                    x.ParentId = parent.Name + " " + parent.Surname;
                 }
-            }
+            });
 
+            //var users = _context.Users.Include(u => u.Class)
+            //                          .OrderBy(x => x.Type)
+            //                          .ThenBy(x => x.UserName.ToLower())
+            //                          .ThenBy(x => x.Surname.ToLower())
+            //                          .ThenBy(x => x.Name.ToLower())
+            //                          .ToList();
+
+            //foreach (var p in users)
+            //{
+            //    if (p.ParentId != null)
+            //    {
+            //        var parent = users.Find(x => x.Id == p.ParentId);
+            //        p.ParentId = parent.Name + " " + parent.Surname;
+            //    }
+            //}
+
+            //TODO: Zrobić View Model dla Indexu
             return View(users);
         }
 
@@ -74,13 +92,19 @@ namespace Virtual_School_Register.Controllers
             {
                 var myClass = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == user.ClassId);
                 detailsModel.Class = myClass;
+
+                if (user.ParentId != null)
+                {
+                    var parent = _userManager.Users.FirstOrDefault(x => x.Id == user.ParentId);
+                    detailsModel.ParentId = parent.Name + " " + parent.Surname;
+                }
             }
 
-            if (user.ParentId != null)
-            {
-                var parent = _userManager.Users.FirstOrDefault(x => x.Id == user.ParentId);
-                detailsModel.ParentId = parent.Name + " " + parent.Surname;
-            }
+            //if (user.ParentId != null)
+            //{
+            //    var parent = _userManager.Users.FirstOrDefault(x => x.Id == user.ParentId);
+            //    detailsModel.ParentId = parent.Name + " " + parent.Surname;
+            //}
 
             return View(detailsModel);
         }
