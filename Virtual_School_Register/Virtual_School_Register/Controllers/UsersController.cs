@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Virtual_School_Register.Data;
 using Virtual_School_Register.Models;
 using Virtual_School_Register.ViewModels;
+using Virtual_School_Register.ViewModels.UsersController;
 
 namespace Virtual_School_Register.Controllers
 {
@@ -35,20 +36,29 @@ namespace Virtual_School_Register.Controllers
         // GET: Users
         public IActionResult Index()
         {
-            //TODO: Nie pobierać całej klasy tylko nazwę klasy (Name)
-            var users = _context.Users.Include(u => u.Class)
-                          .OrderBy(x => x.Type)
-                          .ThenBy(x => x.UserName.ToLower())
-                          .ThenBy(x => x.Surname.ToLower())
-                          .ThenBy(x => x.Name.ToLower())
-                          .ToList();
+            var users = _context.Users.Include(u => u.Class).Select(x => new UserIndexViewModel
+            {
+                Id = x.Id,
+                Login = x.UserName,
+                Name = x.Name,
+                Surname = x.Surname,
+                Email = x.Email,
+                Parent = x.ParentId,
+                Type = x.Type,
+                Class = x.Class.Name
+            })
+              .OrderBy(x => x.Type)
+              .ThenBy(x => x.Name.ToLower())
+              .ThenBy(x => x.Surname.ToLower())
+              .ThenBy(x => x.Name.ToLower())
+              .ToList();
 
             users.ForEach(x =>
             {
-                if (x.ParentId != null)
+                if (x.Parent != null)
                 {
-                    var parent = users.Find(y => y.Id == x.ParentId);
-                    x.ParentId = parent.Name + " " + parent.Surname;
+                    var parent = users.Find(y => y.Id == x.Parent);
+                    x.Parent = parent.Name + " " + parent.Surname;
                 }
             });
 
@@ -68,7 +78,6 @@ namespace Virtual_School_Register.Controllers
             //    }
             //}
 
-            //TODO: Zrobić View Model dla Indexu
             return View(users);
         }
 
@@ -99,12 +108,6 @@ namespace Virtual_School_Register.Controllers
                     detailsModel.ParentId = parent.Name + " " + parent.Surname;
                 }
             }
-
-            //if (user.ParentId != null)
-            //{
-            //    var parent = _userManager.Users.FirstOrDefault(x => x.Id == user.ParentId);
-            //    detailsModel.ParentId = parent.Name + " " + parent.Surname;
-            //}
 
             return View(detailsModel);
         }

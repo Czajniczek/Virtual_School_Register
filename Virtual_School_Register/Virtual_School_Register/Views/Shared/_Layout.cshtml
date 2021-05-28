@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,92 +14,95 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" title="Home"><img src="~/Images/logo64x64.png" width="55" height="55" /></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" title="@Localizer["Home"]"><img src="~/Images/logo64x64.png" width="55" height="55" /></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-link">
+                            <partial name="_CulturePartial" />
+                        </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">@Localizer["Users"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Subjects" asp-action="Index">Subjects</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Subjects" asp-action="Index">@Localizer["Subjects"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Classes" asp-action="Index">Classes</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Classes" asp-action="Index">@Localizer["Classes"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="ConductingLessons" asp-action="Index">Teachers</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ConductingLessons" asp-action="Index">@Localizer["Teachers"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="IndexTeacher">Grades</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="IndexTeacher">@Localizer["Grades"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">Messages</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">@Localizer["Messages"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Tests" asp-action="Index">Tests</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Tests" asp-action="Index">@Localizer["Tests"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">Questions</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">@Localizer["Questions"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Index">Files</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Index">@Localizer["Files"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Annoucements" asp-action="Index">Annoucements</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Annoucements" asp-action="Index">@Localizer["Announcements"]</a>
                             </li>
                         }
                         else if (User.IsInRole("Nauczyciel"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Subjects" asp-action="Index">Subjects</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Subjects" asp-action="Index">@Localizer["Subjects"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Classes" asp-action="Index">Classes</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Classes" asp-action="Index">@Localizer["Classes"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="ConductingLessons" asp-action="Index">Teaching</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ConductingLessons" asp-action="Index">@Localizer["Teaching"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">Messages</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">@Localizer["Messages"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Tests" asp-action="Index">Tests</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Tests" asp-action="Index">@Localizer["Tests"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">Questions</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">@Localizer["Questions"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Index">Files</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Index">@Localizer["Files"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Annoucements" asp-action="Index">Announcements</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Annoucements" asp-action="Index">@Localizer["Announcements"]</a>
                             </li>
                         }
                         else if (User.IsInRole("Uczen"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Subjects" asp-action="Index">Subjects</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Subjects" asp-action="Index">@Localizer["Subjects"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="Index">Grades</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="Index">@Localizer["Grades"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">Messages</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">@Localizer["Messages"]</a>
                             </li>
                         }
                         else if (User.IsInRole("Rodzic"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="Index">Grades</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="Index">@Localizer["Grades"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">Messages</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">@Localizer["Messages"]</a>
                             </li>
                         }
                     </ul>
