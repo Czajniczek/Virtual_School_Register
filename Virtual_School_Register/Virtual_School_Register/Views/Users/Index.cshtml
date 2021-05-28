@@ -1,11 +1,12 @@
-﻿@model IEnumerable<Virtual_School_Register.Models.User>
+﻿@model IEnumerable<Virtual_School_Register.ViewModels.UsersController.UserIndexViewModel>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = Localizer["Users"];
 }
 
 <p class="d-flex justify-content-center">
-    <a class="btn btn-success" asp-action="Create">Create user</a>
+    <a class="btn btn-success" asp-action="Create">@Localizer["Create user"]</a>
 </p>
 
 @*<p>
@@ -19,23 +20,23 @@
                     @Html.DisplayNameFor(model => model.Id)
                 </th>*@
             <th>
-                Login
+                @Localizer["Login"]
                 @*@Html.DisplayNameFor(model => model.UserName)*@
             </th>
             @*<th>
                     @Html.DisplayNameFor(model => model.Password)
                 </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Localizer["Name"]
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Surname)
+                @Localizer["Surname"]
             </th>
             @*<th>
                     @Html.DisplayNameFor(model => model.Sex)
                 </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Localizer["Email"]
             </th>
             <!--<th>
                 Phone number-->
@@ -48,16 +49,16 @@
                     @Html.DisplayNameFor(model => model.Adress)
                 </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.ParentId)
+                @Localizer["Parent"]
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
+                @Localizer["User type"]
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Class)
+                @Localizer["Class"]
             </th>
             <th>
-                Action
+                @Localizer["Action"]
             </th>
         </tr>
     </thead>
@@ -69,7 +70,7 @@
                         @Html.DisplayFor(modelItem => item.Id)
                     </td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => user.UserName)
+                    @Html.DisplayFor(modelItem => user.Login)
                 </td>
                 @*<td>
                         @Html.DisplayFor(modelItem => item.Password)
@@ -103,27 +104,43 @@
                     }
                     else
                     {
-                        @Html.DisplayFor(modelItem => user.ParentId)
+                        @Html.DisplayFor(modelItem => user.Parent)
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => user.Type)
+                    @switch (user.Type)
+                    {
+                        case "Admin":
+                            @Html.DisplayFor(modelItem => user.Type);
+                            break;
+
+                        case "Nauczyciel":
+                            @Localizer["Teacher"]
+                            break;
+
+                        case "Rodzic":
+                            @Localizer["Parent"]
+                            break;
+
+                        case "Uczen":
+                            @Localizer["Student"]
+                            break;
+                    }
                 </td>
                 <td>
                     @if (user.Type != "Uczen")
                     {
                         <img src="~/Images/close.png" alt="x" />
-                        @*@Html.DisplayName("===")*@
                     }
                     else
                     {
-                        @Html.DisplayFor(modelItem => user.Class.Name)
+                        @Html.DisplayFor(modelItem => user.Class)
                     }
                 </td>
                 <td>
-                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@user.Id">Details</a>
-                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@user.Id">@Localizer["Details"]</a>
+                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@user.Id">@Localizer["Edit"]</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@user.Id">@Localizer["Delete"]</a>
                 </td>
             </tr>
         }

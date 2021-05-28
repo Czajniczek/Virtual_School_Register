@@ -1,11 +1,13 @@
-﻿@model IEnumerable<Virtual_School_Register.Models.Annoucement>
+﻿@model IEnumerable<Virtual_School_Register.ViewModels.HomeController.HomeIndexViewModel>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = Localizer["Home"];
 }
 
 <div class="text-center">
-    <h1>Our school news</h1>
+    <h1>@Localizer["Annoucements"]</h1>
+    @*<h1>@ViewData["News"]</h1>*@
 </div>
 
 @foreach (var announcement in Model)
@@ -21,12 +23,12 @@
         <div class="card-footer text-muted">
             <div class="row">
                 <div class="col-md-4">
-                    @Html.DisplayFor(modelItem => announcement.User.Name)
-                    @Html.DisplayFor(modelItem => announcement.User.Surname)
+                    @Html.DisplayFor(modelItem => announcement.Name)
+                    @Html.DisplayFor(modelItem => announcement.Surname)
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     @Html.DisplayFor(modelItem => announcement.Date)
                 </div>
             </div>
