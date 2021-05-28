@@ -31,8 +31,10 @@ namespace Virtual_School_Register
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("Virtual_School_Register_CS")));
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Virtual_School_Register_CS"));
+            });
+
             services.AddDefaultIdentity<User>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
@@ -47,7 +49,11 @@ namespace Virtual_School_Register
                 .AddDefaultTokenProviders();
 
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
-                opt.TokenLifespan = TimeSpan.FromHours(2));
+            {
+                opt.TokenLifespan = TimeSpan.FromHours(2);
+            });
+
+            //opt.TokenLifespan = TimeSpan.FromHours(2));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 

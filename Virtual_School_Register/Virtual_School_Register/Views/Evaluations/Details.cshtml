@@ -54,7 +54,7 @@
     @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
     {
         <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.EvaluationId">Edit</a>
-        <a class="btn btn-danger" asp-action="Delete" asp-route-id="Model.EvaluationId">Delete</a>
+        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.EvaluationId">Delete</a>
         <a class="btn btn-primary" asp-action="IndexTeacher">Back to List</a>
     }
     else

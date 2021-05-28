@@ -22,10 +22,28 @@ namespace Virtual_School_Register.Controllers
 
         public IActionResult Index()
         {
+            //TODO: Nie pobierać całego użytkownika, tylko jego imię i nazwisko (Name and Surname)
+            //var announcements = _context.Annoucement.Include(u => u.User).Select(x => new
+            //{
+            //     Title = x.Title,
+            //     Content = x.Content,
+            //     UserName = x.User.Name,
+            //     UserSurname = x.User.Surname,
+            //     Date = x.Date
+            //})
+            //    .OrderByDescending(x => x.Date)
+            //    .ToList();
+
+            //ViewBag.AnnoucementsList = announcements;
+
             var announcements = _context.Annoucement.Include(u => u.User)
-                                                    .OrderBy(x => x.Date)
-                                                    .Reverse()
+                                                    .OrderByDescending(x => x.Date)
                                                     .ToList();
+
+            //var announcements = _context.Annoucement.Include(u => u.User)
+            //                                        .OrderBy(x => x.Date)
+            //                                        .Reverse()
+            //                                        .ToList();
 
             return View(announcements);
         }
