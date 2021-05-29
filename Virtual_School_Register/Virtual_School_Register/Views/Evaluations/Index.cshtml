@@ -15,20 +15,36 @@
 </h3>
 <hr />
 
-@*<p>
-            <a asp-action="Create">Create New</a>
-    </p>*@
+<form asp-action="Index">
+    <div class="row justify-content-center">
+        @*<input type="hidden" asp-for="@thisUser.Id" />*@
+        @*<input value="@thisUser.Id" name="userId" hidden />*@
+        @Html.TextBox("userId", @thisUser.Id, new { type = "hidden" })
+
+        <p class="my-auto">From:</p>
+        <div class="col-md-2">
+            @Html.TextBox("startDate", @ViewBag.StartDate, "{0:yyyy.MM.dd}", new { type = "date", @class = "form-control" })
+            @*<input type="date" name="startDate" class="form-control" value="@ViewBag.StartDate">*@
+        </div>
+        <p class="my-auto">To:</p>
+        <div class="col-md-2">
+            @Html.TextBox("endDate", @ViewBag.EndDate, "{0:yyyy.MM.dd}", new { type = "date", @class = "form-control" })
+            @*<input type="date" name="endDate" class="form-control" value="@ViewBag.EndDate">*@
+        </div>
+        @*@Html.ActionLink("Filter", "Index", new { userId = @thisUser.Id }, new { type = "submit", @class="btn btn-primary" })*@
+        <input class="btn btn-primary" type="submit" value="Filter" />
+    </div>
+</form>
+<br />
 
 <table class="table table-striped text-center">
     <thead class="thead-dark">
         <tr>
             <th>
                 Subject
-                @*@Html.DisplayNameFor(model => model.SubjectName)*@
             </th>
             <th>
                 Grades
-                @*@Html.DisplayNameFor(model => model.Evaluations)*@
             </th>
             @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
             {
@@ -62,5 +78,5 @@
 </table>
 @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
 {
-    @Html.ActionLink("Back to List", "ClassStudents", "Classes", new { classId = thisUser.ClassId }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Back to List", "ClassStudents", "Classes", new { classId = @thisUser.ClassId }, new { @class = "btn btn-primary" })
 }
