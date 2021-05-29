@@ -4,13 +4,13 @@
     ViewData["Title"] = "Files";
 }
 
-<h1>Index</h1>
+@*<h1>Index</h1>*@
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-success" asp-action="Create">Add New</a>
 </p>
-<table class="table">
-    <thead>
+<table class="table table-striped text-center">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -18,24 +18,32 @@
             <th>
                 @Html.DisplayNameFor(model => model.Subject)
             </th>
-            <th></th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subject.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FileId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FileId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FileId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject.Name)
+                </td>
+                <td>
+                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.FileId">Details</a>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
+                    {
+                        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.FileId">Edit</a>
+                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.FileId">Delete</a>
+                    }
+                    @*<a asp-action="Edit" asp-route-id="@item.FileId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.FileId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.FileId">Delete</a>*@
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+@Html.ActionLink("Back to List", "Index", "Subjects", null, new { @class = "btn btn-primary" })

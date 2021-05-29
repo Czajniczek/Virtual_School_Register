@@ -29,7 +29,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td style="width:250px">
+                <td style="width:235px">
                     @if (item.Title.Length > 50)
                     {
                         <b>@Html.Raw(item.Title.Substring(0, 50) + "...")</b>
