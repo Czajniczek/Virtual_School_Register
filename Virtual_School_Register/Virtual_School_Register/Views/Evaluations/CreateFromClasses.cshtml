@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Create";
     var where = ViewBag.BackTo as ConductingLesson;
+    var toUser = ViewBag.UserId as string;
 }
 
 <h1>Create</h1>
@@ -11,11 +12,10 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateFromClasses">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Value" class="control-label"></label>
-                @*<input asp-for="Value" class="form-control" />*@
                 <select asp-for="Value" class="form-control">
                     <option value="1">1</option>
                     <option value="1+">1+</option>
@@ -38,7 +38,6 @@
             </div>
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                @*<input asp-for="Type" class="form-control" />*@
                 <select asp-for="Type" class="form-control">
                     <option value="Kartkowka">Kartkówka</option>
                     <option value="Sprawdzian">Sprawdzian</option>
@@ -55,20 +54,11 @@
                 <span asp-validation-for="Comment" class="text-danger"></span>
             </div>
             <div class="form-group">
-                @*<label asp-for="UserId" class="control-label"></label>
-                    <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>*@
                 <input asp-for="UserId" hidden />
             </div>
             <div class="form-group">
-                @*<label asp-for="SubjectId" class="control-label"></label>
-                    <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.SubjectId"></select>*@
                 <input asp-for="SubjectId" hidden />
             </div>
-            @*<div class="form-group">
-                    <label asp-for="Date" class="control-label"></label>
-                    <input asp-for="Date" class="form-control" />
-                    <span asp-validation-for="Date" class="text-danger"></span>
-                </div>*@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-success" />
             </div>
@@ -77,7 +67,7 @@
 </div>
 
 <div>
-    @Html.ActionLink("Back to List", "Details", "ConductingLessons", new { id = @where.ConductingLessonId }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Back to List", "Index", "Evaluations", new { userId = @toUser }, new { @class = "btn btn-primary" })
 </div>
 
 @section Scripts {
