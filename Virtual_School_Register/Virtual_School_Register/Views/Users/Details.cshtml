@@ -2,12 +2,14 @@
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = Localizer["Details"];
+    ViewData["Title"] = Localizer["User details"];
 }
 
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center text-center">
     <div>
-        <h1 class="d-flex justify-content-center">@Localizer["Details"]</h1>
+        <h1>@Localizer["User details"]</h1>
+        <br />
+
         <table class="table table-striped text-left" style="width:500px">
             @*<thead class="thead-dark">
                     <tr>
@@ -22,7 +24,7 @@
             <tbody>
                 <tr>
                     <td style="width:150px">
-                        <b>@Html.DisplayNameFor(model => model.Id)</b>
+                        <b>@Localizer["ID"]</b>
                     </td>
                     <td>
                         @Html.DisplayFor(model => model.Id)
@@ -126,7 +128,24 @@
                         <b>@Localizer["User type"]</b>
                     </td>
                     <td>
-                        @Html.DisplayFor(model => model.Type)
+                        @switch (Model.Type)
+                        {
+                            case "Admin":
+                                @Html.DisplayFor(modelItem => Model.Type);
+                                break;
+
+                            case "Nauczyciel":
+                                @Localizer["Teacher"]
+                                break;
+
+                            case "Rodzic":
+                                @Localizer["Parent"]
+                                break;
+
+                            case "Uczen":
+                                @Localizer["Student"]
+                                break;
+                        }
                     </td>
                 </tr>
                 @if (Model.Type == "Uczen" && Model.Class == null)
@@ -153,9 +172,11 @@
                 }
             </tbody>
         </table>
-        <div class="d-flex justify-content-center">
+        <br />
+
+        <div>
             <a class="btn btn-primary" asp-action="Index">@Localizer["Back"]</a>
-            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id" style="margin-left:10px">@Localizer["Edit"]</a>
+            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">@Localizer["Edit"]</a>
         </div>
     </div>
 </div>

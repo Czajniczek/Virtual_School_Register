@@ -81,43 +81,13 @@ namespace Virtual_School_Register.Controllers
             return View(users);
         }
 
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var detailsModel = _mapper.Map<UserDetailsViewModel>(user);
-
-            if (user.Type == "Uczen")
-            {
-                var myClass = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == user.ClassId);
-                detailsModel.Class = myClass;
-
-                if (user.ParentId != null)
-                {
-                    var parent = _userManager.Users.FirstOrDefault(x => x.Id == user.ParentId);
-                    detailsModel.ParentId = parent.Name + " " + parent.Surname;
-                }
-            }
-
-            return View(detailsModel);
-        }
-
         // GET: Users/Create
         public IActionResult Create()
         {
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name"); //Value = Class Id, Text = Name
                                                                                      //Value = 2, Text = 1A
 
+            //TODO: Nie przekazywać wszystkich danych o rodzicach tylko ich id, imię i nazwisko
             var parents = _userManager.Users.Where(x => x.Type == "Rodzic").ToList();
             ViewBag.ParentsList = parents;
 
@@ -169,6 +139,37 @@ namespace Virtual_School_Register.Controllers
             return View(user);
         }
 
+        // GET: Users/Details/5
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var detailsModel = _mapper.Map<UserDetailsViewModel>(user);
+
+            if (user.Type == "Uczen")
+            {
+                var userClass = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == user.ClassId);
+                detailsModel.Class = userClass;
+
+                if (user.ParentId != null)
+                {
+                    var parent = _userManager.Users.FirstOrDefault(x => x.Id == user.ParentId);
+                    detailsModel.ParentId = parent.Name + " " + parent.Surname;
+                }
+            }
+
+            return View(detailsModel);
+        }
+
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
@@ -183,10 +184,11 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
-
+            //TODO: Nie przekazywać wszystkich danych o rodzicach tylko ich id, imię i nazwisko
             var parents = _userManager.Users.Where(x => x.Type == "Rodzic").ToList();
             ViewBag.ParentsList = parents;
+
+            ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
 
             var editModel = _mapper.Map<UserEditViewModel>(user);
 
@@ -261,14 +263,14 @@ namespace Virtual_School_Register.Controllers
 
             if (user.Type == "Uczen")
             {
-                var myClass = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == user.ClassId);
-                deleteModel.Class = myClass;
-            }
+                var userClass = await _context.Class.FirstOrDefaultAsync(x => x.ClassId == user.ClassId);
+                deleteModel.Class = userClass;
 
-            if (user.ParentId != null)
-            {
-                var parent = _userManager.Users.FirstOrDefault(x => x.Id == user.ParentId);
-                deleteModel.ParentId = parent.Name + " " + parent.Surname;
+                if (user.ParentId != null)
+                {
+                    var parent = _userManager.Users.FirstOrDefault(x => x.Id == user.ParentId);
+                    deleteModel.ParentId = parent.Name + " " + parent.Surname;
+                }
             }
 
             return View(deleteModel);
