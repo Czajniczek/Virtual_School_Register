@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Details";
-    var where = ViewBag.BackToId as int?;
 }
 
 <h1>Details</h1>
@@ -13,7 +12,6 @@
     <dl class="row">
         <dt class="col-sm-2">
             Student
-            @*@Html.DisplayNameFor(model => model.User)*@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.User.Name)
@@ -54,8 +52,9 @@
 <div>
     @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
     {
-        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.EvaluationId">Edit</a>
-        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.EvaluationId">Delete</a>
+        <a class="btn btn-warning" asp-action="EditFromClasses" asp-route-id="@Model.EvaluationId">Edit</a>
+        <a class="btn btn-danger" asp-action="DeleteFromClasses" asp-route-id="@Model.EvaluationId">Delete</a>
     }
-    @Html.ActionLink("Back to List", "Details", "ConductingLessons", new { id = @where }, new { @class = "btn btn-primary" })
+
+    @Html.ActionLink("Back to List", "Index", "Evaluations", new { userId = Model.UserId }, new { @class = "btn btn-primary" })
 </div>

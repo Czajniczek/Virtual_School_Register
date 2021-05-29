@@ -46,14 +46,14 @@
                 <td>
                     @foreach (var grade in item.Evaluations)
                     {
-                        <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>
+                        <a class="btn btn-outline-primary" asp-action="DetailsFromClasses" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>
                         <text>&nbsp;&nbsp;</text>
                     }
                 </td>
                 @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
                 {
                     <td>
-                        @Html.ActionLink("Add grade", "Create", "Evaluations", new { userId = @thisUser.Id, subjectId = item.SubjectId, flag = 1 }, new { @class = "btn btn-outline-success" })
+                        @Html.ActionLink("Add grade", "CreateFromClasses", "Evaluations", new { userId = @thisUser.Id, subjectId = item.SubjectId }, new { @class = "btn btn-outline-success" })
                     </td>
                 }
             </tr>

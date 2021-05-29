@@ -98,21 +98,38 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
+            var userClass = _userManager.Users.FirstOrDefault(x => x.Id == evaluation.UserId).ClassId;
+
+            var conductingLesson = _context.ConductingLesson.FirstOrDefault(x => x.SubjectId == evaluation.SubjectId && x.ClassId == userClass);
+
+            ViewBag.BackToId = conductingLesson.ConductingLessonId;
+
             return View(evaluation);
         }
 
-        // GET: Evaluations/Create
-        public IActionResult Create(string userId, int subjectId, int flag)
+        public async Task<IActionResult> DetailsFromClasses(int? id)
         {
-            if (flag == 0)
+            if (id == null)
             {
-                ViewBag.Flag = "A";
-            }
-            else if (flag == 1)
-            {
-                ViewBag.Flag = userId;
+                return NotFound();
             }
 
+            var evaluation = await _context.Evaluation
+                .Include(e => e.Subject)
+                .Include(e => e.User)
+                .FirstOrDefaultAsync(m => m.EvaluationId == id);
+            if (evaluation == null)
+            {
+                return NotFound();
+            }
+
+            return View(evaluation);
+        }
+
+
+        // GET: Evaluations/Create
+        public IActionResult Create(string userId, int subjectId)
+        {
             ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", subjectId.ToString());
             ViewData["UserId"] = new SelectList(_context.Users, "Id", userId);
 
@@ -133,19 +150,43 @@ namespace Virtual_School_Register.Controllers
 
                 _context.Add(evaluation);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
 
                 var subjectId = _context.ConductingLesson.FirstOrDefault(x => x.SubjectId == evaluation.SubjectId);
 
-                //TODO
-                /*if()
-                {*/
-                    return RedirectToAction("Index", "Evaluations", new { userId = evaluation.UserId });
-                /*}
-                else
-                {
-                    return RedirectToAction("Details", "ConductingLessons", new { id = subjectId.ConductingLessonId });
-                }*/
+                return RedirectToAction("Details", "ConductingLessons", new { id = subjectId.ConductingLessonId });
+            }
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", evaluation.SubjectId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", evaluation.UserId);
+            return View(evaluation);
+        }
+
+        public IActionResult CreateFromClasses(string userId, int subjectId)
+        {
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", subjectId.ToString());
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", userId);
+
+            ViewBag.BackTo = _context.ConductingLesson
+                .FirstOrDefault(x => x.SubjectId == subjectId && x.ClassId == _userManager.Users.FirstOrDefault(x => x.Id == userId).ClassId);
+
+            ViewBag.UserId = userId;
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateFromClasses(Evaluation evaluation)
+        {
+            if (ModelState.IsValid)
+            {
+                evaluation.Date = DateTime.Now;
+
+                _context.Add(evaluation);
+                await _context.SaveChangesAsync();
+
+                var subjectId = _context.ConductingLesson.FirstOrDefault(x => x.SubjectId == evaluation.SubjectId);
+
+                return RedirectToAction("Index", "Evaluations", new { userId = evaluation.UserId });
             }
             ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", evaluation.SubjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", evaluation.UserId);
@@ -167,13 +208,20 @@ namespace Virtual_School_Register.Controllers
             }
             ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", evaluation.SubjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", evaluation.UserId);
+
+            var userClass = _userManager.Users.FirstOrDefault(x => x.Id == evaluation.UserId).ClassId;
+
+            var conductingLesson = _context.ConductingLesson.FirstOrDefault(x => x.SubjectId == evaluation.SubjectId && x.ClassId == userClass);
+
+            ViewBag.BackToId = conductingLesson.ConductingLessonId;
+
             return View(evaluation);
         }
 
         // POST: Evaluations/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EvaluationId,UserId,Value,Date,Type,Comment,SubjectId")] Evaluation evaluation)
+        public async Task<IActionResult> Edit(int id, Evaluation evaluation)
         {
             if (id != evaluation.EvaluationId)
             {
@@ -198,7 +246,64 @@ namespace Virtual_School_Register.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                var userClass = _userManager.Users.FirstOrDefault(x => x.Id == evaluation.UserId).ClassId;
+
+                var conductingLesson = _context.ConductingLesson.FirstOrDefault(x => x.SubjectId == evaluation.SubjectId && x.ClassId == userClass);
+
+                return RedirectToAction("Details", "ConductingLessons", new { id = conductingLesson.ConductingLessonId });
+            }
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", evaluation.SubjectId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", evaluation.UserId);
+            return View(evaluation);
+        }
+
+        public async Task<IActionResult> EditFromClasses(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var evaluation = await _context.Evaluation.FindAsync(id);
+            if (evaluation == null)
+            {
+                return NotFound();
+            }
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", evaluation.SubjectId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", evaluation.UserId);
+            return View(evaluation);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditFromClasses(int id, Evaluation evaluation)
+        {
+            if (id != evaluation.EvaluationId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(evaluation);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!EvaluationExists(evaluation.EvaluationId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return RedirectToAction("Index", "Evaluations", new { userId = evaluation.UserId });
             }
             ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", evaluation.SubjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", evaluation.UserId);
@@ -222,6 +327,12 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
+            var userClass = _userManager.Users.FirstOrDefault(x => x.Id == evaluation.UserId).ClassId;
+
+            var conductingLesson = _context.ConductingLesson.FirstOrDefault(x => x.SubjectId == evaluation.SubjectId && x.ClassId == userClass);
+
+            ViewBag.BackToId = conductingLesson.ConductingLessonId;
+
             return View(evaluation);
         }
 
@@ -233,7 +344,43 @@ namespace Virtual_School_Register.Controllers
             var evaluation = await _context.Evaluation.FindAsync(id);
             _context.Evaluation.Remove(evaluation);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+
+            var userClass = _userManager.Users.FirstOrDefault(x => x.Id == evaluation.UserId).ClassId;
+
+            var conductingLesson = _context.ConductingLesson.FirstOrDefault(x => x.SubjectId == evaluation.SubjectId && x.ClassId == userClass);
+
+            return RedirectToAction("Details", "ConductingLessons", new { id = conductingLesson.ConductingLessonId });
+        }
+
+        public async Task<IActionResult> DeleteFromClasses(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var evaluation = await _context.Evaluation
+                .Include(e => e.Subject)
+                .Include(e => e.User)
+                .FirstOrDefaultAsync(m => m.EvaluationId == id);
+            if (evaluation == null)
+            {
+                return NotFound();
+            }
+
+            return View(evaluation);
+        }
+
+        [HttpPost, ActionName("DeleteFromClasses")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteFromClassesConfirmed(int id)
+        {
+            var evaluation = await _context.Evaluation.FindAsync(id);
+            _context.Evaluation.Remove(evaluation);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Evaluations", new { userId = evaluation.UserId });
         }
 
         private bool EvaluationExists(int id)

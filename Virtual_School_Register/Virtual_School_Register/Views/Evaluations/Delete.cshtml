@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Delete";
+    var where = ViewBag.BackToId as int?;
 }
 
 <h1>Delete</h1>
@@ -55,13 +56,6 @@
         <input type="hidden" asp-for="EvaluationId" />
         <input type="submit" value="Delete" class="btn btn-danger" />
 
-        @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
-        {
-            <a class="btn btn-primary" asp-action="IndexTeacher">Back to List</a>
-        }
-        else
-        {
-            <a class="btn btn-primary" asp-action="Index">Back to List</a>
-        }
+        @Html.ActionLink("Back to List", "Details", "ConductingLessons", new { id = @where }, new { @class = "btn btn-primary" })
     </form>
 </div>
