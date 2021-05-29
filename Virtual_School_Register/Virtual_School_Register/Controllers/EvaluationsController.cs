@@ -35,7 +35,7 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Evaluations
-        public async Task<IActionResult> Index(string userId)
+        public async Task<IActionResult> Index(string userId, DateTime startDate, DateTime endDate)
         {
             List<Evaluation> evaluations = new List<Evaluation>();
             List<SubjectGradeViewModel> subjectGradesList = new List<SubjectGradeViewModel>();
@@ -71,11 +71,31 @@ namespace Virtual_School_Register.Controllers
                 ICollection<Evaluation> grades = _context.Evaluation
                     .Where(x => x.UserId == thisUser.Id && x.SubjectId == subject.SubjectId).ToList();
 
+                if (startDate.Year != 0001)
+                {
+                    grades = grades.Where(x => x.Date.Date >= startDate.Date).ToList();
+                }
+
+                if (endDate.Year != 0001)
+                {
+                    grades = grades.Where(x => x.Date.Date <= endDate.Date).ToList();
+                }
+
                 subjectGrade.SubjectId = subject.SubjectId;
                 subjectGrade.SubjectName = subject.Subject.Name;
                 subjectGrade.Evaluations = grades;
 
                 subjectGradesList.Add(subjectGrade);
+            }
+
+            if (startDate.Year != 0001)
+            {
+                ViewBag.StartDate = startDate.Date;
+            }
+
+            if (endDate.Year != 0001)
+            {
+                ViewBag.EndDate = endDate.Date;
             }
 
             return View(subjectGradesList);
@@ -232,6 +252,8 @@ namespace Virtual_School_Register.Controllers
             {
                 try
                 {
+                    evaluation.Date = DateTime.Now;
+
                     _context.Update(evaluation);
                     await _context.SaveChangesAsync();
                 }
@@ -288,6 +310,8 @@ namespace Virtual_School_Register.Controllers
             {
                 try
                 {
+                    evaluation.Date = DateTime.Now;
+
                     _context.Update(evaluation);
                     await _context.SaveChangesAsync();
                 }
