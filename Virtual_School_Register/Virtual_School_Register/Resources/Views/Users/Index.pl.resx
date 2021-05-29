@@ -120,11 +120,11 @@
   <data name="Action" xml:space="preserve">
     <value>Akcja</value>
   </data>
+  <data name="Add user" xml:space="preserve">
+    <value>Dodaj użytkownika</value>
+  </data>
   <data name="Class" xml:space="preserve">
     <value>Klasa</value>
-  </data>
-  <data name="Create user" xml:space="preserve">
-    <value>Stwórz użytkownika</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Usuń</value>

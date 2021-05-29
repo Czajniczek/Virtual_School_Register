@@ -1,148 +1,331 @@
 ﻿@model Virtual_School_Register.ViewModels.UserDetailsViewModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = Localizer["Deleting a user"];
 }
 
-<h1>Delete</h1>
+<div class="d-flex justify-content-center text-center">
+    <div>
+        <h1>@Localizer["Delete user"]</h1>
+        <br />
+
+        <table class="table table-striped text-left" style="width:500px">
+            @*<thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Info
+                        </th>
+                        <th>
+                            Info 2
+                        </th>
+                    </tr>
+                </thead>*@
+            <tbody>
+                <tr>
+                    <td style="width:150px">
+                        <b>@Localizer["ID"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Id)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Login"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.UserName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Name"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Name)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Surname"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Surname)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Sex"]</b>
+                    </td>
+                    <td>
+                        @if (Model.Sex == "M")
+                        {
+                            @Localizer["Man"]
+                        }
+                        else
+                        {
+                            @Localizer["Woman"]
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Email"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Email)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Phone number"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.PhoneNumber)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Birth date"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.BirthDate)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Adress"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Adress)
+                    </td>
+                </tr>
+                @if (Model.Type == "Uczen" && Model.ParentId == null)
+                {
+                    <tr>
+                        <td>
+                            <b>@Localizer["Parent"]</b>
+                        </td>
+                        <td>
+                            @Localizer["No parent assigned"]
+                        </td>
+                    </tr>
+                }
+                else if (Model.Type == "Uczen")
+                {
+                    <tr>
+                        <td>
+                            <b>@Localizer["Parent"]</b>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ParentId)
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td>
+                        <b>@Localizer["User type"]</b>
+                    </td>
+                    <td>
+                        @switch (Model.Type)
+                        {
+                            case "Admin":
+                                @Html.DisplayFor(modelItem => Model.Type);
+                                break;
+
+                            case "Nauczyciel":
+                                @Localizer["Teacher"]
+                                break;
+
+                            case "Rodzic":
+                                @Localizer["Parent"]
+                                break;
+
+                            case "Uczen":
+                                @Localizer["Student"]
+                                break;
+                        }
+                    </td>
+                </tr>
+                @if (Model.Type == "Uczen" && Model.Class == null)
+                {
+                    <tr>
+                        <td>
+                            <b>@Localizer["Class"]</b>
+                        </td>
+                        <td>
+                            @Localizer["No class assigned"]
+                        </td>
+                    </tr>
+                }
+                else if (Model.Type == "Uczen")
+                {
+                    <tr>
+                        <td>
+                            <b>@Localizer["Class"]</b>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Class.Name)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+
+        <div>
+            <form asp-action="Delete">
+                <a class="btn btn-primary" asp-action="Index">@Localizer["Back"]</a>
+                <input type="hidden" asp-for="Id" />
+                <input type="submit" value="@Localizer["Delete"]" class="btn btn-danger" />
+            </form>
+            @*<a class="btn btn-primary" asp-action="Index">@Localizer["Back"]</a>
+            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">@Localizer["Edit"]</a>*@
+        </div>
+    </div>
+</div>
+
+
+<!--<h1>Delete</h1>
 
 <h3>Are you sure you want to delete this user?</h3>
-<div>
-    @*<h4>User</h4>*@
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        @*<dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Password)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Password)
-            </dd>*@
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Surname)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Surname)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Sex)
-        </dt>
-        <dd class="col-sm-10">
-            @if (Model.Sex == "M")
-            {
-                @Html.DisplayName("Man")
-            }
-            else
-            {
-                @Html.DisplayName("Woman")
-            }
-        </dd>
-        @*<dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Sex)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Sex)
-            </dd>*@
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BirthDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.BirthDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Adress)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Adress)
-        </dd>
-        @if (Model.Type == "Uczen" && Model.ParentId == null)
-        {
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ParentId)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayName("Parent not assigned")
-            </dd>
-        }
-        else if (Model.Type == "Uczen")
-        {
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ParentId)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ParentId)
-            </dd>
-        }
-        @*<dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ParentId)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ParentId)
-            </dd>*@
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Type)
-        </dd>
-        @if (Model.Type == "Uczen" && Model.Class == null)
-        {
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Class)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayName("No class assigned")
-            </dd>
-        }
-        else if (Model.Type == "Uczen")
-        {
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Class)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Class.Name)
-            </dd>
-        }
-        @*<dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Class)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Class.Name)
-            </dd>*@
-    </dl>
+<div>-->
+@*<h4>User</h4>*@
+<!--<hr />
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Id)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Id)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.UserName)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.UserName)
+    </dd>-->
+@*<dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Password)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Password)
+    </dd>*@
+<!--<dt class="col-sm-2">
+    @Html.DisplayNameFor(model => model.Name)
+</dt>
+<dd class="col-sm-10">
+    @Html.DisplayFor(model => model.Name)
+</dd>
+<dt class="col-sm-2">
+    @Html.DisplayNameFor(model => model.Surname)
+</dt>
+<dd class="col-sm-10">
+    @Html.DisplayFor(model => model.Surname)
+</dd>
+<dt class="col-sm-2">
+    @Html.DisplayNameFor(model => model.Sex)
+</dt>
+<dd class="col-sm-10">
+    @if (Model.Sex == "M")
+    {
+        @Html.DisplayName("Man")
+    }
+    else
+    {
+        @Html.DisplayName("Woman")
+    }
+</dd>-->
+@*<dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Sex)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Sex)
+    </dd>*@
+<!--<dt class="col-sm-2">
+    @Html.DisplayNameFor(model => model.Email)
+</dt>
+<dd class="col-sm-10">
+    @Html.DisplayFor(model => model.Email)
+</dd>
+<dt class="col-sm-2">
+    @Html.DisplayNameFor(model => model.PhoneNumber)
+</dt>
+<dd class="col-sm-10">
+    @Html.DisplayFor(model => model.PhoneNumber)
+</dd>
+<dt class="col-sm-2">
+    @Html.DisplayNameFor(model => model.BirthDate)
+</dt>
+<dd class="col-sm-10">
+    @Html.DisplayFor(model => model.BirthDate)
+</dd>
+<dt class="col-sm-2">
+    @Html.DisplayNameFor(model => model.Adress)
+</dt>
+<dd class="col-sm-10">
+    @Html.DisplayFor(model => model.Adress)
+</dd>
+@if (Model.Type == "Uczen" && Model.ParentId == null)
+{
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.ParentId)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayName("Parent not assigned")
+    </dd>
+}
+else if (Model.Type == "Uczen")
+{
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.ParentId)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.ParentId)
+    </dd>
+}-->
+@*<dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.ParentId)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.ParentId)
+    </dd>*@
+<!--<dt class="col-sm-2">
+    @Html.DisplayNameFor(model => model.Type)
+</dt>
+<dd class="col-sm-10">
+    @Html.DisplayFor(model => model.Type)
+</dd>
+@if (Model.Type == "Uczen" && Model.Class == null)
+{
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Class)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayName("No class assigned")
+    </dd>
+}
+else if (Model.Type == "Uczen")
+{
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Class)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Class.Name)
+    </dd>
+}-->
+@*<dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Class)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Class.Name)
+    </dd>*@
+<!--</dl>
 
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" />
         <a class="btn btn-primary" asp-action="Index">Back to List</a>
     </form>
-</div>
+</div>-->

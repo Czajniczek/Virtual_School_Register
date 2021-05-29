@@ -9,10 +9,8 @@ namespace Virtual_School_Register.ViewModels
 {
     public class UserDetailsViewModel
     {
-        [Display(Name = "ID")]
         public string Id { get; set; }
 
-        [Display(Name = "Login")]
         public string UserName { get; set; }
 
         public string Name { get; set; }
@@ -23,22 +21,17 @@ namespace Virtual_School_Register.ViewModels
 
         public string Email { get; set; }
 
-        [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
 
-        [Display(Name = "Birth date")]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
         public string Adress { get; set; }
 
-        [Display(Name = "Parent")]
+        public string Type { get; set; }
+
         public string ParentId { get; set; }
 
-        [Display(Name = "Class")]
         public Class Class { get; set; }
-
-        [Display(Name = "User type")]
-        public string Type { get; set; }
     }
 }
