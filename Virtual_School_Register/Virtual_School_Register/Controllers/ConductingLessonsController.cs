@@ -45,7 +45,7 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: ConductingLessons/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, DateTime startDate, DateTime endDate)
         {
             if (id == null)
             {
@@ -77,10 +77,30 @@ namespace Virtual_School_Register.Controllers
                 ICollection<Evaluation> grades = _context.Evaluation
                     .Where(x => x.UserId == user.Id && x.SubjectId == conductingLesson.SubjectId).ToList();
 
+                if (startDate.Year != 0001)
+                {
+                    grades = grades.Where(x => x.Date.Date >= startDate.Date).ToList();
+                }
+
+                if (endDate.Year != 0001)
+                {
+                    grades = grades.Where(x => x.Date.Date <= endDate.Date).ToList();
+                }
+
                 usersGrades.User = user;
                 usersGrades.Evaluations = grades;
 
                 usersGradesList.Add(usersGrades);
+            }
+
+            if (startDate.Year != 0001)
+            {
+                ViewBag.StartDate = startDate.Date;
+            }
+
+            if (endDate.Year != 0001)
+            {
+                ViewBag.EndDate = endDate.Date;
             }
 
             return View(usersGradesList);

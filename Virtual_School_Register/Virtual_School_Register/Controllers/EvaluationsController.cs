@@ -35,6 +35,7 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Evaluations
+        [Route("Evaluations/Index/{userId?}")] // potrzebne do zmiany języka w trakcie wyszukiwania po datach, żeby widniało w routingu
         public async Task<IActionResult> Index(string userId, DateTime startDate, DateTime endDate)
         {
             List<Evaluation> evaluations = new List<Evaluation>();

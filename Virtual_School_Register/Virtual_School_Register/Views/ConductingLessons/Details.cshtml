@@ -51,8 +51,26 @@
         @conductingLesson.Subject.Name
     </b>
 </h1>
-
 <hr />
+
+<form asp-action="Details">
+    <div class="row justify-content-center">
+        <input value="@conductingLesson.ConductingLessonId" name="userId" hidden />
+        @*@Html.TextBox("userId", @thisUser.Id, new { type = "hidden" })*@
+        <h5 class="my-auto">Date from:</h5>
+        <div class="col-md-2">
+            @Html.TextBox("startDate", @ViewBag.StartDate, "{0:yyyy.MM.dd}", new { type = "date", @class = "form-control" })
+            @*<input type="date" name="startDate" class="form-control" value="@ViewBag.StartDate">*@
+        </div>
+        <h5 class="my-auto">To:</h5>
+        <div class="col-md-2">
+            @Html.TextBox("endDate", @ViewBag.EndDate, "{0:yyyy.MM.dd}", new { type = "date", @class = "form-control" })
+            @*<input type="date" name="endDate" class="form-control" value="@ViewBag.EndDate">*@
+        </div>
+        <input class="btn btn-primary" type="submit" value="Filter" />
+    </div>
+</form>
+<br />
 
 <table class="table table-striped text-center">
     <thead class="thead-dark">
@@ -84,8 +102,46 @@
                 <td>
                     @foreach (var grade in user.Evaluations)
                     {
-                        @Html.ActionLink(@grade.Value, "Details", "Evaluations", new { id = @grade.EvaluationId }, new { @class = "btn btn-outline-primary" })
-                        @*<a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>*@
+                        @if (grade.Value[0] == '1')
+                        {
+                            @*<a class="btn btn-outline-primary font-weight-bold" style="color: red" asp-action="DetailsFromClasses" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>*@
+                            @Html.ActionLink(@grade.Value, "Details", "Evaluations", new { id = @grade.EvaluationId }, new { @class = "btn btn-outline-primary font-weight-bold font-weight-bold", style = "color: red" })
+
+                        }
+                        else if (grade.Value[0] == '2')
+                        {
+                            @*<a class="btn btn-outline-primary font-weight-bold" style="color: coral" asp-action="DetailsFromClasses" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>*@
+                            @Html.ActionLink(@grade.Value, "Details", "Evaluations", new { id = @grade.EvaluationId }, new { @class = "btn btn-outline-primary font-weight-bold font-weight-bold", style="color: coral" })
+
+                        }
+                        else if (grade.Value[0] == '3')
+                        {
+                            @*<a class="btn btn-outline-primary font-weight-bold" style="color: darkgoldenrod" asp-action="DetailsFromClasses" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>*@
+                            @Html.ActionLink(@grade.Value, "Details", "Evaluations", new { id = @grade.EvaluationId }, new { @class = "btn btn-outline-primary font-weight-bold font-weight-bold", style = "color: darkgoldenrod" })
+
+                        }
+                        else if (grade.Value[0] == '4')
+                        {
+                            @*<a class="btn btn-outline-primary font-weight-bold" style="color: mediumpurple" asp-action="DetailsFromClasses" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>*@
+                            @Html.ActionLink(@grade.Value, "Details", "Evaluations", new { id = @grade.EvaluationId }, new { @class = "btn btn-outline-primary font-weight-bold font-weight-bold", style = "color: mediumpurple" })
+
+                        }
+                        else if (grade.Value[0] == '5')
+                        {
+                            @*<a class="btn btn-outline-primary font-weight-bold" style="color: blue" asp-action="DetailsFromClasses" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>*@
+                            @Html.ActionLink(@grade.Value, "Details", "Evaluations", new { id = @grade.EvaluationId }, new { @class = "btn btn-outline-primary font-weight-bold font-weight-bold", style = "color: blue" })
+
+                        }
+                        else if (grade.Value[0] == '6')
+                        {
+                            @*<a class="btn btn-outline-primary font-weight-bold" style="color: green" asp-action="DetailsFromClasses" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>*@
+                            @Html.ActionLink(@grade.Value, "Details", "Evaluations", new { id = @grade.EvaluationId }, new { @class = "btn btn-outline-primary font-weight-bold font-weight-bold", style = "color: green" })
+
+                        }
+                        else
+                        {
+                            @Html.ActionLink(@grade.Value, "Details", "Evaluations", new { id = @grade.EvaluationId }, new { @class = "btn btn-outline-primary font-weight-bold" })
+                        }
                         <text>&nbsp;&nbsp;</text>
                     }
                 </td>
