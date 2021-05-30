@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Virtual_School_Register.Data;
@@ -27,24 +28,6 @@ namespace Virtual_School_Register.Controllers
             return View(await _context.Subject.ToListAsync());
         }
 
-        // GET: Subjects/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var subject = await _context.Subject
-                .FirstOrDefaultAsync(m => m.SubjectId == id);
-            if (subject == null)
-            {
-                return NotFound();
-            }
-
-            return View(subject);
-        }
-
         // GET: Subjects/Create
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
@@ -64,6 +47,25 @@ namespace Virtual_School_Register.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            return View(subject);
+        }
+
+        // GET: Subjects/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var subject = await _context.Subject
+                .FirstOrDefaultAsync(m => m.SubjectId == id);
+            if (subject == null)
+            {
+                return NotFound();
+            }
+
             return View(subject);
         }
 

@@ -36,7 +36,7 @@ namespace Virtual_School_Register
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Virtual_School_Register_CS"));
+                options.UseSqlServer(Configuration.GetConnectionString("Virtual_School_Register_CS")); //Connection string
             });
 
             services.AddDefaultIdentity<User>(options =>

@@ -84,6 +84,7 @@ namespace Virtual_School_Register.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
+            //TODO: Nie przekazywać wszystkich danych
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name"); //Value = Class Id, Text = Name
                                                                                      //Value = 2, Text = 1A
 
@@ -188,6 +189,7 @@ namespace Virtual_School_Register.Controllers
             var parents = _userManager.Users.Where(x => x.Type == "Rodzic").ToList();
             ViewBag.ParentsList = parents;
 
+            //TODO: Nie przekazywać wszystkich danych
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
 
             var editModel = _mapper.Map<UserEditViewModel>(user);
