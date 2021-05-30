@@ -8,11 +8,12 @@
 
 <hr />
 <div class="thead-dark row">
-    <div class="col-md-2">
+    <div class="col-md-10">
         <a class="btn btn-success" asp-action="Create">Compose</a>
-    </div>
-    <div class="col-md-8">
-
+        @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
+        {
+            <a class="btn btn-success" asp-action="CreateEmailToClassParents">Write to class parents</a>
+        }
     </div>
     <div class="col-md-2">
         <a class="btn btn-primary" asp-action="Index">Received</a>
