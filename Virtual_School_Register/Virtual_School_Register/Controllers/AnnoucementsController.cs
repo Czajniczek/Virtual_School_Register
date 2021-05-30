@@ -29,43 +29,25 @@ namespace Virtual_School_Register.Controllers
         {
             List<Annoucement> announcements;
 
-            if(User.IsInRole("Admin"))
+            if (User.IsInRole("Admin"))
             {
-                announcements = await _context.Annoucement.Include(u => u.User).OrderBy(x => x.Date).Reverse().ToListAsync();
+                announcements = await _context.Annoucement.Include(u => u.User).OrderByDescending(x => x.Date).ToListAsync();
             }
             else
             {
                 var thisUser = _userManager.GetUserId(HttpContext.User);
 
-                announcements = await _context.Annoucement.Include(u => u.User).Where(x => x.UserId == thisUser).OrderBy(x => x.Title.ToLower()).ThenBy(x => x.Content).ToListAsync();
+                announcements = await _context.Annoucement.Include(u => u.User).Where(x => x.UserId == thisUser).OrderByDescending(x => x.Date).ToListAsync();
             }
 
             return View(announcements);
         }
 
-        // GET: Annoucements/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var annoucement = await _context.Annoucement
-                .Include(a => a.User)
-                .FirstOrDefaultAsync(m => m.AnnoucementId == id);
-            if (annoucement == null)
-            {
-                return NotFound();
-            }
-
-            return View(annoucement);
-        }
-
         // GET: Annoucements/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+
             return View();
         }
 
@@ -84,6 +66,25 @@ namespace Virtual_School_Register.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", annoucement.UserId);
+            return View(annoucement);
+        }
+
+        // GET: Annoucements/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var annoucement = await _context.Annoucement
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(m => m.AnnoucementId == id);
+            if (annoucement == null)
+            {
+                return NotFound();
+            }
+
             return View(annoucement);
         }
 

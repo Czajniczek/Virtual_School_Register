@@ -1,35 +1,39 @@
 ﻿@model IEnumerable<Virtual_School_Register.Models.Annoucement>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Annoucements";
+    ViewData["Title"] = Localizer["Announcements"];
 }
 
-<p>
-    <a class="btn btn-success" asp-action="Create">Create New</a>
+<p class="d-flex justify-content-center">
+    <a class="btn btn-success" asp-action="Create">@Localizer["Add announcement"]</a>
 </p>
+
 <table class="table table-striped text-center">
     <thead class="thead-dark">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Localizer["Title"]
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Content)
+                @Localizer["Content"]
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                @Localizer["Date"]
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @Localizer["User"]
             </th>
-            <th>Action</th>
+            <th>
+                @Localizer["Action"]
+            </th>
         </tr>
     </thead>
     <tbody class="text-left">
         @foreach (var item in Model)
         {
             <tr>
-                <td style="width:235px">
+                <td style="width:200px">
                     @if (item.Title.Length > 50)
                     {
                         <b>@Html.Raw(item.Title.Substring(0, 50) + "...")</b>
@@ -57,13 +61,9 @@
                     @Html.DisplayFor(modelItem => item.User.Surname)
                 </td>
                 <td>
-                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.AnnoucementId">Details</a>
-                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.AnnoucementId">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.AnnoucementId">Delete</a>
-
-                    @*<a asp-action="Edit" asp-route-id="@item.AnnoucementId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.AnnoucementId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.AnnoucementId">Delete</a>*@
+                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.AnnoucementId">@Localizer["Details"]</a>
+                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.AnnoucementId">@Localizer["Edit"]</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.AnnoucementId">@Localizer["Delete"]</a>
                 </td>
             </tr>
         }
