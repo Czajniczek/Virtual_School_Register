@@ -59,8 +59,7 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            var subject = await _context.Subject
-                .FirstOrDefaultAsync(m => m.SubjectId == id);
+            var subject = await _context.Subject.FirstOrDefaultAsync(m => m.SubjectId == id);
             if (subject == null)
             {
                 return NotFound();
@@ -83,6 +82,7 @@ namespace Virtual_School_Register.Controllers
             {
                 return NotFound();
             }
+
             return View(subject);
         }
 
@@ -117,6 +117,7 @@ namespace Virtual_School_Register.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(subject);
         }
 
@@ -129,8 +130,7 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            var subject = await _context.Subject
-                .FirstOrDefaultAsync(m => m.SubjectId == id);
+            var subject = await _context.Subject.FirstOrDefaultAsync(m => m.SubjectId == id);
             if (subject == null)
             {
                 return NotFound();

@@ -117,61 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Add" xml:space="preserve">
-    <value>Dodaj</value>
+  <data name="An error occurred while processing your request." xml:space="preserve">
+    <value>Podczas przetwarzania żądania wystąpił błąd.</value>
   </data>
-  <data name="Add user" xml:space="preserve">
-    <value>Dodaj użytkownika</value>
+  <data name="and restarting the app." xml:space="preserve">
+    <value>i ponownie uruchamiając aplikację.</value>
   </data>
-  <data name="Adding a user" xml:space="preserve">
-    <value>Dodawanie użytkownika</value>
+  <data name="Development" xml:space="preserve">
+    <value>programistycznego</value>
   </data>
-  <data name="Adress" xml:space="preserve">
-    <value>Adres</value>
+  <data name="Development Mode" xml:space="preserve">
+    <value>Tryb deweloperski</value>
   </data>
-  <data name="Back" xml:space="preserve">
-    <value>Wróć</value>
+  <data name="Development2" xml:space="preserve">
+    <value>programistyczne</value>
   </data>
-  <data name="Birth date" xml:space="preserve">
-    <value>Data urodzin</value>
+  <data name="Development3" xml:space="preserve">
+    <value>na programowanie</value>
   </data>
-  <data name="Class" xml:space="preserve">
-    <value>Klasa</value>
+  <data name="environment by setting the" xml:space="preserve">
+    <value>ustawiając zmienną środowiskową</value>
   </data>
-  <data name="Confirm password" xml:space="preserve">
-    <value>Potwierdź hasło</value>
+  <data name="environment variable to" xml:space="preserve">
+    <value />
   </data>
-  <data name="Man" xml:space="preserve">
-    <value>Mężczyzna</value>
+  <data name="environment will display more detailed information about the error that occurred." xml:space="preserve">
+    <value>spowoduje wyświetlenie bardziej szczegółowych informacji o błędzie, który wystąpił.</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>Imię</value>
+  <data name="Error" xml:space="preserve">
+    <value>Błąd</value>
   </data>
-  <data name="Parent" xml:space="preserve">
-    <value>Rodzic</value>
+  <data name="It can result in displaying sensitive information from exceptions to end users. For local debugging, enable the" xml:space="preserve">
+    <value>Może to skutkować wyświetlaniem poufnych informacji z wyjątków użytkownikom końcowym. W przypadku debugowania lokalnego włącz środowisko</value>
   </data>
-  <data name="Password" xml:space="preserve">
-    <value>Hasło</value>
+  <data name="Request ID:" xml:space="preserve">
+    <value>Identyfikator wniosku:</value>
   </data>
-  <data name="Phone number" xml:space="preserve">
-    <value>Numer telefonu</value>
+  <data name="Swapping to" xml:space="preserve">
+    <value>Przełączenie do środowiska</value>
   </data>
-  <data name="Sex" xml:space="preserve">
-    <value>Płeć</value>
-  </data>
-  <data name="Student" xml:space="preserve">
-    <value>Uczeń</value>
-  </data>
-  <data name="Surname" xml:space="preserve">
-    <value>Nazwisko</value>
-  </data>
-  <data name="Teacher" xml:space="preserve">
-    <value>Nauczyciel</value>
-  </data>
-  <data name="Type" xml:space="preserve">
-    <value>Typ</value>
-  </data>
-  <data name="Woman" xml:space="preserve">
-    <value>Kobieta</value>
+  <data name="The Development environment shouldn't be enabled for deployed applications." xml:space="preserve">
+    <value>Środowiska programistycznego nie należy włączać dla wdrożonych aplikacji.</value>
   </data>
 </root>

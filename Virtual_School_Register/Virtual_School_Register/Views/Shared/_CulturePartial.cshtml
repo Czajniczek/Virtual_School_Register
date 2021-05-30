@@ -8,7 +8,7 @@
 }
 
 <div>
-    <form asp-action="CultureManagement" asp-controller="Home" method="post" asp-route-returnUrl="@returnUrl">
+    <form asp-action="CultureManagement" asp-controller="Home" asp-route-returnUrl="@returnUrl" method="post">
         <select class="form-control-sm" style="width:95px" name="culture" asp-for="@culture.RequestCulture.UICulture.Name" onchange="this.form.submit();">
             <option value="en">@Localizer["en"]</option>
             <option value="pl">@Localizer["pl"]</option>
@@ -16,10 +16,3 @@
         </select>
     </form>
 </div>
-
-@*<div>
-        <form asp-action="CultureManagement" asp-controller="Home" method="post" asp-route-returnUrl="@returnUrl">
-            <select name="culture" asp-for="@culture.RequestCulture.UICulture.Name" asp-items="cultureList" onchange="this.form.submit();">
-            </select>
-        </form>
-    </div>*@
