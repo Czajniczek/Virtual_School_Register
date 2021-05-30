@@ -17,6 +17,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Virtual_School_Register.Data;
+using Virtual_School_Register.EmailConfig;
 using Virtual_School_Register.MapperConfig;
 using Virtual_School_Register.Models;
 
@@ -111,6 +112,12 @@ namespace Virtual_School_Register
                 opt.SupportedUICultures = supportedCultures;
             });
             #endregion Localization with cookies
+
+            #region Email
+            services.AddSingleton(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+
+            services.AddScoped<IEmailSender, EmailSender>();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

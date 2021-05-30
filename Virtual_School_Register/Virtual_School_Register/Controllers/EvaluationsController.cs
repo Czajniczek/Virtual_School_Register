@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Virtual_School_Register.Data;
+using Virtual_School_Register.EmailConfig;
 using Virtual_School_Register.Models;
 using Virtual_School_Register.ViewModels;
 
@@ -19,12 +20,14 @@ namespace Virtual_School_Register.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
+        private readonly IEmailSender _emailSender;
 
-        public EvaluationsController(ApplicationDbContext context, UserManager<User> userManager, IMapper mapper)
+        public EvaluationsController(ApplicationDbContext context, UserManager<User> userManager, IMapper mapper, IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
             _mapper = mapper;
+            _emailSender = emailSender;
         }
 
         [Authorize(Roles = "Admin")]
@@ -38,6 +41,9 @@ namespace Virtual_School_Register.Controllers
         [Route("Evaluations/Index/{userId?}")] // potrzebne do zmiany języka w trakcie wyszukiwania po datach, żeby widniało w routingu
         public async Task<IActionResult> Index(string userId, DateTime startDate, DateTime endDate)
         {
+            /*var message = new MyMessage(new string[] { "mateusz.m.paszko@gmail.com" }, "Test mail", "Działa kurde!");
+            _emailSender.SendEmail(message);*/
+
             List<Evaluation> evaluations = new List<Evaluation>();
             List<SubjectGradeViewModel> subjectGradesList = new List<SubjectGradeViewModel>();
 

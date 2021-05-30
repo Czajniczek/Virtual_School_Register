@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Virtual_School_Register.Data;
+using Virtual_School_Register.EmailConfig;
 using Virtual_School_Register.Models;
 
 namespace Virtual_School_Register.Controllers
@@ -17,11 +18,13 @@ namespace Virtual_School_Register.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public MessagesController(ApplicationDbContext context, UserManager<User> userManager)
+        public MessagesController(ApplicationDbContext context, UserManager<User> userManager, IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         // GET: Messages
@@ -137,6 +140,61 @@ namespace Virtual_School_Register.Controllers
                 message.Date = DateTime.Now;
 
                 _context.Add(message);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", message.UserId);
+            return View(message);
+        }
+
+        [Authorize(Roles = "Admin, Nauczyciel")]
+        public IActionResult CreateEmailToClassParents()
+        {
+            /*var classes = _context.Class.Where(x => x.ClassTutorId == _userManager.GetUserId(HttpContext.User))
+                .OrderBy(x => x.Name).ToList();*/
+
+            var classes = _context.Class.OrderBy(x => x.Name).ToList();
+
+            ViewBag.ClassesList = classes;
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateEmailToClassParents(Message message)
+        {
+            if (ModelState.IsValid)
+            {
+                message.UserId = _userManager.GetUserId(HttpContext.User);
+                message.Date = DateTime.Now;
+
+                var classStudents = _userManager.Users.Where(x => x.ClassId.ToString() == message.RecipientId).ToList();
+
+                List<Message> messagesList = new List<Message>();
+
+                foreach (var student in classStudents)
+                {
+                    if(student.ParentId != null)
+                    {
+                        var parentEmail = _userManager.Users.FirstOrDefault(x => x.Id == student.ParentId).Email;
+
+                        Message newMessage = new Message();
+
+                        newMessage.Title = message.Title;
+                        newMessage.Date = message.Date;
+                        newMessage.Content = message.Content;
+                        newMessage.RecipientId = student.ParentId;
+                        newMessage.UserId = message.UserId;
+
+                        var emailMessage = new MyMessage(new string[] { parentEmail }, newMessage.Title, newMessage.Content);
+                        _emailSender.SendEmail(emailMessage);
+
+                        messagesList.Add(newMessage);
+                    }
+                }
+
+                _context.Message.AddRange(messagesList);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
