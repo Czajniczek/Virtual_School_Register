@@ -84,11 +84,10 @@ namespace Virtual_School_Register.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            //TODO: Nie przekazywać wszystkich danych
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name"); //Value = Class Id, Text = Name
                                                                                      //Value = 2, Text = 1A
 
-            //TODO: Nie przekazywać wszystkich danych o rodzicach tylko ich id, imię i nazwisko
+            //TODO: Nie przekazywać wszystkich danych o rodzicach tylko ich id, imię i nazwisko (dodać viewmodel)
             var parents = _userManager.Users.Where(x => x.Type == "Rodzic").ToList();
             ViewBag.ParentsList = parents;
 
@@ -98,7 +97,6 @@ namespace Virtual_School_Register.Controllers
         // POST: Users/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> Create([Bind("Id,UserName,Password,Name,Surname,Sex,Email,PhoneNumber,BirthDate,Adress,ParentId,Type,ClassId")] User user)
         public async Task<IActionResult> Create(UserCreateViewModel user)
         {
             if (ModelState.IsValid)
@@ -137,6 +135,7 @@ namespace Virtual_School_Register.Controllers
             }
 
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
+
             return View(user);
         }
 
@@ -185,12 +184,12 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            //TODO: Nie przekazywać wszystkich danych o rodzicach tylko ich id, imię i nazwisko
+            ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId); //Value = Class Id, Text = Name
+                                                                                                   //Value = 2, Text = 1A
+
+            //TODO: Nie przekazywać wszystkich danych o rodzicach tylko ich id, imię i nazwisko (dodać viewmodel)
             var parents = _userManager.Users.Where(x => x.Type == "Rodzic").ToList();
             ViewBag.ParentsList = parents;
-
-            //TODO: Nie przekazywać wszystkich danych
-            ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
 
             var editModel = _mapper.Map<UserEditViewModel>(user);
 
@@ -242,6 +241,7 @@ namespace Virtual_School_Register.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId);
 
             return View(user);

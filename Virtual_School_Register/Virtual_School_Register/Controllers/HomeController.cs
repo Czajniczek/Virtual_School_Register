@@ -55,6 +55,12 @@ namespace Virtual_School_Register.Controllers
             return View();
         }
 
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
         [HttpPost]
         public IActionResult CultureManagement(string culture, string returnUrl)
         {
@@ -64,12 +70,6 @@ namespace Virtual_School_Register.Controllers
                 new CookieOptions { Expires = DateTimeOffset.Now.AddDays(30) });
 
             return LocalRedirect(returnUrl);
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
