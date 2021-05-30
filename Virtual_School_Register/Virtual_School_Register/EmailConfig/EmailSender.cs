@@ -31,7 +31,7 @@ namespace Virtual_School_Register.EmailConfig
             emailMessage.From.Add(new MailboxAddress(_emailConfig.From));
             emailMessage.To.AddRange(myMessage.To);
             emailMessage.Subject = myMessage.Subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = myMessage.Content };
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = myMessage.Content };
 
             return emailMessage;
         }

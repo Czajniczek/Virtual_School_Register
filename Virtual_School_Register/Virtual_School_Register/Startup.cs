@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -18,6 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Virtual_School_Register.Data;
 using Virtual_School_Register.EmailConfig;
+using Virtual_School_Register.Jobs;
 using Virtual_School_Register.MapperConfig;
 using Virtual_School_Register.Models;
 
@@ -117,6 +119,31 @@ namespace Virtual_School_Register
             services.AddSingleton(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
 
             services.AddScoped<IEmailSender, EmailSender>();
+            #endregion
+
+            #region Quartz
+            services.AddQuartz(q =>
+            {
+                q.SchedulerId = "BackgroundTest";
+                q.UseMicrosoftDependencyInjectionJobFactory();
+                q.UseSimpleTypeLoader();
+                q.UseInMemoryStore();
+                q.UseDefaultThreadPool(tp =>
+                {
+                    tp.MaxConcurrency = 10;
+                });
+
+                q.ScheduleJob<MonthlyReportJob>(trigger => trigger
+                .WithIdentity("MonthlyRepotTriggerJob")
+                .StartNow()
+                //.WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(30)).RepeatForever()));
+                .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromDays(30)).RepeatForever()));
+            });
+
+            services.AddQuartzServer(opt =>
+            {
+                opt.WaitForJobsToComplete = true;
+            });
             #endregion
         }
 

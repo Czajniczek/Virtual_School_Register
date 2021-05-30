@@ -65,17 +65,15 @@
         <p class="card-text">@Html.DisplayFor(model => model.Content)</p>
     </div>
     <div class="card-footer text-muted">
-        <div class="row">
-            <div class="col-md-4">
+        <div class="row d-flex justify-content-between">
+            <div style="margin-left:15px">
                 From:
                 <b>
                     @Html.DisplayFor(model => model.User.Name)
                     @Html.DisplayFor(model => model.User.Surname)
                 </b>
             </div>
-            <div class="col-md-6">
-            </div>
-            <div class="col-md-2">
+            <div style="margin-right:15px">
                 @Html.DisplayFor(model => model.Date)
             </div>
         </div>
