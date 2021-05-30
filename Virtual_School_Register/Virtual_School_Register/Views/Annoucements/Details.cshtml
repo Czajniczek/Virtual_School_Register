@@ -1,43 +1,87 @@
 ﻿@model Virtual_School_Register.Models.Annoucement
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Localizer["Announcement details"];
 }
 
-<h1>Details</h1>
+<div class="d-flex justify-content-center text-center">
+    <div>
+        <h1>@Localizer["Announcement details"]</h1>
+        <br />
 
-<div>
-    <h4>Announcement</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.Name)
-            @Html.DisplayFor(model => model.User.Surname)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.AnnoucementId">Edit</a>
-    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+        <table class="table table-striped text-left" style="width:500px">
+            <tbody>
+                <tr>
+                    <td>
+                        <b>@Localizer["Title"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Title)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Content"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Content)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Date"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Date)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["User"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.User.Name)
+                        @Html.DisplayFor(model => model.User.Surname)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        @*<div>
+            <h4>Announcement</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Title)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Title)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Content)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Content)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Date)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Date)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.User)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.User.Name)
+                    @Html.DisplayFor(model => model.User.Surname)
+                </dd>
+            </dl>
+        </div>*@
+    <div>
+        <a class="btn btn-primary" asp-action="Index">@Localizer["Back"]</a>
+        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.AnnoucementId">@Localizer["Edit"]</a>
+    </div>
+    </div>
 </div>
