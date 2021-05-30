@@ -9,7 +9,7 @@
 
 <div>
     <form asp-action="CultureManagement" asp-controller="Home" method="post" asp-route-returnUrl="@returnUrl">
-        <select name="culture" asp-for="@culture.RequestCulture.UICulture.Name" onchange="this.form.submit();">
+        <select class="form-control-sm" style="width:95px" name="culture" asp-for="@culture.RequestCulture.UICulture.Name" onchange="this.form.submit();">
             <option value="en">@Localizer["en"]</option>
             <option value="pl">@Localizer["pl"]</option>
             <option value="ru">@Localizer["ru"]</option>

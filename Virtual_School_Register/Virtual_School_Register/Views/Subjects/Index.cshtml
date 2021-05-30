@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<Virtual_School_Register.Models.Subject>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Subjects";
+    ViewData["Title"] = Localizer["Subjects"];
 }
 
 @if (User.IsInRole("Admin"))
 {
-    <p>
-        <a class="btn btn-success" asp-action="Create">Create New</a>
+    <p class="d-flex justify-content-center">
+        <a class="btn btn-success" asp-action="Create">@Localizer["Add subject"]</a>
     </p>
 }
 else
@@ -19,12 +20,14 @@ else
     <thead class="thead-dark">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Localizer["Subject name"]
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Content)
+                @Localizer["Content"]
             </th>
-            <th></th>
+            <th>
+                @Localizer["Action"]
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -38,12 +41,12 @@ else
                     @Html.DisplayFor(modelItem => item.Content)
                 </td>
                 <td>
-                    @Html.ActionLink("Files", "Index", "Files", new { subjectId = item.SubjectId }, new { @class = "btn btn-outline-info" })
-                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.SubjectId">Details</a>
+                    @Html.ActionLink(Localizer["Files"].Value.ToString(), "Index", "Files", new { subjectId = item.SubjectId }, new { @class = "btn btn-outline-info" })
+                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.SubjectId">@Localizer["Details"]</a>
                     @if (User.IsInRole("Admin"))
                     {
-                        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.SubjectId">Edit</a>
-                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.SubjectId">Delete</a>
+                        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.SubjectId">@Localizer["Edit"]</a>
+                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.SubjectId">@Localizer["Delete"]</a>
                     }
                 </td>
             </tr>

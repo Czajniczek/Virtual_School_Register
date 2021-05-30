@@ -20,10 +20,8 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <partial name="_CulturePartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-link">
-                            <partial name="_CulturePartial" />
-                        </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
@@ -39,8 +37,8 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="ConductingLessons" asp-action="Index">@Localizer["Teachers"]</a>
                             </li>
                             @*<li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="IndexTeacher">@Localizer["Grades"]</a>
-                            </li>*@
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Evaluations" asp-action="IndexTeacher">@Localizer["Grades"]</a>
+                                </li>*@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">@Localizer["Messages"]</a>
                             </li>
@@ -51,8 +49,8 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">@Localizer["Questions"]</a>
                             </li>
                             @*<li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Index">@Localizer["Files"]</a>
-                            </li>*@
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Index">@Localizer["Files"]</a>
+                                </li>*@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Annoucements" asp-action="Index">@Localizer["Announcements"]</a>
                             </li>
@@ -78,8 +76,8 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">@Localizer["Questions"]</a>
                             </li>
                             @*<li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Index">@Localizer["Files"]</a>
-                            </li>*@
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Index">@Localizer["Files"]</a>
+                                </li>*@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Annoucements" asp-action="Index">@Localizer["Announcements"]</a>
                             </li>
