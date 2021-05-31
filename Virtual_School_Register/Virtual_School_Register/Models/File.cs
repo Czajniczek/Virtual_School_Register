@@ -12,11 +12,17 @@ namespace Virtual_School_Register.Models
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         //public string Path { get; set; }
 
-        //public string Description { get; set; }
-
         //public string Content { get; set; }
+
+        public string FileType { get; set; }
+
+        public byte[] DataFiles { get; set; }
+
+        public DateTime Date { get; set; }
 
         [Display(Name = "Subject")]
         public int SubjectId { get; set; } //Do dodawania (create)
