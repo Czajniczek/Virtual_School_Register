@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    var where = ViewBag.BackToSubject as int?;
 }
 
 <h1>Details</h1>
@@ -10,21 +11,34 @@
     <h4>File</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Subject)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Subject.Name)
         </dd>
     </dl>
 </div>
 <div>
-    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.FileId">Edit</a>
-    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+    @*<a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.FileId">Edit</a>*@
+    @*<a class="btn btn-primary" asp-action="Index">Back to List</a>*@
+    @Html.ActionLink("Back to List", "Index", "Files", new { subjectId = @where }, new { @class = "btn btn-primary" })
 </div>
