@@ -24,8 +24,7 @@ namespace Virtual_School_Register.Controllers
         // GET: Questions
         public async Task<IActionResult> Index(int testId)
         {
-            //var questions = await _context.Question.Include(q => q.Test).Where(x => x.TestId == testId).ToListAsync();
-            var questions = await _context.Question.Include(q => q.Test).ToListAsync();
+            var questions = await _context.Question.Include(q => q.Test).Where(x => x.TestId == testId).ToListAsync();
 
             ViewBag.BackTo = _context.Test.FirstOrDefault(x => x.TestId == testId);
 
