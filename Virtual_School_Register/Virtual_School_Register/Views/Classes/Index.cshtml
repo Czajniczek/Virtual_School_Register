@@ -1,25 +1,29 @@
 ﻿@model IEnumerable<Virtual_School_Register.Models.Class>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Classes";
+    ViewData["Title"] = Localizer["Classes"];
 }
 
-<p>
-    <a class="btn btn-success" asp-action="Create">Create class</a>
+<p class="d-flex justify-content-center">
+    <a class="btn btn-success" asp-action="Create">@Localizer["Add class"]</a>
 </p>
+
 <table class="table table-striped text-center">
     <thead class="thead-dark">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Localizer["Class name"]
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Content)
+                @Localizer["Profile"]
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClassTutorId)
+                @Localizer["Class tutor"]
             </th>
-            <th>Action</th>
+            <th>
+                @Localizer["Action"]
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -43,13 +47,13 @@
                     }
                 </td>
                 <td>
-                    @Html.ActionLink("Students", "ClassStudents", "Classes", new { classId = _class.ClassId }, new { @class = "btn btn-outline-info" })
+                    @Html.ActionLink(Localizer["Students"].Value.ToString(), "ClassStudents", "Classes", new { classId = _class.ClassId }, new { @class = "btn btn-outline-info" })
                     @if (User.IsInRole("Admin"))
                     {
-                        <a class="btn btn-outline-warning" asp-action="Students" asp-route-id="@_class.ClassId">Edit students</a>
-                        <a class="btn btn-outline-warning" asp-action="Subjects" asp-route-id="@_class.ClassId">Edit subjects</a>
-                        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@_class.ClassId">Edit</a>
-                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@_class.ClassId">Delete</a>
+                        <a class="btn btn-outline-warning" asp-action="Students" asp-route-id="@_class.ClassId">@Localizer["Edit students"]</a>
+                        <a class="btn btn-outline-warning" asp-action="Subjects" asp-route-id="@_class.ClassId">@Localizer["Edit subjects"]</a>
+                        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@_class.ClassId">@Localizer["Edit"]</a>
+                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@_class.ClassId">@Localizer["Delete"]</a>
                     }
                 </td>
             </tr>

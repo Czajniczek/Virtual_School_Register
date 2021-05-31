@@ -39,13 +39,6 @@ namespace Virtual_School_Register.Controllers
                 .OrderByDescending(x => x.Date)
                 .ToList();
 
-            //var announcements = _context.Annoucement.Include(u => u.User)
-            //                                        .OrderByDescending(x => x.Date)
-            //                                        .ToList();
-
-            //var test = _localizer["News"];
-            //ViewData["News"] = test;
-
             return View(announcements);
         }
 

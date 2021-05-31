@@ -46,11 +46,12 @@ namespace Virtual_School_Register
             {
                 options.SignIn.RequireConfirmedAccount = false; //Wymagane potwierdzenie konta
 
-                options.Password.RequireDigit = true; //Liczba
+                //Example: Zaq!2wsx
+                options.Password.RequiredLength = 8; //D³ugoœæ
+                options.Password.RequireUppercase = true; //Du¿y znak
                 options.Password.RequireLowercase = true; //Ma³y znak
                 options.Password.RequireNonAlphanumeric = true; //Znak specjalny
-                options.Password.RequireUppercase = true; //Du¿y znak
-                options.Password.RequiredLength = 8; //D³ugoœæ
+                options.Password.RequireDigit = true; //Liczba
             })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -161,6 +162,7 @@ namespace Virtual_School_Register
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
