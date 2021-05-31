@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,11 +19,13 @@ namespace Virtual_School_Register.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
-        public TestsController(ApplicationDbContext context, IMapper mapper)
+        public TestsController(ApplicationDbContext context, IMapper mapper, UserManager<User> userManager)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         // GET: Tests
@@ -55,23 +58,79 @@ namespace Virtual_School_Register.Controllers
         {
             var questions = _context.Question.Where(x => x.TestId == testId).ToList();
 
-            if(myQuestion < questions.Count)
+            if (myQuestion < questions.Count)
             {
                 return RedirectToAction("BeginQuestion", "Tests", new { questionId = questions[myQuestion].QuestionId, testId = testId, myPoints = myPoints, myQuestion = myQuestion });
             }
 
-            int maxPoints = 0;
+            return RedirectToAction("EndTest", "Tests", new { testId = testId, myPoints = myPoints });
+        }
 
-            var questionsPoints = _context.Question.Where(x => x.TestId == testId).ToList();
+        public IActionResult EndTest(int testId, int myPoints)
+        {
+            float maxPoints = 0;
 
-            foreach (var question in questionsPoints)
+            var questions = _context.Question.Where(x => x.TestId == testId).ToList();
+
+            foreach (var question in questions)
             {
                 maxPoints = maxPoints + question.Points;
             }
 
-            ModelState.AddModelError("Twój wynik to:", myPoints.ToString());
+            float percent = 0;
 
-            return RedirectToAction("Index", "Tests");
+            if (maxPoints != 0)
+            {
+                percent = (myPoints / maxPoints) * 100;
+            }
+
+            string grade = "";
+
+            if (percent >= 98)
+            {
+                grade = "6";
+            }
+            else if (percent >= 86)
+            {
+                grade = "5";
+            }
+            else if (percent >= 71)
+            {
+                grade = "4";
+            }
+            else if (percent >= 51)
+            {
+                grade = "3";
+            }
+            else if (percent >= 41)
+            {
+                grade = "2";
+            }
+            else
+            {
+                grade = "1";
+            }
+
+            var test = _context.Test.FirstOrDefault(x => x.TestId == testId);
+
+            var conductingLesson = _context.ConductingLesson.FirstOrDefault(x => x.ConductingLessonId == test.ConductingLessonId);
+
+            Evaluation evaluation = new Evaluation();
+
+            evaluation.UserId = _userManager.GetUserId(HttpContext.User);
+            evaluation.Value = grade;
+            evaluation.Date = DateTime.Now;
+            evaluation.Type = "Sprawdzian";
+            evaluation.Comment = "Test: " + test.Title;
+            evaluation.SubjectId = conductingLesson.SubjectId;
+
+            _context.Evaluation.Add(evaluation);
+            _context.SaveChangesAsync();
+
+            ViewBag.Result = $"Your score is: {myPoints.ToString()} / {maxPoints} points.";
+            ViewBag.Grade = $"Your grade is: {grade}. It was inserted automatically.";
+
+            return View();
         }
 
         public async Task<IActionResult> BeginQuestion(int questionId, int testId, int myPoints, int myQuestion)
@@ -89,7 +148,7 @@ namespace Virtual_School_Register.Controllers
         [HttpPost]
         public IActionResult BeginQuestion(QuestionViewModel question)
         {
-            if(question.Answer == question.CorrectAnswer)
+            if (question.Answer == question.CorrectAnswer)
             {
                 question.MyPoints += question.Points;
             }
