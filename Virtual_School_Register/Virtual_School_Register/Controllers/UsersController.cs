@@ -48,7 +48,7 @@ namespace Virtual_School_Register.Controllers
                 Class = x.Class.Name
             })
               .OrderBy(x => x.Type)
-              .ThenBy(x => x.Name.ToLower())
+              .ThenBy(x => x.Class.ToLower())
               .ThenBy(x => x.Surname.ToLower())
               .ThenBy(x => x.Name.ToLower())
               .ToList();
