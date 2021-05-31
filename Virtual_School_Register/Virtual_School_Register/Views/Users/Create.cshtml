@@ -49,7 +49,6 @@
                             <option value="M">@Localizer["Man"]</option>
                             <option value="K">@Localizer["Woman"]</option>
                         </select>
-                        @*<input asp-for="Sex" class="form-control" />*@
                         <span asp-validation-for="Sex" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -93,7 +92,6 @@
                                 <option value="@parent.Id">@parent.Name @parent.Surname</option>
                             }
                         </select>
-                        @*<input asp-for="ParentId" class="form-control" />*@
                         <span asp-validation-for="ParentId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -104,7 +102,7 @@
                             {
                                 <option value="@_class.Value">@_class.Text</option>
                             }
-                        </select> @*asp-items="ViewBag.ClassId"*@
+                        </select>
                         <span asp-validation-for="ClassId" class="text-danger"></span>
                     </div>
                 </div>

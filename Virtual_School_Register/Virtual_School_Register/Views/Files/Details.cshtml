@@ -1,11 +1,61 @@
 ﻿@model Virtual_School_Register.Models.File
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Localizer["File details"];
     var where = ViewBag.BackToSubject as int?;
 }
 
-<h1>Details</h1>
+<div class="d-flex justify-content-center text-center">
+    <div>
+        <h1>@Localizer["File details"]</h1>
+        <br />
+
+        <table class="table table-striped text-left" style="width:500px">
+            <tbody>
+                <tr>
+                    <td>
+                        <b>@Localizer["Name"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Name)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Description"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Description)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Date"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Date)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>@Localizer["Subject"]</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Subject.Name)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            @Html.ActionLink(Localizer["Back"].Value.ToString(), "Index", "Files", new { subjectId = @where }, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+</div>
+
+
+<!--<h1>Details</h1>
 
 <div>
     <h4>File</h4>
@@ -37,8 +87,8 @@
         </dd>
     </dl>
 </div>
-<div>
-    @*<a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.FileId">Edit</a>*@
-    @*<a class="btn btn-primary" asp-action="Index">Back to List</a>*@
-    @Html.ActionLink("Back to List", "Index", "Files", new { subjectId = @where }, new { @class = "btn btn-primary" })
-</div>
+<div>-->
+@*<a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.FileId">Edit</a>*@
+@*<a class="btn btn-primary" asp-action="Index">Back to List</a>*@
+<!--@Html.ActionLink("Back to List", "Index", "Files", new { subjectId = @where }, new { @class = "btn btn-primary" })
+</div>-->

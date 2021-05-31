@@ -7,26 +7,23 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="@Localizer["Profile"]">@User.Identity.Name&nbsp;&nbsp;<img src="~/Images/user.png" width="35" height="35" /></a>
-            @*<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>*@
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="@Localizer["Profile"]">@User.Identity.Name&nbsp;&nbsp;<img src="~/Images/Account/User.png" width="35" height="35" /></a>
         </li>
         @:&nbsp;
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark" title="@Localizer["Logout"]"><img src="~/Images/logout2.png" width="35" height="35" /></button>
-                @*<button type="submit" class="nav-link btn btn-link text-dark">Logout</button>*@
+                <button type="submit" class="nav-link btn btn-link text-dark" title="@Localizer["Logout"]"><img src="~/Images/Account/Logout.png" width="35" height="35" /></button>
             </form>
         </li>
     }
     else
     {
+        @*<li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register" title="@Localizer["Register"]">@Localizer["Register"]</a>
+            </li>
+            @:&nbsp;*@
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register" title="@Localizer["Register"]">@Localizer["Register"]</a>
-        </li>
-        @:&nbsp;
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login" title="@Localizer["Login"]"><img src="~/Images/login.png" width="35" height="35" /></a>
-            @*<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>*@
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login" title="@Localizer["Login"]"><img src="~/Images/Account/Login.png" width="35" height="35" /></a>
         </li>
     }
 </ul>

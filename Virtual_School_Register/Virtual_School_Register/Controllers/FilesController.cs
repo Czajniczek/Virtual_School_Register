@@ -46,27 +46,6 @@ namespace Virtual_School_Register.Controllers
             return File(file.DataFiles, type, file.Name);
         }
 
-        // GET: Files/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var file = await _context.File
-                .Include(f => f.Subject)
-                .FirstOrDefaultAsync(m => m.FileId == id);
-            if (file == null)
-            {
-                return NotFound();
-            }
-
-            ViewBag.BackToSubject = file.SubjectId;
-
-            return View(file);
-        }
-
         // GET: Files/Create
         public IActionResult Create(int subjectId)
         {
@@ -112,67 +91,88 @@ namespace Virtual_School_Register.Controllers
                     ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", file.SubjectId);
                     return View(file);
                 }
-                
+
                 _context.Add(file);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Files", new { subjectId = file.SubjectId});
+                return RedirectToAction("Index", "Files", new { subjectId = file.SubjectId });
 
             }
             ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", file.SubjectId);
             return View(file);
         }
 
-        // GET: Files/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Files/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var file = await _context.File.FindAsync(id);
+            var file = await _context.File
+                .Include(f => f.Subject)
+                .FirstOrDefaultAsync(m => m.FileId == id);
             if (file == null)
             {
                 return NotFound();
             }
-            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Name", file.SubjectId);
+
+            ViewBag.BackToSubject = file.SubjectId;
+
             return View(file);
         }
 
-        // POST: Files/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FileId,Name,SubjectId")] Models.File file)
-        {
-            if (id != file.FileId)
-            {
-                return NotFound();
-            }
+        //// GET: Files/Edit/5
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(file);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FileExists(file.FileId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", file.SubjectId);
-            return View(file);
-        }
+        //    var file = await _context.File.FindAsync(id);
+        //    if (file == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Name", file.SubjectId);
+        //    return View(file);
+        //}
+
+        //// POST: Files/Edit/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("FileId,Name,SubjectId")] Models.File file)
+        //{
+        //    if (id != file.FileId)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(file);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!FileExists(file.FileId))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", file.SubjectId);
+        //    return View(file);
+        //}
 
         // GET: Files/Delete/5
         public async Task<IActionResult> Delete(int? id)

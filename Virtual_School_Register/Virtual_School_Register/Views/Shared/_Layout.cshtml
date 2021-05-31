@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - eRegister</title>
-    <link rel="shortcut icon" href="/Images/logo.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/Images/Logos/Logo.ico" type="image/x-icon">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     @switch (Context.Request.Cookies["Theme"])
@@ -32,7 +32,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" title="@Localizer["Home"]"><img src="~/Images/logo64x64.png" width="55" height="55" /></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" title="@Localizer["Home"]"><img src="~/Images/Logos/Logo.png" width="55" height="55" /></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -131,7 +131,6 @@
         </nav>
     </header>
     <div class="container">
-        @*<div class="container-fluid" style="text-align:center">*@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -146,7 +145,7 @@
                 <button type="button" class="btn btn-warning contrast" id="ContrastMode">@Localizer["Contrast"]</button>
             </div>
             <div>
-                &nbsp;&nbsp;&nbsp;&copy; 2021 - eRegister
+                &nbsp;&nbsp;&nbsp;&copy; 2021 - eRegister by Mateusz Paszko and Gabriel Czajkowski
             </div>
         </div>
     </footer>
@@ -201,6 +200,7 @@
         function setCookie(cname, cvalue, exdays) {
             var d = new Date();
             d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+
             var expires = "expires=" + d.toUTCString();
             document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         }

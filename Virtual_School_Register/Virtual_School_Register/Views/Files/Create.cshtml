@@ -1,50 +1,79 @@
 ﻿@model Virtual_School_Register.Models.File
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = Localizer["Adding a file"];
     var where = ViewBag.BackToSubject as int?;
 }
 
-<h1>Create</h1>
+<div class="d-flex justify-content-center text-center">
+    <div>
+        <h1>@Localizer["Add file"]</h1>
+        <br />
 
-<h4>File</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @*<div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+        <form asp-action="Create" method="post" enctype="multipart/form-data" style="width:500px">
+            <div class="text-left">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label class="control-label">@Localizer["Description"]</label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">@Localizer["Upload file"]</label>
+                    <input class="custom-file" name="files" type="file" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="SubjectId" hidden />
+                </div>
             </div>
+            <br />
+
             <div class="form-group">
-                <label class="control-label">Upload file</label>
-                <input class="form-control" name="files" type="file" />
-            </div>
-            <div class="form-group">
-                @*<label asp-for="SubjectId" class="control-label"></label>
-                <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.SubjectId"></select>*@
-                <input asp-for="SubjectId" hidden />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-success" />
+                @Html.ActionLink(Localizer["Back"].Value.ToString(), "Index", "Files", new { subjectId = @where }, new { @class = "btn btn-primary" })
+                <input type="submit" value="@Localizer["Add"]" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    @*<a class="btn btn-primary" asp-action="Index">Back to List</a>*@
-    @Html.ActionLink("Back to List", "Index", "Files", new { subjectId = @where }, new { @class = "btn btn-primary" })
-
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
+@*<h1>Create</h1>
+
+    <h4>File</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Upload file</label>
+                    <input class="form-control" name="files" type="file" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="SubjectId" hidden />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-success" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "Index", "Files", new { subjectId = @where }, new { @class = "btn btn-primary" })
+
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }*@

@@ -62,22 +62,6 @@ namespace Virtual_School_Register.Controllers
                 }
             });
 
-            //var users = _context.Users.Include(u => u.Class)
-            //                          .OrderBy(x => x.Type)
-            //                          .ThenBy(x => x.UserName.ToLower())
-            //                          .ThenBy(x => x.Surname.ToLower())
-            //                          .ThenBy(x => x.Name.ToLower())
-            //                          .ToList();
-
-            //foreach (var p in users)
-            //{
-            //    if (p.ParentId != null)
-            //    {
-            //        var parent = users.Find(x => x.Id == p.ParentId);
-            //        p.ParentId = parent.Name + " " + parent.Surname;
-            //    }
-            //}
-
             return View(users);
         }
 
@@ -87,7 +71,7 @@ namespace Virtual_School_Register.Controllers
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name"); //Value = Class Id, Text = Name
                                                                                      //Value = 2, Text = 1A
 
-            //TODO: Nie przekazywać wszystkich danych o rodzicach tylko ich id, imię i nazwisko (dodać viewmodel)
+            //TODO: Nie przekazywać wszystkich danych o rodzicach tylko ich id, imię i nazwisko
             var parents = _userManager.Users.Where(x => x.Type == "Rodzic").ToList();
             ViewBag.ParentsList = parents;
 
@@ -187,7 +171,7 @@ namespace Virtual_School_Register.Controllers
             ViewData["ClassId"] = new SelectList(_context.Class, "ClassId", "Name", user.ClassId); //Value = Class Id, Text = Name
                                                                                                    //Value = 2, Text = 1A
 
-            //TODO: Nie przekazywać wszystkich danych o rodzicach tylko ich id, imię i nazwisko (dodać viewmodel)
+            //TODO: Nie przekazywać wszystkich danych o rodzicach tylko ich id, imię i nazwisko
             var parents = _userManager.Users.Where(x => x.Type == "Rodzic").ToList();
             ViewBag.ParentsList = parents;
 
