@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Virtual_School_Register.Models
+namespace Virtual_School_Register.ViewModels
 {
-    public class Test
+    public class TestViewModel
     {
         public int TestId { get; set; }
 
@@ -19,8 +20,8 @@ namespace Virtual_School_Register.Models
 
         public int ConductingLessonId { get; set; }
 
-        public virtual ConductingLesson ConductingLesson { get; set; }
+        public string SubjectName { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; }
+        public string ClassName { get; set; }
     }
 }

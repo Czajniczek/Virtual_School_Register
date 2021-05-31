@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Virtual_School_Register.Models
+namespace Virtual_School_Register.ViewModels
 {
-    public class Question
+    public class QuestionViewModel
     {
         public int QuestionId { get; set; }
 
@@ -30,6 +30,12 @@ namespace Virtual_School_Register.Models
         [Display(Name = "Answer D")]
         public string AnswerD { get; set; }
 
+        public string Answer { get; set; }
+
+        public int MyPoints { get; set; }
+
+        public int MyQuestion { get; set; }
+
         [Display(Name = "Correct answer")]
         [Required]
         [MinLength(1, ErrorMessage = "Correct answer cannot be empty!")]
@@ -38,7 +44,5 @@ namespace Virtual_School_Register.Models
         public int Points { get; set; }
 
         public int TestId { get; set; }
-
-        public virtual Test Test { get; set; }
     }
 }
