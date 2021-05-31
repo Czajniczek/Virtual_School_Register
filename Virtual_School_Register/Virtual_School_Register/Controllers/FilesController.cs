@@ -28,22 +28,18 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Files
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int subjectId)
         {
-            var applicationDbContext = _context.File.Include(f => f.Subject);
-            return View(await applicationDbContext.ToListAsync());
+            var files = await _context.File.Include(f => f.Subject).Where(x => x.SubjectId == subjectId).ToListAsync();
+
+            ViewBag.BackTo = _context.Subject.FirstOrDefault(x => x.SubjectId == subjectId);
+
+            return View(files);
         }
 
         public ActionResult DownloadFile(int fileId)
         {
             var file = _context.File.Find(fileId);
-
-            /*var cd = new ContentDisposition
-            {
-                FileName = file.Name,
-                Inline = false,
-            };*/
-            //Response.Headers.Add("Content-Disposition", file.Name);
 
             string type = "application/" + file.FileType.ToString();
 
@@ -66,13 +62,18 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
+            ViewBag.BackToSubject = file.SubjectId;
+
             return View(file);
         }
 
         // GET: Files/Create
-        public IActionResult Create()
+        public IActionResult Create(int subjectId)
         {
-            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Name");
+            ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", subjectId.ToString());
+
+            ViewBag.BackToSubject = subjectId;
+
             return View();
         }
 
@@ -106,10 +107,17 @@ namespace Virtual_School_Register.Controllers
                         }
                     }
                 }
+                else
+                {
+                    ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", file.SubjectId);
+                    return View(file);
+                }
                 
                 _context.Add(file);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index", "Files", new { subjectId = file.SubjectId});
+
             }
             ViewData["SubjectId"] = new SelectList(_context.Subject, "SubjectId", "Content", file.SubjectId);
             return View(file);
@@ -182,6 +190,8 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
+            ViewBag.BackToSubject = file.SubjectId;
+
             return View(file);
         }
 
@@ -193,7 +203,8 @@ namespace Virtual_School_Register.Controllers
             var file = await _context.File.FindAsync(id);
             _context.File.Remove(file);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index", "Files", new { subjectId = file.SubjectId });
         }
 
         private bool FileExists(int id)
