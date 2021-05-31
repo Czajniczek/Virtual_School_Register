@@ -2,36 +2,52 @@
 
 @{
     ViewData["Title"] = "Questions";
+    var where = ViewBag.BackTo as Test;
 }
 
-@*<h1>Index</h1>*@
-
-<p>
-    <a class="btn btn-success" asp-action="Create">Create New</a>
-</p>
+<h3>
+    Test:
+    <b>
+        @where.Title
+    </b>
+</h3>
+<hr />
+@if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create", "Questions", new { testId = @where.TestId }, new { @class = "btn btn-success" })
+    </p>
+}
+else
+{
+    <br />
+}
 <table class="table table-striped text-center">
     <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Content)
             </th>
+            @*            <th>
+                    @Html.DisplayNameFor(model => model.AnswerA)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AnswerB)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AnswerC)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AnswerD)
+                </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.AnswerA)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AnswerB)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AnswerC)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AnswerD)
+                Answers
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CorrectAnswer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Test)
+                @Html.DisplayNameFor(model => model.Points)
             </th>
             <th>Action</th>
         </tr>
@@ -43,31 +59,37 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Content)
                 </td>
+                @*                <td>
+                        @Html.DisplayFor(modelItem => item.AnswerA)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AnswerB)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AnswerC)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AnswerD)
+                    </td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.AnswerA)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AnswerB)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AnswerC)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AnswerD)
+                    <b>A:</b> @Html.DisplayFor(modelItem => item.AnswerA)
+                    <br />
+                    <b>B:</b> @Html.DisplayFor(modelItem => item.AnswerB)
+                    <br />
+                    <b>C:</b> @Html.DisplayFor(modelItem => item.AnswerC)
+                    <br />
+                    <b>D:</b> @Html.DisplayFor(modelItem => item.AnswerD)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CorrectAnswer)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Test.Title)
+                    @Html.DisplayFor(modelItem => item.Points)
                 </td>
                 <td>
                     <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.QuestionId">Details</a>
                     <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.QuestionId">Edit</a>
                     <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.QuestionId">Delete</a>
-                    @*<a asp-action="Edit" asp-route-id="@item.QuestionId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.QuestionId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.QuestionId">Delete</a>*@
                 </td>
             </tr>
         }

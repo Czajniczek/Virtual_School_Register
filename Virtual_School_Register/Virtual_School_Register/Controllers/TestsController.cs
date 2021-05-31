@@ -2,29 +2,101 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Virtual_School_Register.Data;
 using Virtual_School_Register.Models;
+using Virtual_School_Register.ViewModels;
 
 namespace Virtual_School_Register.Controllers
 {
-    [Authorize(Roles = "Admin, Nauczyciel")]
+    [Authorize(Roles = "Admin, Nauczyciel, Uczen")]
     public class TestsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public TestsController(ApplicationDbContext context)
+        public TestsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: Tests
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Test.ToListAsync());
+            var conductingLessons = await _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User).ToListAsync();
+
+            var tests = await _context.Test.ToListAsync();
+
+            List<TestViewModel> testsList = new List<TestViewModel>();
+
+            foreach (var test in tests)
+            {
+                var newTest = _mapper.Map<TestViewModel>(test);
+
+                var conductingLesson = conductingLessons.FirstOrDefault(x => x.ConductingLessonId == test.ConductingLessonId);
+
+                newTest.SubjectName = conductingLesson.Subject.Name;
+                newTest.ClassName = conductingLesson.Class.Name;
+
+                testsList.Add(newTest);
+            }
+
+            //testsList.OrderBy(x => x.ClassName).ThenBy(x => x.SubjectName);
+
+            return View(testsList);
+        }
+
+        public IActionResult BeginTest(int testId, int myPoints, int myQuestion)
+        {
+            var questions = _context.Question.Where(x => x.TestId == testId).ToList();
+
+            if(myQuestion < questions.Count)
+            {
+                return RedirectToAction("BeginQuestion", "Tests", new { questionId = questions[myQuestion].QuestionId, testId = testId, myPoints = myPoints, myQuestion = myQuestion });
+            }
+
+            int maxPoints = 0;
+
+            var questionsPoints = _context.Question.Where(x => x.TestId == testId).ToList();
+
+            foreach (var question in questionsPoints)
+            {
+                maxPoints = maxPoints + question.Points;
+            }
+
+            ModelState.AddModelError("Twój wynik to:", myPoints.ToString());
+
+            return RedirectToAction("Index", "Tests");
+        }
+
+        public async Task<IActionResult> BeginQuestion(int questionId, int testId, int myPoints, int myQuestion)
+        {
+            var question = await _context.Question.FirstOrDefaultAsync(x => x.QuestionId == questionId && x.TestId == testId);
+
+            var newQuestion = _mapper.Map<QuestionViewModel>(question);
+
+            newQuestion.MyPoints = myPoints;
+            newQuestion.MyQuestion = myQuestion;
+
+            return View(newQuestion);
+        }
+
+        [HttpPost]
+        public IActionResult BeginQuestion(QuestionViewModel question)
+        {
+            if(question.Answer == question.CorrectAnswer)
+            {
+                question.MyPoints += question.Points;
+            }
+
+            question.MyQuestion++;
+
+            return RedirectToAction("BeginTest", "Tests", new { testId = question.TestId, myPoints = question.MyPoints, myQuestion = question.MyQuestion });
         }
 
         // GET: Tests/Details/5
@@ -42,21 +114,32 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            return View(test);
+            var newTest = _mapper.Map<TestViewModel>(test);
+
+            var conductingLesson = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
+                .FirstOrDefault(x => x.ConductingLessonId == test.ConductingLessonId);
+
+            newTest.SubjectName = conductingLesson.Subject.Name;
+            newTest.ClassName = conductingLesson.Class.Name;
+
+            return View(newTest);
         }
 
         // GET: Tests/Create
         public IActionResult Create()
         {
+            var conductingLessonsList = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
+                .OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name).ToList();
+
+            ViewBag.ConductingLessons = conductingLessonsList;
+
             return View();
         }
 
         // POST: Tests/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TestId,Title,Time,ClassSubjectTeacherId")] Test test)
+        public async Task<IActionResult> Create([Bind("TestId,Title,Time,ConductingLessonId")] Test test)
         {
             if (ModelState.IsValid)
             {
@@ -80,15 +163,19 @@ namespace Virtual_School_Register.Controllers
             {
                 return NotFound();
             }
+
+            var conductingLessonsList = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
+                .OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name).ToList();
+
+            ViewBag.ConductingLessons = conductingLessonsList;
+
             return View(test);
         }
 
         // POST: Tests/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TestId,Title,Time,ClassSubjectTeacherId")] Test test)
+        public async Task<IActionResult> Edit(int id, [Bind("TestId,Title,Time,ConductingLessonId")] Test test)
         {
             if (id != test.TestId)
             {
@@ -133,7 +220,15 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            return View(test);
+            var newTest = _mapper.Map<TestViewModel>(test);
+
+            var conductingLesson = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
+                .FirstOrDefault(x => x.ConductingLessonId == test.ConductingLessonId);
+
+            newTest.SubjectName = conductingLesson.Subject.Name;
+            newTest.ClassName = conductingLesson.Class.Name;
+
+            return View(newTest);
         }
 
         // POST: Tests/Delete/5

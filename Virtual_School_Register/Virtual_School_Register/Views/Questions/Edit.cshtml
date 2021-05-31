@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var where = ViewBag.BackToTest as int?;
 }
 
 <h1>Edit</h1>
@@ -44,9 +45,20 @@
                 <span asp-validation-for="CorrectAnswer" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TestId" class="control-label"></label>
-                <select asp-for="TestId" class="form-control" asp-items="ViewBag.TestId"></select>
-                <span asp-validation-for="TestId" class="text-danger"></span>
+                @*<label asp-for="TestId" class="control-label"></label>
+                    <select asp-for="TestId" class="form-control" asp-items="ViewBag.TestId"></select>
+                    <span asp-validation-for="TestId" class="text-danger"></span>*@
+                <input asp-for="TestId" hidden />
+            </div>
+            <div class="form-group">
+                <label asp-for="Points" class="control-label"></label>
+                <select asp-for="Points" class="form-control">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-success" />
@@ -56,7 +68,9 @@
 </div>
 
 <div>
-    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+    @*<a class="btn btn-primary" asp-action="Index">Back to List</a>*@
+    @Html.ActionLink("Back to List", "Index", "Questions", new { testId = @where }, new { @class = "btn btn-primary" })
+
 </div>
 
 @section Scripts {

@@ -22,10 +22,14 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Questions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int testId)
         {
-            var applicationDbContext = _context.Question.Include(q => q.Test);
-            return View(await applicationDbContext.ToListAsync());
+            //var questions = await _context.Question.Include(q => q.Test).Where(x => x.TestId == testId).ToListAsync();
+            var questions = await _context.Question.Include(q => q.Test).ToListAsync();
+
+            ViewBag.BackTo = _context.Test.FirstOrDefault(x => x.TestId == testId);
+
+            return View(questions);
         }
 
         // GET: Questions/Details/5
@@ -44,28 +48,32 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
+            ViewBag.BackToTest = question.TestId;
+
             return View(question);
         }
 
         // GET: Questions/Create
-        public IActionResult Create()
+        public IActionResult Create(int testId)
         {
-            ViewData["TestId"] = new SelectList(_context.Set<Test>(), "TestId", "Title");
+            ViewData["TestId"] = new SelectList(_context.Set<Test>(), "TestId", testId.ToString());
+
+            ViewBag.BackToTest = testId;
+
             return View();
         }
 
         // POST: Questions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("QuestionId,Content,AnswerA,AnswerB,AnswerC,AnswerD,CorrectAnswer,TestId")] Question question)
+        public async Task<IActionResult> Create([Bind("QuestionId,Content,AnswerA,AnswerB,AnswerC,AnswerD,CorrectAnswer,Points,TestId")] Question question)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(question);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index", "Questions", new { testId = question.TestId });
             }
             ViewData["TestId"] = new SelectList(_context.Set<Test>(), "TestId", "Title", question.TestId);
             return View(question);
@@ -84,16 +92,17 @@ namespace Virtual_School_Register.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.BackToTest = question.TestId;
+
             ViewData["TestId"] = new SelectList(_context.Set<Test>(), "TestId", "Title", question.TestId);
             return View(question);
         }
 
         // POST: Questions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("QuestionId,Content,AnswerA,AnswerB,AnswerC,AnswerD,CorrectAnswer,TestId")] Question question)
+        public async Task<IActionResult> Edit(int id, [Bind("QuestionId,Content,AnswerA,AnswerB,AnswerC,AnswerD,CorrectAnswer,Points,TestId")] Question question)
         {
             if (id != question.QuestionId)
             {
@@ -118,7 +127,9 @@ namespace Virtual_School_Register.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index", "Questions", new { testId = question.TestId });
+
             }
             ViewData["TestId"] = new SelectList(_context.Set<Test>(), "TestId", "Title", question.TestId);
             return View(question);
@@ -140,6 +151,8 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
+            ViewBag.BackToTest = question.TestId;
+
             return View(question);
         }
 
@@ -151,7 +164,8 @@ namespace Virtual_School_Register.Controllers
             var question = await _context.Question.FindAsync(id);
             _context.Question.Remove(question);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index", "Questions", new { testId = question.TestId });
         }
 
         private bool QuestionExists(int id)
