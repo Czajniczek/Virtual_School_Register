@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    var where = ViewBag.BackToSubject as int?;
 }
 
 <h1>Create</h1>
@@ -27,8 +28,9 @@
                 <input class="form-control" name="files" type="file" />
             </div>
             <div class="form-group">
-                <label asp-for="SubjectId" class="control-label"></label>
-                <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.SubjectId"></select>
+                @*<label asp-for="SubjectId" class="control-label"></label>
+                <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.SubjectId"></select>*@
+                <input asp-for="SubjectId" hidden />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-success" />
@@ -38,7 +40,9 @@
 </div>
 
 <div>
-    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+    @*<a class="btn btn-primary" asp-action="Index">Back to List</a>*@
+    @Html.ActionLink("Back to List", "Index", "Files", new { subjectId = @where }, new { @class = "btn btn-primary" })
+
 </div>
 
 @section Scripts {
