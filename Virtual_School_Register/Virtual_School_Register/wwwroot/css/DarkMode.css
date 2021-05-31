@@ -1,0 +1,44 @@
+﻿body {
+    background-color: #202020;
+    color: #DCDCDC !important;
+}
+
+header {
+    background-color: #383838;
+}
+
+footer {
+    background-color: #303030;
+}
+
+/*Nav buttons*/
+.text-dark {
+    color: #D3D3D3 !important;
+}
+
+.nav-link:hover {
+    color: white !important;
+}
+
+/*a:hover {
+    color: white !important;
+}*/
+
+/*Przycisk z wyborem motywu*/
+.default {
+    background-color: #D3D3D3;
+}
+
+.card-body {
+    background-color: #303030;
+}
+
+.card-footer, .card-header {
+    background-color: #282828;
+    color: #D3D3D3 !important;
+}
+
+tbody {
+    background-color: #282828;
+    color: #D3D3D3;
+}

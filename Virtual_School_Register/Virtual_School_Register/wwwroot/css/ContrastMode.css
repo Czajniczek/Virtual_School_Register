@@ -1,0 +1,140 @@
+﻿body {
+    background-color: black;
+    color: white !important;
+}
+
+header {
+    background-color: black;
+}
+
+footer {
+    background-color: black;
+}
+
+/*Nav buttons*/
+.text-dark {
+    color: white !important;
+}
+
+/*a:hover {
+    color: white !important;
+}*/
+
+/*Przycisk z wyborem motywu*/
+.default {
+    background-color: white;
+}
+
+    .default:hover {
+        background-color: yellow;
+        border: solid 1px yellow;
+    }
+
+.dark {
+    background-color: black;
+}
+
+    .dark:hover {
+        background-color: yellow;
+        color: black;
+    }
+
+.contrast {
+    background-color: yellow;
+    border: solid 1px yellow;
+}
+
+    .contrast:hover {
+        background-color: yellow;
+        border: solid 1px yellow;
+    }
+
+.card {
+    border: 1px solid white !important;
+}
+
+.card-body {
+    background-color: #181818 !important;
+}
+
+.card-footer, .card-header {
+    background-color: black;
+    color: white !important;
+}
+
+.card-header {
+    border-bottom: 1px solid white;
+}
+
+.card-footer {
+    border-top: 1px solid white;
+}
+
+.table {
+    border: 1px solid white !important;
+}
+
+tbody {
+    background-color: black;
+    color: white;
+}
+
+.text-dark:hover {
+    color: yellow !important;
+}
+
+.btn-outline-info {
+    color: cyan;
+    border-color: cyan;
+}
+
+    .btn-outline-info:hover {
+        color: #fff;
+        background-color: cyan;
+        border-color: cyan;
+    }
+
+.btn-outline-warning {
+    color: yellow;
+    border-color: yellow;
+}
+
+    .btn-outline-warning:hover {
+        color: #212529;
+        background-color: yellow;
+        border-color: yellow;
+    }
+
+.btn-outline-danger {
+    color: #dc3545;
+    border-color: red;
+}
+
+    .btn-outline-danger:hover {
+        color: #fff;
+        background-color: red;
+        border-color: red;
+    }
+
+.btn-outline-success {
+    color: #00FF00;
+    border-color: #00FF00;
+}
+
+    .btn-outline-success:hover {
+        color: #000;
+        background-color: #00FF00;
+        border-color: #00FF00;
+    }
+
+.btn-success {
+    color: #000;
+    background-color: #00FF00;
+    border-color: #00FF00;
+}
+
+    .btn-success:hover {
+        color: #000;
+        background-color: #00CC00;
+        border-color: #00CC00;
+    }
