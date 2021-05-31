@@ -31,9 +31,37 @@ namespace Virtual_School_Register.Controllers
         // GET: Tests
         public async Task<IActionResult> Index()
         {
-            var conductingLessons = await _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User).ToListAsync();
+            List<Test> tests = new List<Test>();
+            List<ConductingLesson> conductingLessons = new List<ConductingLesson>();
 
-            var tests = await _context.Test.ToListAsync();
+            if (User.IsInRole("Nauczyciel"))
+            {
+                conductingLessons = await _context.ConductingLesson.Where(x => x.UserId == _userManager.GetUserId(HttpContext.User))
+                    .Include(c => c.Class).Include(c => c.Subject).Include(c => c.User).ToListAsync();
+
+                var conductingLessonsIds = await _context.ConductingLesson.Where(x => x.UserId == _userManager.GetUserId(HttpContext.User))
+                    .Select(x => x.ConductingLessonId).ToListAsync();
+
+                tests = await _context.Test.Where(x => conductingLessonsIds.Contains(x.ConductingLessonId)).ToListAsync();
+            }
+            else if (User.IsInRole("Uczen"))
+            {
+                var userClass = _userManager.Users.FirstOrDefault(x => x.Id == _userManager.GetUserId(HttpContext.User)).ClassId;
+
+                conductingLessons = await _context.ConductingLesson.Where(x => x.ClassId == userClass)
+                    .Include(c => c.Class).Include(c => c.Subject).Include(c => c.User).ToListAsync();
+
+                var conductingLessonsIds = await _context.ConductingLesson.Where(x => x.ClassId == userClass)
+                    .Select(x => x.ConductingLessonId).ToListAsync();
+
+                tests = await _context.Test.Where(x => conductingLessonsIds.Contains(x.ConductingLessonId)).ToListAsync();
+            }
+            else
+            {
+                conductingLessons = await _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User).ToListAsync();
+
+                tests = await _context.Test.ToListAsync();
+            }
 
             List<TestViewModel> testsList = new List<TestViewModel>();
 
@@ -63,7 +91,14 @@ namespace Virtual_School_Register.Controllers
                 return RedirectToAction("BeginQuestion", "Tests", new { questionId = questions[myQuestion].QuestionId, testId = testId, myPoints = myPoints, myQuestion = myQuestion });
             }
 
-            return RedirectToAction("EndTest", "Tests", new { testId = testId, myPoints = myPoints });
+            if(questions.Count != 0)
+            {
+                return RedirectToAction("EndTest", "Tests", new { testId = testId, myPoints = myPoints });
+            }
+            else
+            {
+                return RedirectToAction("Index", "Tests");
+            }
         }
 
         public IActionResult EndTest(int testId, int myPoints)
@@ -185,10 +220,24 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Tests/Create
+        [Authorize(Roles = "Admin, Nauczyciel")]
         public IActionResult Create()
         {
-            var conductingLessonsList = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
-                .OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name).ToList();
+            List<ConductingLesson> conductingLessonsList = new List<ConductingLesson>();
+
+            if (User.IsInRole("Nauczyciel"))
+            {
+                conductingLessonsList = _context.ConductingLesson
+                    .Where(x => x.UserId == _userManager.GetUserId(HttpContext.User))
+                    .Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
+                    .OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name).ToList();
+            }
+            else
+            {
+                conductingLessonsList = _context.ConductingLesson
+                    .Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
+                    .OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name).ToList();
+            }
 
             ViewBag.ConductingLessons = conductingLessonsList;
 
@@ -198,6 +247,7 @@ namespace Virtual_School_Register.Controllers
         // POST: Tests/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Nauczyciel")]
         public async Task<IActionResult> Create([Bind("TestId,Title,Time,ConductingLessonId")] Test test)
         {
             if (ModelState.IsValid)
@@ -210,6 +260,7 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Tests/Edit/5
+        [Authorize(Roles = "Admin, Nauczyciel")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -223,8 +274,21 @@ namespace Virtual_School_Register.Controllers
                 return NotFound();
             }
 
-            var conductingLessonsList = _context.ConductingLesson.Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
-                .OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name).ToList();
+            List<ConductingLesson> conductingLessonsList = new List<ConductingLesson>();
+
+            if (User.IsInRole("Nauczyciel"))
+            {
+                conductingLessonsList = _context.ConductingLesson
+                    .Where(x => x.UserId == _userManager.GetUserId(HttpContext.User))
+                    .Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
+                    .OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name).ToList();
+            }
+            else
+            {
+                conductingLessonsList = _context.ConductingLesson
+                    .Include(c => c.Class).Include(c => c.Subject).Include(c => c.User)
+                    .OrderBy(x => x.Class.Name).ThenBy(x => x.Subject.Name).ToList();
+            }
 
             ViewBag.ConductingLessons = conductingLessonsList;
 
@@ -234,6 +298,7 @@ namespace Virtual_School_Register.Controllers
         // POST: Tests/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Nauczyciel")]
         public async Task<IActionResult> Edit(int id, [Bind("TestId,Title,Time,ConductingLessonId")] Test test)
         {
             if (id != test.TestId)
@@ -265,6 +330,7 @@ namespace Virtual_School_Register.Controllers
         }
 
         // GET: Tests/Delete/5
+        [Authorize(Roles = "Admin, Nauczyciel")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -293,6 +359,7 @@ namespace Virtual_School_Register.Controllers
         // POST: Tests/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Nauczyciel")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var test = await _context.Test.FindAsync(id);

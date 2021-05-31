@@ -14,7 +14,7 @@
 }
 else
 {
-    <br/>
+    <br />
 }
 <table class="table table-striped text-center">
     <thead class="thead-dark">
@@ -55,7 +55,10 @@ else
                 <td>
                     @*@Html.ActionLink("Questions", "Index", "Questions", new { testId = item.TestId }, new { @class = "btn btn-outline-info" })*@
                     @*<a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.TestId">Details</a>*@
-                    @Html.ActionLink("Begin Test", "BeginTest", "Tests", new { testId = item.TestId, myPoints = 0, myQuestion = 0 }, new { @class = "btn btn-outline-success" })
+                    @if (User.IsInRole("Uczen"))
+                    {
+                        @Html.ActionLink("Begin Test", "BeginTest", "Tests", new { testId = item.TestId, myPoints = 0, myQuestion = 0 }, new { @class = "btn btn-outline-success" })
+                    }
                     @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
                     {
                         @Html.ActionLink("Questions", "Index", "Questions", new { testId = item.TestId }, new { @class = "btn btn-outline-info" })
