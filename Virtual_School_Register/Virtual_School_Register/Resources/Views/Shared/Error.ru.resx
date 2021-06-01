@@ -117,4 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="An error occurred while processing your request." xml:space="preserve">
+    <value>Произошла ошибка при обработке вашего запроса.</value>
+  </data>
+  <data name="and restarting the app." xml:space="preserve">
+    <value>и перезапуск приложения.</value>
+  </data>
+  <data name="Development" xml:space="preserve">
+    <value>программирование</value>
+  </data>
+  <data name="Development Mode" xml:space="preserve">
+    <value>Режим разработчика</value>
+  </data>
+  <data name="Development2" xml:space="preserve">
+    <value>программирование</value>
+  </data>
+  <data name="Development3" xml:space="preserve">
+    <value>по программированию</value>
+  </data>
+  <data name="environment by setting the" xml:space="preserve">
+    <value>установив переменную среды</value>
+  </data>
+  <data name="environment variable to" xml:space="preserve">
+    <value />
+  </data>
+  <data name="environment will display more detailed information about the error that occurred." xml:space="preserve">
+    <value>отобразит более подробную информацию о возникшей ошибке.</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="It can result in displaying sensitive information from exceptions to end users. For local debugging, enable the" xml:space="preserve">
+    <value>Это может привести к отображению конфиденциальной информации с исключениями для конечных пользователей. Для локальной отладки включите среду</value>
+  </data>
+  <data name="Request ID:" xml:space="preserve">
+    <value>ID запроса:</value>
+  </data>
+  <data name="Swapping to" xml:space="preserve">
+    <value>Переключитесь на окружающую среду</value>
+  </data>
+  <data name="The Development environment shouldn't be enabled for deployed applications." xml:space="preserve">
+    <value>Среда разработки не должна быть включена для развернутых приложений.</value>
+  </data>
 </root>
