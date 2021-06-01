@@ -9,8 +9,8 @@
 <br />
 <div>
     <div class="row">
-        <h4 class="col-md-2">Class name: @Html.DisplayFor(model => model.Name)</h4>
-        <h4 class="col-md-5">@Html.DisplayNameFor(model => model.Content): @Html.DisplayFor(model => model.Content)</h4>
+        <h4 class="col-md-3">Class name: @Html.DisplayFor(model => model.Name)</h4>
+        <h4 class="col-md-4">@Html.DisplayNameFor(model => model.Content): @Html.DisplayFor(model => model.Content)</h4>
         <h4 class="col-md-5">@Html.DisplayNameFor(model => model.ClassTutorId): @Html.DisplayFor(model => model.ClassTutorId)</h4>
     </div>
     <hr />
@@ -93,7 +93,9 @@
     </div>
 </div>
 
-<div>
-    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.ClassId">Edit</a>
-    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+<div class="d-flex justify-content-center text-center">
+    <div>
+        <a class="btn btn-primary" asp-action="Index">Back</a>
+        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.ClassId">Edit</a>
+    </div>
 </div>

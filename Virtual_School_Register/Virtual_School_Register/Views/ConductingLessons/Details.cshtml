@@ -111,7 +111,7 @@
                         else if (grade.Value[0] == '2')
                         {
                             @*<a class="btn btn-outline-primary font-weight-bold" style="color: coral" asp-action="DetailsFromClasses" asp-route-id="@grade.EvaluationId">@Html.Raw(grade.Value)</a>*@
-                            @Html.ActionLink(@grade.Value, "Details", "Evaluations", new { id = @grade.EvaluationId }, new { @class = "btn btn-outline-primary font-weight-bold font-weight-bold", style="color: coral" })
+                            @Html.ActionLink(@grade.Value, "Details", "Evaluations", new { id = @grade.EvaluationId }, new { @class = "btn btn-outline-primary font-weight-bold font-weight-bold", style = "color: coral" })
 
                         }
                         else if (grade.Value[0] == '3')
@@ -156,4 +156,8 @@
         }
     </tbody>
 </table>
-@Html.ActionLink("Back to List", "Index", "ConductingLessons", null, new { @class = "btn btn-primary" })
+<div class="d-flex justify-content-center text-center">
+    <div>
+        @Html.ActionLink("Back", "Index", "ConductingLessons", null, new { @class = "btn btn-primary" })
+    </div>
+</div>

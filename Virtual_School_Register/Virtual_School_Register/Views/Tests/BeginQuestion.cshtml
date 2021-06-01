@@ -2,48 +2,54 @@
 
 @{
     ViewData["Title"] = "Create";
-    @*var where = ViewBag.BackToTest as int?;*@
 }
 
-<h4>Question</h4>
+<h4 class="d-flex justify-content-center text-center">Question</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="BeginQuestion">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                @Html.DisplayFor(model => model.Content)
+
+
+<div class="d-flex justify-content-center text-center">
+    <div>
+        <form asp-action="BeginQuestion" style="width:350px">
+            <div class="text-left">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    @Html.DisplayFor(model => model.Content)
+                </div>
+                <div class="form-group">
+                    <input type="radio" asp-for="Answer" value="A" />
+                    @Html.DisplayFor(model => model.AnswerA)
+                </div>
+                <div class="form-group">
+                    <input type="radio" asp-for="Answer" value="B" />
+                    @Html.DisplayFor(model => model.AnswerB)
+                </div>
+                <div class="form-group">
+                    <input type="radio" asp-for="Answer" value="C" />
+                    @Html.DisplayFor(model => model.AnswerC)
+                </div>
+                <div class="form-group">
+                    <input type="radio" asp-for="Answer" value="D" />
+                    @Html.DisplayFor(model => model.AnswerD)
+                </div>
+                <input asp-for="MyPoints" hidden />
+                <input asp-for="MyQuestion" hidden />
+                <input asp-for="TestId" hidden />
+                <input asp-for="CorrectAnswer" hidden />
+                <input asp-for="Points" hidden />
             </div>
-            <div class="form-group">
-                <input type="radio" asp-for="Answer" value="A" />
-                @Html.DisplayFor(model => model.AnswerA)
-            </div>
-            <div class="form-group">
-                <input type="radio" asp-for="Answer" value="B" />
-                @Html.DisplayFor(model => model.AnswerB)
-            </div>
-            <div class="form-group">
-                <input type="radio" asp-for="Answer" value="C" />
-                @Html.DisplayFor(model => model.AnswerC)
-            </div>
-            <div class="form-group">
-                <input type="radio" asp-for="Answer" value="D" />
-                @Html.DisplayFor(model => model.AnswerD)
-            </div>
-            <div class="form-group">
+            <br />
+
+            <div>
                 <input type="submit" value="Next" class="btn btn-success" />
             </div>
-            <input asp-for="MyPoints" hidden />
-            <input asp-for="MyQuestion" hidden />
-            <input asp-for="TestId" hidden />
-            <input asp-for="CorrectAnswer" hidden />
-            <input asp-for="Points" hidden />
         </form>
     </div>
 </div>
+<br />
 
-<div>
-    @Html.ActionLink("Back to List", "Index", "Tests", null, new { @class = "btn btn-primary" })
+<div class="d-flex justify-content-center text-center">
+    @Html.ActionLink("Exit", "Index", "Tests", null, new { @class = "btn btn-danger" })
 </div>
 
 @section Scripts {

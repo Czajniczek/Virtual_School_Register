@@ -8,8 +8,8 @@
 
 @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
 {
-    <p>
-        <a class="btn btn-success" asp-action="Create">Create New</a>
+    <p class="d-flex justify-content-center text-center">
+        <a class="btn btn-success" asp-action="Create">Add test</a>
     </p>
 }
 else

@@ -117,4 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Action" xml:space="preserve">
+    <value>Акция</value>
+  </data>
+  <data name="Add class" xml:space="preserve">
+    <value>Добавить класс</value>
+  </data>
+  <data name="Class name" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="Class tutor" xml:space="preserve">
+    <value>Педагог</value>
+  </data>
+  <data name="Classes" xml:space="preserve">
+    <value>Класс</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
+  <data name="Edit students" xml:space="preserve">
+    <value>Редактир. учащихся</value>
+  </data>
+  <data name="Edit subjects" xml:space="preserve">
+    <value>Редактир. предметы</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Профиль</value>
+  </data>
+  <data name="Students" xml:space="preserve">
+    <value>Студенты</value>
+  </data>
 </root>

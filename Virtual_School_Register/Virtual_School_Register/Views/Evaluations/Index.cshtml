@@ -102,5 +102,9 @@
 </table>
 @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
 {
-    @Html.ActionLink("Back to List", "ClassStudents", "Classes", new { classId = @thisUser.ClassId }, new { @class = "btn btn-primary" })
+    <div class="d-flex justify-content-center text-center">
+        <div>
+            @Html.ActionLink("Back", "ClassStudents", "Classes", new { classId = @thisUser.ClassId }, new { @class = "btn btn-primary" })
+        </div>
+    </div>
 }
