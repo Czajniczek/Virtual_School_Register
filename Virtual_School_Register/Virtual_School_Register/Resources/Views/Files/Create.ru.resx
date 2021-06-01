@@ -117,4 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Add" xml:space="preserve">
+    <value>Добавлять</value>
+  </data>
+  <data name="Add file" xml:space="preserve">
+    <value>Добавить файл</value>
+  </data>
+  <data name="Adding a file" xml:space="preserve">
+    <value>Добавление файла</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Вернись</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="Upload file" xml:space="preserve">
+    <value>Загрузите файл</value>
+  </data>
 </root>

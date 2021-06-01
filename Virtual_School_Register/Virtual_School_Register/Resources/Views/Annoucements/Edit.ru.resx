@@ -117,4 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Announcement editing" xml:space="preserve">
+    <value>Редактирование объявления</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Вернись</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="Edit announcement" xml:space="preserve">
+    <value>Редактировать объявление</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Заголовок</value>
+  </data>
 </root>

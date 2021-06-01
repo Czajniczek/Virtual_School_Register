@@ -117,4 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Adress" xml:space="preserve">
+    <value>Адрес</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Вернись</value>
+  </data>
+  <data name="Birth date" xml:space="preserve">
+    <value>Дата рождения</value>
+  </data>
+  <data name="Class" xml:space="preserve">
+    <value>Класс</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
+  <data name="Man" xml:space="preserve">
+    <value>Мужчина</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="No class assigned" xml:space="preserve">
+    <value>Класс не назначен</value>
+  </data>
+  <data name="No parent assigned" xml:space="preserve">
+    <value>Родитель не назначен</value>
+  </data>
+  <data name="Parent" xml:space="preserve">
+    <value>Родитель</value>
+  </data>
+  <data name="Phone number" xml:space="preserve">
+    <value>Телефонный номер</value>
+  </data>
+  <data name="Sex" xml:space="preserve">
+    <value>Секс</value>
+  </data>
+  <data name="Student" xml:space="preserve">
+    <value>Ученик</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="Teacher" xml:space="preserve">
+    <value>Учитель</value>
+  </data>
+  <data name="User details" xml:space="preserve">
+    <value>Детали пользователя</value>
+  </data>
+  <data name="User type" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="Woman" xml:space="preserve">
+    <value>Женщина</value>
+  </data>
 </root>
