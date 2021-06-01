@@ -5,8 +5,8 @@
     var where = ViewBag.BackTo as Test;
 }
 
-<h3>
-    Test:
+<h3 class="d-flex justify-content-center text-center">
+    Test:&nbsp;
     <b>
         @where.Title
     </b>
@@ -14,8 +14,8 @@
 <hr />
 @if (User.IsInRole("Admin") || User.IsInRole("Nauczyciel"))
 {
-    <p>
-        @Html.ActionLink("Create New", "Create", "Questions", new { testId = @where.TestId }, new { @class = "btn btn-success" })
+    <p class="d-flex justify-content-center text-center">
+        @Html.ActionLink("Add question", "Create", "Questions", new { testId = @where.TestId }, new { @class = "btn btn-success" })
     </p>
 }
 else
@@ -28,18 +28,6 @@ else
             <th>
                 @Html.DisplayNameFor(model => model.Content)
             </th>
-            @*            <th>
-                    @Html.DisplayNameFor(model => model.AnswerA)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AnswerB)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AnswerC)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AnswerD)
-                </th>*@
             <th>
                 Answers
             </th>
@@ -59,18 +47,6 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.Content)
                 </td>
-                @*                <td>
-                        @Html.DisplayFor(modelItem => item.AnswerA)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AnswerB)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AnswerC)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AnswerD)
-                    </td>*@
                 <td>
                     <b>A:</b> @Html.DisplayFor(modelItem => item.AnswerA)
                     <br />
@@ -95,4 +71,6 @@ else
         }
     </tbody>
 </table>
-@Html.ActionLink("Back to List", "Index", "Tests", null, new { @class = "btn btn-primary" })
+<div class="d-flex justify-content-center text-center">
+    @Html.ActionLink("Back", "Index", "Tests", null, new { @class = "btn btn-primary" })
+</div>

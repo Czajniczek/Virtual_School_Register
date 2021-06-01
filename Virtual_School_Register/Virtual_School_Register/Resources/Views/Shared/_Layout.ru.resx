@@ -117,4 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Announcements" xml:space="preserve">
+    <value>Анонсы</value>
+  </data>
+  <data name="Classes" xml:space="preserve">
+    <value>Классы</value>
+  </data>
+  <data name="Contrast" xml:space="preserve">
+    <value>Контрастный</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Темный</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>Файлы</value>
+  </data>
+  <data name="Grades" xml:space="preserve">
+    <value>Оценки</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Домашняя страница</value>
+  </data>
+  <data name="Messages" xml:space="preserve">
+    <value>Сообщения</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Вопросы</value>
+  </data>
+  <data name="Style" xml:space="preserve">
+    <value>Стиль</value>
+  </data>
+  <data name="Subjects" xml:space="preserve">
+    <value>Предметы</value>
+  </data>
+  <data name="Teachers" xml:space="preserve">
+    <value>Учителя</value>
+  </data>
+  <data name="Teaching" xml:space="preserve">
+    <value>Обучение</value>
+  </data>
+  <data name="Tests" xml:space="preserve">
+    <value>Тесты</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Пользователи</value>
+  </data>
 </root>
