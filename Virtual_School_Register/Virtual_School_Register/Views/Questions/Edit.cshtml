@@ -41,8 +41,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="CorrectAnswer" class="control-label"></label>
-                <input asp-for="CorrectAnswer" class="form-control" />
-                <span asp-validation-for="CorrectAnswer" class="text-danger"></span>
+                @*<input asp-for="CorrectAnswer" class="form-control" />*@
+                <select asp-for="CorrectAnswer" class="form-control">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                </select>
+                @*<span asp-validation-for="CorrectAnswer" class="text-danger"></span>*@
             </div>
             <div class="form-group">
                 @*<label asp-for="TestId" class="control-label"></label>
