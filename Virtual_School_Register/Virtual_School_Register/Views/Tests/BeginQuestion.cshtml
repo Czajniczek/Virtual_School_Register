@@ -4,7 +4,16 @@
     ViewData["Title"] = "Create";
 }
 
-<h4 class="d-flex justify-content-center text-center">Question</h4>
+<div class="d-flex justify-content-center text-center">
+    <div class="mx-auto">
+        <h4 style="margin-left:50px">Question</h4>
+    </div>
+    <div>
+        <h5><b>@Model.Points pkt.</b></h5>
+    </div>
+</div>
+@*<h4 class="d-flex justify-content-center text-center">Question</h4>
+    <label asp-for="Points"><b>@Model.Points pkt.</b></label>*@
 <hr />
 
 
@@ -14,7 +23,9 @@
             <div class="text-left">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    @Html.DisplayFor(model => model.Content)
+                    <b>
+                        @Html.DisplayFor(model => model.Content)
+                    </b>
                 </div>
                 <div class="form-group">
                     <input type="radio" asp-for="Answer" value="A" />
@@ -47,7 +58,7 @@
     </div>
 </div>
 <br />
-
+<hr />
 <div class="d-flex justify-content-center text-center">
     @Html.ActionLink("Exit", "Index", "Tests", null, new { @class = "btn btn-danger" })
 </div>

@@ -123,6 +123,9 @@
   <data name="Add user" xml:space="preserve">
     <value>Добавить пользователя</value>
   </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Админ</value>
+  </data>
   <data name="Class" xml:space="preserve">
     <value>Класс</value>
   </data>
