@@ -1,2 +1,2 @@
 # Virtual_School_Register
-Virtual school register in .NET 5
+Virtual school register written in .NET 5 framework.
